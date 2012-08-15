@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="bottom_bg">#6b6d6b</color>
+    <color name="title_bg">#949294</color>
+    <color name="title_child_bg">#a0a0a0</color>
+    <color name="btn_bg">#306cd9</color>
+    <color name="color_title_default">#fbfafb</color>
+    <color name="color_list_item_default">#fbfafb</color>
+    <color name="color_list_item_text_default">#848384</color>
+
+</resources>

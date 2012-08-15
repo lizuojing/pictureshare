@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="hello">Hello World, PicManagerActivity!</string>
+    <string name="app_name">PicManager</string>
+    <string name="activity_title">扫描王</string>
+    <string name="setting_activity_title">设置</string>
+    <string name="edit">编辑</string>
+    <string name="finish">完成</string>
+    <string name="cancel">取消</string>
+    <string name="back">返回</string>
+    <string name="edit_hint">Search</string>
+    <string name="take_photo">立即拍照</string>
+    <string name="pick_photo">本地图库</string>
+    <string name="pick_image">选择图片</string>
+
+
+</resources>
