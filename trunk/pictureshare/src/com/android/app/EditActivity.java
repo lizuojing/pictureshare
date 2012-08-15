@@ -3,13 +3,17 @@ package com.android.app;
 import java.util.ArrayList;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.View.OnClickListener;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
@@ -21,13 +25,18 @@ public class EditActivity extends Activity implements View.OnClickListener{
 	private static final String TAG = "EditActivity";
 	private ListView listView;
 	private Button finishButton;
+	private InputMethodManager inputMethodManager;
+	private EditText search_edit;
 
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.main);
+		setContentView(R.layout.edit);
 
+		inputMethodManager = (InputMethodManager)this.getSystemService(Context.INPUT_METHOD_SERVICE);  
+
+		
 		initComponents();
 
 		registerButton();
@@ -54,7 +63,20 @@ public class EditActivity extends Activity implements View.OnClickListener{
 		finishButton = (Button)findViewById(R.id.button1);
 		
 		listView = (ListView) findViewById(R.id.listView1);
-
+		
+		search_edit = (EditText)findViewById(R.id.editText1);
+		search_edit.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				search_edit.setFocusable(true);
+				search_edit.setFocusableInTouchMode(true);
+				search_edit.requestFocus();
+				inputMethodManager.showSoftInput(search_edit, 0);
+			}
+		});
+		
+		
 		ListAdapter adapter = new ListAdapter(loadData());
 		listView.setAdapter(adapter);
 

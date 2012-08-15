@@ -12,12 +12,12 @@
 
         <TextView
             android:id="@+id/TextView1"
+            android:textSize="18sp"
+            android:textColor="@color/color_title_default"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="@string/activity_title"
-            android:textColor="@color/color_title_default"
-            android:textSize="18sp" />
+            android:text="@string/activity_title" />
 
         <Button
             android:id="@+id/button1"
@@ -25,7 +25,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:text="@string/edit" />
+            android:text="@string/finish" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -58,85 +58,34 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
+                android:clickable="true"
+                android:focusable="false"
                 android:hint="@string/edit_hint" >
-
-                <requestFocus />
             </EditText>
         </LinearLayout>
     </RelativeLayout>
 
-    <FrameLayout
-        android:id="@+id/frameLayout1"
+    <RelativeLayout
+        android:id="@+id/relativeLayout4"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:background="@color/bottom_bg" >
-        <RelativeLayout
-            android:id="@+id/relativeLayout4"
-            android:layout_width="fill_parent"
+        android:layout_alignParentBottom="true" 
+        android:background="@color/bottom_bg">
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:background="@color/bottom_bg" >
-
-            <ImageView
-                android:id="@+id/imageView2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_centerVertical="true"
-                android:src="@drawable/ic_launcher" />
-
-            <ImageView
-                android:id="@+id/imageView3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:src="@drawable/ic_launcher" />
-
-            <ImageView
-                android:id="@+id/imageView4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:src="@drawable/ic_launcher" />
-        </RelativeLayout>
-
-        <LinearLayout
-            android:id="@+id/tab_share_layout"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_gravity="top"
-            android:background="@color/bottom_bg"
-            android:visibility="gone" >
-
-            <LinearLayout
-                android:id="@+id/tab_share_mask"
-                android:layout_width="fill_parent"
-                android:layout_height="300px"
-                android:layout_gravity="bottom"
-                android:gravity="top"
-                android:orientation="vertical" >
-
-                <LinearLayout
-                    android:id="@+id/tab_share_content"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="bottom"
-                    android:gravity="bottom"
-                    android:orientation="vertical" >
-                </LinearLayout>
-            </LinearLayout>
-        </LinearLayout>
-
-    </FrameLayout>
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/ic_launcher" />
+    </RelativeLayout>
 
     <ListView
         android:id="@+id/listView1"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/frameLayout1"
-        android:layout_below="@+id/relativeLayout3" >
+        android:layout_below="@+id/relativeLayout3"
+        android:layout_above="@+id/relativeLayout4">
     </ListView>
 
 </RelativeLayout>
