@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -20,9 +21,11 @@ import android.view.ViewGroup.LayoutParams;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.view.animation.Animation.AnimationListener;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -42,6 +45,7 @@ import com.android.app.view.MainItem;
 public class MainActivity extends Activity implements View.OnClickListener{
 
 	protected static final int GET_IMAGE = 2000;
+	protected static final String TAG = "MainActivity";
 	private ListView listView;
 	private Button editButton;
 	private ImageView mapImage;
@@ -53,13 +57,16 @@ public class MainActivity extends Activity implements View.OnClickListener{
 	private Button sharePhoto;
 	private LinearLayout tab_share_content;
 	protected File mCurrentPhotoFile;
+	private EditText search_edit;
+	private InputMethodManager inputMethodManager;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.edit);
-
+		setContentView(R.layout.main);
+		
+		inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 		initComponents();
 		initShareTab();
 		registerButton();
@@ -187,7 +194,6 @@ public class MainActivity extends Activity implements View.OnClickListener{
 				
 				
 			}else {
-				//进入评论页面
 				Intent intent = new Intent();
 				if (mCurrentPhotoFile != null){
 					intent.putExtra("mCurrentFile",mCurrentPhotoFile.getAbsolutePath());
@@ -229,6 +235,19 @@ public class MainActivity extends Activity implements View.OnClickListener{
 		takePicImage = (ImageView)findViewById(R.id.imageView3);
 		setImage = (ImageView)findViewById(R.id.imageView4);
 		
+		search_edit = (EditText)findViewById(R.id.editText1);
+		inputMethodManager = (InputMethodManager)this.getSystemService(Context.INPUT_METHOD_SERVICE);  
+		
+		search_edit.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				search_edit.setFocusable(true);
+				search_edit.setFocusableInTouchMode(true);
+				search_edit.requestFocus();
+				inputMethodManager.showSoftInput(search_edit, 0);
+			}
+		});
 		
 		listView = (ListView) findViewById(R.id.listView1);
 
@@ -237,6 +256,7 @@ public class MainActivity extends Activity implements View.OnClickListener{
 
 	}
 
+	
 	private ArrayList<Avatar> loadData() {
 		ArrayList<Avatar> list = new ArrayList<Avatar>();
 		Avatar avatar = new Avatar();
