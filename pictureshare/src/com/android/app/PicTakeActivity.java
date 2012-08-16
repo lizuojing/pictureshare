@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
 
@@ -16,6 +17,7 @@ import android.widget.ImageView;
  */
 public class PicTakeActivity extends Activity {
 	private static final String TAG = "PicTakeActivity";
+	protected static final String ACTION_3D = "action_3d";
 	private Button btn_back;
 	private ImageView imageView;
 	private String filePath;
@@ -24,8 +26,8 @@ public class PicTakeActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.picedit);
-		
 		filePath = getIntent().getStringExtra("mCurrentFile");
 		Log.i(TAG, "filePath is " + filePath);
 		

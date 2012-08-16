@@ -198,7 +198,7 @@ public class MainActivity extends Activity implements View.OnClickListener{
 				if (mCurrentPhotoFile != null){
 					intent.putExtra("mCurrentFile",mCurrentPhotoFile.getAbsolutePath());
 				}
-				intent.setClass(this, PicTakeActivity.class);
+				intent.setClass(this, DishActivity.class);
 				startActivity(intent);
 			}
 		}
