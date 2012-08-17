@@ -52,6 +52,7 @@ public class PMapActivity extends MapActivity {
 		
 		mMapView = (MapView) findViewById(R.id.bmapsView);
 		mMapView.setBuiltInZoomControls(true); // 设置启用内置的缩放控件
+		mMapView.setDoubleClickZooming(false);
 		
 		mMapView.setOnTouchListener(new OnTouchListener() {
 			
