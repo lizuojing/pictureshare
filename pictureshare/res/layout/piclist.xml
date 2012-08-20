@@ -24,11 +24,12 @@
             android:id="@+id/button1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
             android:background="@drawable/button_bg"
-            android:text="@string/edit"
+            android:text="@string/back"
             android:textColor="#ffffff" />
+
     </RelativeLayout>
 
     <RelativeLayout
@@ -57,40 +58,6 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:background="@color/bottom_bg" >
-
-        <RelativeLayout
-            android:id="@+id/relativeLayout4"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:background="@color/bottom_bg" >
-
-            <ImageView
-                android:id="@+id/imageView2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_centerVertical="true"
-                android:layout_marginTop="5dip"
-                android:src="@drawable/button_map" />
-
-            <ImageView
-                android:id="@+id/imageView3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:layout_marginTop="5dip"
-                android:src="@drawable/button_share" />
-
-            <ImageView
-                android:id="@+id/imageView4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:layout_marginTop="5dip"
-                android:src="@drawable/button_setting" />
-        </RelativeLayout>
 
         <LinearLayout
             android:id="@+id/tab_share_layout"

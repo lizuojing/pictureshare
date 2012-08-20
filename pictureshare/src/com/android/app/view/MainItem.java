@@ -60,21 +60,21 @@ public class MainItem extends RelativeLayout {
 		title.setTextColor(getResources().getColor(R.color.color_list_item_text_default));
 		addView(time,timeLP);
 		
-		RelativeLayout.LayoutParams rightLP = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT);
+		/*RelativeLayout.LayoutParams rightLP = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT);
 		rightLP.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
 		rightLP.addRule(RelativeLayout.CENTER_VERTICAL);
 		rightLP.setMargins(Utils.dipToPixels(context, 10), 0, Utils.dipToPixels(context, 10), 0);
 		ImageView rightView = new ImageView(context);
-		rightView.setImageResource(R.drawable.ic_launcher);
+		rightView.setImageResource(R.drawable.android_default);
 		mRightImage = rightView;
-		addView(rightView,rightLP);
+		addView(rightView,rightLP);*/
 	}
 
 	public void setItemData(Avatar avatar) {
 		if(Utils.isNullOrEmpty(avatar.getPath())) {
-			mLeftImage.setImageResource(R.drawable.ic_launcher);
+			mLeftImage.setImageResource(R.drawable.android_default);
 		}else {
-			mLeftImage.setImageResource(R.drawable.ic_launcher);
+			mLeftImage.setImageResource(R.drawable.android_default);
 		}
 		
 		mTitle.setText(avatar.getTitle());

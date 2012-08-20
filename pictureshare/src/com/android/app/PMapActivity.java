@@ -4,13 +4,13 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Point;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
+import android.widget.Button;
+import android.widget.Toast;
 
 import com.baidu.mapapi.BMapManager;
 import com.baidu.mapapi.GeoPoint;
@@ -23,11 +23,15 @@ import com.baidu.mapapi.MyLocationOverlay;
 import com.baidu.mapapi.Overlay;
 import com.baidu.mapapi.Projection;
 
-public class PMapActivity extends MapActivity {
+public class PMapActivity extends MapActivity implements View.OnClickListener{
 	protected static final String TAG = "PMapActivity";
 	private BMapManager mBMapMan;
 	private MKLocationManager mLocationManager;
 	private MapView mMapView;
+	private Button deleteButton;
+	private Button shareButton;
+	private Button detalButton;
+	private Button backToOneButton;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -114,6 +118,20 @@ public class PMapActivity extends MapActivity {
 		mylocTest.enableMyLocation(); // 启用定位
 		mylocTest.enableCompass();    // 启用指南针
 		mMapView.getOverlays().add(mylocTest);
+		
+		initComponents();
+	}
+
+	private void initComponents() {
+		deleteButton = (Button)findViewById(R.id.button2);
+		shareButton = (Button)findViewById(R.id.button3);
+		detalButton = (Button)findViewById(R.id.button4);
+		backToOneButton = (Button)findViewById(R.id.button5);
+		
+		deleteButton.setOnClickListener(this);
+		shareButton.setOnClickListener(this);
+		detalButton.setOnClickListener(this);
+		backToOneButton.setOnClickListener(this);
 	}
 
 	@Override
@@ -162,5 +180,28 @@ public class PMapActivity extends MapActivity {
 	        canvas.drawBitmap(BitmapFactory.decodeResource(getResources(),R.drawable.ic_launcher), point.x, point.y, paint);
 //	        canvas.drawBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher), null, paint);
 	    }
+	}
+
+	@Override
+	public void onClick(View v) {
+		switch (v.getId()) {
+		case R.id.button2:
+			Toast.makeText(this, "删除", Toast.LENGTH_SHORT).show();
+			break;
+		case R.id.button3:
+			Toast.makeText(this, "回到一级", Toast.LENGTH_SHORT).show();
+			break;
+		case R.id.button4:
+			Toast.makeText(this, "分享", Toast.LENGTH_SHORT).show();
+			break;
+		case R.id.button5:
+			Toast.makeText(this, "detal", Toast.LENGTH_SHORT).show();
+			break;
+
+			
+		default:
+			break;
+		}
+		
 	}
 }
