@@ -176,8 +176,8 @@ public class PMapActivity extends MapActivity implements View.OnClickListener{
 	    public void draw(Canvas canvas, MapView mapView, boolean shadow) {
 	        //在天安门的位置绘制一个String
 	        Point point = mMapView.getProjection().toPixels(geoPoint, null);
-	        canvas.drawText("★这里是天安门", point.x, point.y, paint);
-	        canvas.drawBitmap(BitmapFactory.decodeResource(getResources(),R.drawable.ic_launcher), point.x, point.y, paint);
+//	        canvas.drawText("★这里是天安门", point.x, point.y, paint);
+	        canvas.drawBitmap(BitmapFactory.decodeResource(getResources(),R.drawable.annotation), point.x, point.y, paint);
 //	        canvas.drawBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher), null, paint);
 	    }
 	}
