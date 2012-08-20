@@ -32,23 +32,37 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name" >
         <activity
-            android:label="@string/app_name"
-            android:name=".MainActivity" >
-            <intent-filter >
+            android:name=".MainActivity"
+            android:label="@string/app_name" >
+            <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".EditActivity" android:theme="@android:style/Theme.Black.NoTitleBar">
+        <activity
+            android:name=".EditActivity"
+            android:theme="@android:style/Theme.Black.NoTitleBar" >
         </activity>
-        <activity android:name=".PMapActivity"  android:theme="@android:style/Theme.Black.NoTitleBar">
+        <activity
+            android:name=".PMapActivity"
+            android:theme="@android:style/Theme.Black.NoTitleBar" >
         </activity>
-        <activity android:name=".PicTakeActivity" android:theme="@android:style/Theme.Black.NoTitleBar">
+        <activity
+            android:name=".PicTakeActivity"
+            android:theme="@android:style/Theme.Black.NoTitleBar" >
         </activity>
-        <activity android:name=".SettingActivity" android:theme="@android:style/Theme.Black.NoTitleBar">
+        <activity
+            android:name=".SettingActivity"
+            android:theme="@android:style/Theme.Black.NoTitleBar" >
         </activity>
-        <activity android:name=".DishActivity" android:theme="@android:style/Theme.Black.NoTitleBar">
+        <activity
+            android:name=".DishActivity"
+            android:theme="@android:style/Theme.Black.NoTitleBar" >
+        </activity>
+        <activity
+            android:name=".RectActiivity"
+            android:theme="@android:style/Theme.Black.NoTitleBar" >
         </activity>
     </application>
 
