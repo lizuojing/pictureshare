@@ -223,6 +223,8 @@ public class MainActivity extends Activity implements View.OnClickListener{
 					long arg3) {
 				Toast.makeText(MainActivity.this, "positon is " + arg2,
 						Toast.LENGTH_SHORT).show();
+				Intent intent = new Intent(MainActivity.this,PicListActivity.class);
+				startActivity(intent);
 
 			}
 		});

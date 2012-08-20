@@ -3,7 +3,10 @@
 
     <string name="hello">Hello World, PicManagerActivity!</string>
     <string name="app_name">PicManager</string>
-    <string name="activity_title">扫描王</string>
+    <string name="tab_one">1</string>
+    <string name="tab_two">2</string>
+    <string name="tab_three">3</string>
+    <string name="activity_title">Scaner</string>
     <string name="setting_activity_title">设置</string>
     <string name="edit">编辑</string>
     <string name="finish">完成</string>
@@ -13,6 +16,16 @@
     <string name="take_photo">立即拍照</string>
     <string name="pick_photo">本地图库</string>
     <string name="pick_image">选择图片</string>
+    <string name="delete">删除</string>
+    <string name="share">分享</string>
+    <string name="detail">detal</string>
+    <string name="back_to_one">回到一级</string>
+    <string name="setting_svr_setting">服务器设置</string>
+    <string name="setting_personal_center">个人中心</string>
+    <string name="setting_pic_setting">图片设置</string>
+    <string name="setting_valuation">评价</string>
+    <string name="setting_common">通用</string>
+    
 
 
 </resources>

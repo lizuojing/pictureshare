@@ -12,12 +12,12 @@
 
         <TextView
             android:id="@+id/TextView1"
-            android:textSize="18sp"
-            android:textColor="@color/color_title_default"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="@string/activity_title" />
+            android:text="@string/activity_title"
+            android:textColor="@color/color_title_default"
+            android:textSize="18sp" />
 
         <Button
             android:id="@+id/button1"
@@ -25,7 +25,9 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:text="@string/finish" />
+            android:background="@drawable/button_bg"
+            android:text="@string/finish"
+            android:textColor="#ffffff" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -35,42 +37,25 @@
         android:layout_below="@+id/relativeLayout2"
         android:background="@color/title_child_bg" >
 
-        <Button
-            android:id="@+id/button2"
-            android:layout_width="wrap_content"
+        <EditText
+            android:id="@+id/editText1"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:text="@string/cancel" />
-
-        <LinearLayout
-            android:id="@+id/linearLayout1"
-            android:layout_width="500px"
-            android:layout_height="wrap_content" >
-
-            <ImageView
-                android:id="@+id/imageView1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_launcher" />
-
-            <EditText
-                android:id="@+id/editText1"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:clickable="true"
-                android:focusable="false"
-                android:hint="@string/edit_hint" >
-            </EditText>
-        </LinearLayout>
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="2dip"
+            android:layout_marginRight="2dip"
+            android:clickable="true"
+            android:focusable="false"
+            android:hint="@string/edit_hint" >
+        </EditText>
     </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/relativeLayout4"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true" 
-        android:background="@color/bottom_bg">
+        android:layout_alignParentBottom="true"
+        android:background="@color/bottom_bg" >
 
         <ImageView
             android:id="@+id/imageView2"
@@ -84,8 +69,8 @@
         android:id="@+id/listView1"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/relativeLayout3"
-        android:layout_above="@+id/relativeLayout4">
+        android:layout_above="@+id/relativeLayout4"
+        android:layout_below="@+id/relativeLayout3" >
     </ListView>
 
 </RelativeLayout>
