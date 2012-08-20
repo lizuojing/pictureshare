@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/RelativeLayout1"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+<!--     <ImageView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="@drawable/ic_launcher" /> -->
+
+    <com.android.app.entity.MyView
+        android:id="@+id/MyView_font"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="@null" >
+    </com.android.app.entity.MyView>
+
+</FrameLayout>
