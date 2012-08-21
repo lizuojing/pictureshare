@@ -6,12 +6,15 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 import android.app.Activity;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.provider.MediaStore;
 import android.view.Gravity;
 import android.view.View;
@@ -33,6 +36,7 @@ import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 
 import com.android.app.entity.Avatar;
+import com.android.app.service.PicService;
 import com.android.app.utils.Utils;
 import com.android.app.view.MainItem;
 
@@ -59,6 +63,22 @@ public class MainActivity extends Activity implements View.OnClickListener{
 	protected File mCurrentPhotoFile;
 	private EditText search_edit;
 	private InputMethodManager inputMethodManager;
+	
+    private PicService picService;
+	
+	 private ServiceConnection mConnection = new ServiceConnection() 
+	    {
+
+			public void onServiceConnected(ComponentName className, IBinder service) 
+	        {
+	        	picService = ((PicService.LocalBinder)service).getService();
+	        }
+
+	        public void onServiceDisconnected(ComponentName className) 
+	        {
+	        	picService = null;
+	        }
+	    };
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +90,7 @@ public class MainActivity extends Activity implements View.OnClickListener{
 		initComponents();
 		initShareTab();
 		registerButton();
+
 	}
 	
 	private void initShareTab() {

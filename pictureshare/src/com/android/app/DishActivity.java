@@ -46,7 +46,7 @@ public class DishActivity extends ActivityGroup {
 
 		eachLayout.addView(getLocalActivityManager().startActivity(
 				"contact",
-				new Intent(this, PicTakeActivity.class)
+				new Intent(this, RectActiivity.class)
 						.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
 				.getDecorView());
 
