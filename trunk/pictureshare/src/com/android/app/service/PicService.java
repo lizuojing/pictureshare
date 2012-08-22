@@ -2,9 +2,11 @@ package com.android.app.service;
 
 import java.util.ArrayList;
 
+import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Binder;
 import android.os.Handler;
@@ -12,6 +14,7 @@ import android.os.IBinder;
 import android.os.Message;
 import android.util.Log;
 
+import com.android.app.PicApp;
 import com.android.app.intent.PicIntent;
 import com.android.app.receceiver.HeartBeatCheckReceiver;
 
@@ -32,6 +35,8 @@ public class PicService extends Service {
 	private int HB_DEFAULT_CHECK_COUNT = 3;
 	private int interval = HB_DEFAULT_ITV;
 	private static ArrayList<ServiceHandler> mServiceHandlers = new ArrayList<ServiceHandler>();
+
+	private static ArrayList<Activity> allActivity;
 	private ServiceHandler mHandler = null;
 
 	public static abstract class ServiceHandler extends Handler {
@@ -86,6 +91,7 @@ public class PicService extends Service {
 	@Override
 	public void onCreate() {
 		Log.i(TAG, "onCreate is running");
+		allActivity = new ArrayList<Activity>();
 		super.onCreate();
 	}
 
@@ -108,7 +114,7 @@ public class PicService extends Service {
 		super.onDestroy();
 	}
 
-	private void registerHeartBeatCheckAlarm() {
+	public void registerHeartBeatCheckAlarm() {
 		Log.i(TAG, "registerHeartBeatCheckAlarm() start");
 
 		AlarmManager am = (AlarmManager) getSystemService(ALARM_SERVICE);
@@ -216,4 +222,32 @@ public class PicService extends Service {
 			}
 		}
 	}
+	
+	public static void promptExitApp(Context context) {
+		//退出所有Activity
+    	for(int i=0;i<allActivity.size();i++)
+    	{
+    		((Activity)allActivity.get(i)).finish();
+    	}
+    	allActivity.clear();
+    	//退出Service	
+    	PicApp.getApp(context).stopDataService();
+    	unRegisterHeartBeatCheckAlarm(context);
+    	
+		android.os.Process.killProcess(android.os.Process.myPid());
+	}
+
+	public static void unRegisterHeartBeatCheckAlarm(Context context) {
+		Log.i(TAG, "unRegisterHeartBeatCheckAlarm() start");
+
+		AlarmManager am = (AlarmManager)context.getSystemService("alarm");
+
+		Intent intent = new Intent(context, HeartBeatCheckReceiver.class);
+		intent.setAction(PicIntent.ACTION_HEARTBEAT_CHECK);
+
+		PendingIntent pi = PendingIntent.getBroadcast(context, 0, intent, 0);
+
+		am.cancel(pi);
+	}
+	
 }

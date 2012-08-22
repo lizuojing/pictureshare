@@ -133,6 +133,7 @@ public class EditActivity extends Activity implements View.OnClickListener{
 		private ArrayList<Avatar> list;
 
 		public ListAdapter(ArrayList<Avatar> list) {
+			
 			this.list = list;
 		}
 
@@ -159,7 +160,7 @@ public class EditActivity extends Activity implements View.OnClickListener{
 			Avatar avatar = list.get(position);
 			MainItem item = null;
 			if (convertView == null) {
-				item = new MainItem(EditActivity.this, avatar);
+//				item = new MainItem(EditActivity.this, avatar);
 				convertView = item;
 			} else {
 				item = (MainItem) convertView;

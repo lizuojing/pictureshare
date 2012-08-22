@@ -1,8 +1,11 @@
 package com.android.app.utils;
 
 import java.io.File;
+import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import android.content.Context;
 import android.os.Environment;
@@ -66,5 +69,54 @@ public class Utils {
 			cacheDir.mkdirs();
 		}
 		return cacheDir;
+	}
+	
+	public static boolean isNickname(final String str) {
+		try {
+			byte[] bytes=str.getBytes("gbk");
+			if(bytes.length>20){
+				return false;
+			}
+		} catch (UnsupportedEncodingException e) {
+		}
+		final String regex = "[\\u4e00-\\u9fa5\\w]{1,}";
+		return match(regex, str);
+	}
+	
+	public static boolean isEmail(final String str) {
+		final String regex = "^[a-zA-Z0-9]{1,}[a-zA-Z0-9\\_\\.\\-]{0,}@(([a-zA-Z0-9]){1,}\\.){1,3}[a-zA-Z0-9]{0,}[a-zA-Z]{1,}$";
+		return match(regex, str);
+	}
+
+	public static boolean isRegUserName(final String str) {
+		final String regex = "[0-9a-zA-Z\\_]{5,20}";
+		return match(regex, str);
+	}
+	
+	public static boolean isLoginUserName(final String str) {
+		final String regex = "[0-9a-zA-Z\\_]{3,20}";
+		return match(regex, str);
+	}
+
+	public static boolean isPassword(final String str) {
+		final String regex = "[\\S]{6,15}";
+		return match(regex, str);
+	}
+	private static boolean match(final String regex, final String str) {
+		final Pattern pattern = Pattern.compile(regex);
+		final Matcher matcher = pattern.matcher(str);
+		return matcher.matches();
+	}
+	
+	public static final int byteToShort(byte[] bytes) {
+		return (bytes[0] << 8) + (bytes[1] & 0xFF);
+	}
+
+	public static boolean isSDCardEnable() {
+		String SDState = Environment.getExternalStorageState();
+		if (SDState != null && SDState.equals(android.os.Environment.MEDIA_MOUNTED)) {
+			return true;
+		}
+		return false;
 	}
 }

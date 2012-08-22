@@ -1,13 +1,25 @@
 package com.android.app.api;
 
+import android.content.Context;
 /**
- * api接口
+ * api
  * @author Administrator
  *
  */
-public interface BaseApi {
-	public ApiResult connect(String method,BaseRequestParam params);
-	public ApiResult baseRequest(String method,BaseRequestParam params);
-	public ApiResult disconnect(String method,BaseRequestParam params);
+public class BaseApi {
+	protected Context context;
+	protected ApiReturnResultListener returnResultListener;
 
+	public BaseApi(Context context) {
+		super();
+		this.context = context;
+	}
+
+	public ApiReturnResultListener getReturnResultListener() {
+		return returnResultListener;
+	}
+
+	public void setReturnResultListener(ApiReturnResultListener returnResultListener) {
+		this.returnResultListener = returnResultListener;
+	}
 }

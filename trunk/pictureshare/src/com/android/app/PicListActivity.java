@@ -145,7 +145,7 @@ public class PicListActivity extends Activity implements View.OnClickListener{
 			Avatar avatar = list.get(position);
 			MainItem item = null;
 			if (convertView == null) {
-				item = new MainItem(PicListActivity.this, avatar);
+//				item = new MainItem(PicListActivity.this, avatar);
 				convertView = item;
 			} else {
 				item = (MainItem) convertView;

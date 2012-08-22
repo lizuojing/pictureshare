@@ -1,12 +1,20 @@
 package com.android.app.api;
 
+import android.content.Context;
+
 /**
  * 图片相关api
  * 
  * @author Administrator
  * 
  */
-public class AvatarApi extends BaseApiImp {
+public class AvatarApi extends BaseApi {
+
+	public AvatarApi(Context context) {
+		super(context);
+		// TODO Auto-generated constructor stub
+	}
+
 
 	/**
 	 * 获取单张图片详细信息
@@ -14,13 +22,8 @@ public class AvatarApi extends BaseApiImp {
 	 * @param params
 	 * @return
 	 */
-	public ApiResult getAvatarInfo(AvatarRequestParam params) {
+	public void getAvatarInfo(AvatarRequestParam params) {
 
-		// 参数封装
-
-		// 发送请求
-		baseRequest(null, params);
-		return null;
 	}
 	
 	
@@ -30,13 +33,8 @@ public class AvatarApi extends BaseApiImp {
 	 * @param params
 	 * @return
 	 */
-	public ApiResult getAvatarList(AvatarRequestParam params) {
+	public void getAvatarList(AvatarRequestParam params) {
 
-		// 参数封装
-
-		// 发送请求
-		baseRequest(null, params);
-		return null;
 	}
 
 	/**
@@ -45,13 +43,8 @@ public class AvatarApi extends BaseApiImp {
 	 * @param params
 	 * @return
 	 */
-	public ApiResult uploadAvatar(AvatarRequestParam params) {
+	public void uploadAvatar(AvatarRequestParam params) {
 
-		// 参数封装
-
-		// 发送请求
-		baseRequest(null, params);
-		return null;
 	}
 
 	/**
@@ -60,13 +53,8 @@ public class AvatarApi extends BaseApiImp {
 	 * @param params
 	 * @return
 	 */
-	public ApiResult uploadAvatarInfo(AvatarRequestParam params) {
+	public void uploadAvatarInfo(AvatarRequestParam params) {
 
-		// 参数封装
-
-		// 发送请求
-		baseRequest(null, params);
-		return null;
 	}
 
 	/**
@@ -75,13 +63,8 @@ public class AvatarApi extends BaseApiImp {
 	 * @param params
 	 * @return
 	 */
-	public ApiResult shareAvatar(AvatarRequestParam params) {
+	public void shareAvatar(AvatarRequestParam params) {
 
-		// 参数封装
-
-		// 发送请求
-		baseRequest(null, params);
-		return null;
 	}
 	
 	
@@ -91,13 +74,8 @@ public class AvatarApi extends BaseApiImp {
 	 * @param params
 	 * @return
 	 */
-	public ApiResult mapAvatar(AvatarRequestParam params) {
+	public void mapAvatar(AvatarRequestParam params) {
 		
-		// 参数封装
-		
-		// 发送请求
-		baseRequest(null, params);
-		return null;
 	}
 	
 	/**
@@ -106,13 +84,8 @@ public class AvatarApi extends BaseApiImp {
 	 * @param params
 	 * @return
 	 */
-	public ApiResult tacks(AvatarRequestParam params) {
+	public void tacks(AvatarRequestParam params) {
 		
-		// 参数封装
-		
-		// 发送请求
-		baseRequest(null, params);
-		return null;
 	}
 
 }

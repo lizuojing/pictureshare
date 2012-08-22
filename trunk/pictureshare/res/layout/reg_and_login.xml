@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/background"
+    android:orientation="vertical" >
+
+    <!-- 标题栏 -->
+
+    <RelativeLayout
+        android:id="@+id/relativeLayout2"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/title_bg" >
+
+        <TextView
+            android:id="@+id/reg_login_title"
+            android:layout_width="wrap_content"
+            android:layout_height="40dip"
+            android:gravity="center_vertical"
+            android:layout_centerInParent="true"
+            android:text="@string/login_title"
+            android:textColor="@color/color_title_default"
+            android:textSize="18sp" />
+    </RelativeLayout>
+
+    <com.android.app.view.TabContent
+        android:id="@+id/content"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" >
+
+        <include layout="@layout/login" />
+
+        <include layout="@layout/reg" />
+    </com.android.app.view.TabContent>
+
+</LinearLayout>

@@ -12,7 +12,7 @@ import com.android.app.service.PicService;
 
 public class PicApp extends Application {
 	private static final String TAG = "PicApp";
-	private Context mContext;
+	private static Context mContext;
     private PicService picService;
 	
 	  private ServiceConnection mConnection = new ServiceConnection() 
@@ -41,6 +41,20 @@ public class PicApp extends Application {
 		
 		
 		
+	}
+	
+	public static Context getAppContext() {
+		return mContext;
+	}
+	
+	public PicService getService()
+	{
+		return picService;
+	}
+	
+	public static PicApp getApp(Context context)
+	{
+		return (PicApp)context.getApplicationContext();
 	}
 	
 	@Override
