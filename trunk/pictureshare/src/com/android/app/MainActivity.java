@@ -370,8 +370,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 		private ImageLoaderManager imageLoaderManager;
 
 		public ListAdapter() {
-			imageLoaderManager = new ImageLoaderManager(MainActivity.this,
-					new Handler(), this);
+			imageLoaderManager = new ImageLoaderManager(MainActivity.this,new Handler(), this);
 		}
 
 		@Override
