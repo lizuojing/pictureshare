@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
@@ -16,6 +17,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 
 import com.android.app.entity.Avatar;
+import com.android.app.image.ImageLoaderManager;
 import com.android.app.view.MainItem;
 
 public class PicListActivity extends Activity implements View.OnClickListener{
@@ -117,8 +119,10 @@ public class PicListActivity extends Activity implements View.OnClickListener{
 	class ListAdapter extends BaseAdapter {
 
 		private ArrayList<Avatar> list;
+		private ImageLoaderManager imageLoaderManager;
 
 		public ListAdapter(ArrayList<Avatar> list) {
+			imageLoaderManager = new ImageLoaderManager(EditActivity.this,new Handler(), this);
 			this.list = list;
 		}
 
@@ -145,7 +149,7 @@ public class PicListActivity extends Activity implements View.OnClickListener{
 			Avatar avatar = list.get(position);
 			MainItem item = null;
 			if (convertView == null) {
-//				item = new MainItem(PicListActivity.this, avatar);
+				item = new MainItem(PicListActivity.this, avatar,imageLoaderManager);
 				convertView = item;
 			} else {
 				item = (MainItem) convertView;
