@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import com.android.app.R;
 import com.android.app.entity.Avatar;
+import com.android.app.image.ImageLoaderManager;
 import com.android.app.utils.Utils;
 
 public class MainItem extends RelativeLayout {
@@ -19,10 +20,12 @@ public class MainItem extends RelativeLayout {
 	private TextView mTitle;
 	private TextView mTime;
 	private ImageView mRightImage;
+	private ImageLoaderManager imageLoaderManager;
 
 
-	public MainItem(Context context, Avatar avatar) {
+	public MainItem(Context context, Avatar avatar, ImageLoaderManager imageLoaderManager) {
 		super(context);
+		this.imageLoaderManager = imageLoaderManager;
 		createLayout(context);
 		setItemData(avatar);
 	}
@@ -31,11 +34,11 @@ public class MainItem extends RelativeLayout {
 	private void createLayout(Context context) {
 		setBackgroundColor(getResources().getColor(R.color.color_list_item_default));
 		
-		RelativeLayout.LayoutParams imageLP = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT);
-//		RelativeLayout.LayoutParams imageLP = new RelativeLayout.LayoutParams(Utils.dipToPixels(context, 80),Utils.dipToPixels(context, 50));
+//		RelativeLayout.LayoutParams imageLP = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT);
+		RelativeLayout.LayoutParams imageLP = new RelativeLayout.LayoutParams(Utils.dipToPixels(context, 100),Utils.dipToPixels(context, 100));
 		imageLP.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
 		imageLP.addRule(RelativeLayout.CENTER_VERTICAL);
-//		imageLP.setMargins(Utils.dipToPixels(context, 2), 0, 0, 0);
+		imageLP.setMargins(Utils.dipToPixels(context, 2), Utils.dipToPixels(context, 2), Utils.dipToPixels(context, 2), Utils.dipToPixels(context, 2));
 		ImageView image = new ImageView(context);
 		image.setId(ID_IMAGE);
 		mLeftImage = image;
@@ -53,6 +56,7 @@ public class MainItem extends RelativeLayout {
 		
 		RelativeLayout.LayoutParams timeLP = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT);
 		timeLP.addRule(RelativeLayout.RIGHT_OF,ID_IMAGE);
+//		timeLP.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
 		timeLP.addRule(RelativeLayout.BELOW,ID_TITLE);
 		timeLP.setMargins(Utils.dipToPixels(context, 10), 0, 0, 0);
 		TextView time = new TextView(context);
@@ -71,8 +75,8 @@ public class MainItem extends RelativeLayout {
 	}
 
 	public void setItemData(Avatar avatar) {
-		if(Utils.isNullOrEmpty(avatar.getPath())) {
-			mLeftImage.setImageResource(R.drawable.android_default);
+		if(!Utils.isNullOrEmpty(avatar.getPath())) {
+			mLeftImage.setImageBitmap(imageLoaderManager.getImage(avatar.getPath(), R.drawable.android_default));
 		}else {
 			mLeftImage.setImageResource(R.drawable.android_default);
 		}

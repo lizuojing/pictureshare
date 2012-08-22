@@ -1,0 +1,328 @@
+package com.android.app;
+
+import android.app.Activity;
+import android.app.Dialog;
+import android.content.res.Configuration;
+import android.os.Bundle;
+import android.os.Handler;
+import android.view.KeyEvent;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.View.OnFocusChangeListener;
+import android.view.ViewGroup.LayoutParams;
+import android.view.inputmethod.EditorInfo;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ProgressBar;
+import android.widget.TextView;
+import android.widget.Toast;
+import android.widget.TextView.OnEditorActionListener;
+
+import com.android.app.api.ApiResult;
+import com.android.app.api.ApiReturnResultListener;
+import com.android.app.api.OwnerRequestParam;
+import com.android.app.api.UserApi;
+import com.android.app.service.PicService;
+import com.android.app.utils.Utils;
+import com.android.app.view.PicDialogProgress;
+import com.android.app.view.TabContent;
+
+public class RegAndLoginActivity extends Activity implements OnFocusChangeListener, OnClickListener,
+		OnEditorActionListener {
+
+	private static final int ID_DIALOG_PROGRESS = 1;
+	private static final int REQ_CODE_REG = 1;
+	private static final int REQ_CODE_LOGIN = 2;
+	public static final String INTENT_TO_PAGE = "intent_to_page";
+	public static final String INTENT_PAGE_REG = "intent_page_reg";
+	public static final String INTENT_PAGE_LOGIN = "intent_page_login";
+
+	private TextView ivTitle;
+	private TabContent tabContent;
+
+//	private LinearLayout bgEditLoginUserName;
+//	private LinearLayout bgEditLoginPassword;
+//	private LinearLayout bgEditRegUserName;
+//	private LinearLayout bgEditRegPassword;
+//	private LinearLayout bgEditRegEmail;
+
+	private EditText editLoginUserName;
+	private EditText editLoginPassword;
+	private EditText editRegUserName;
+	private EditText editRegPassword;
+	private EditText editRegEmail;
+
+	private Button btnGoReg;
+	private Button btnReg;
+	private Button btnLogin;
+
+	private int currentPageIndex;
+	private UserApi userApi;
+
+	private String regUsername;
+	private String regPassword;
+
+	private String intentToPage;
+	private boolean firstIntoActivity;
+	private PicDialogProgress progressDialog;
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.reg_and_login);
+		initLayout();
+		userApi = new UserApi(this);
+		userApi.setReturnResultListener(apiReturnResultListener);
+		intentToPage = getIntent().getStringExtra(INTENT_TO_PAGE);
+		firstIntoActivity=true;
+	}
+
+	@Override
+	public void onWindowFocusChanged(boolean hasFocus) {
+		super.onWindowFocusChanged(hasFocus);
+		if (firstIntoActivity) {
+			firstIntoActivity=false;
+			if (INTENT_PAGE_REG.equalsIgnoreCase(intentToPage)) {
+				goToRegPage();
+			} else {
+				goToLoginPage();
+			}
+		}
+
+	}
+
+	@Override
+	public void onConfigurationChanged(Configuration newConfig) {
+		super.onConfigurationChanged(newConfig);
+		Handler handler = new Handler();
+		handler.postDelayed(new Runnable() {
+			@Override
+			public void run() {
+				tabContent.scrollToPage(currentPageIndex);
+			}
+		}, 100);
+	}
+
+
+	private void initLayout() {
+		ivTitle = (TextView) findViewById(R.id.reg_login_title);
+		tabContent = (TabContent) findViewById(R.id.content);
+		tabContent.setSlideEnabled(false);
+
+//		bgEditLoginUserName = (LinearLayout) findViewById(R.id.bg_login_edit_username);
+//		bgEditLoginPassword = (LinearLayout) findViewById(R.id.bg_login_edit_password);
+//		bgEditRegUserName = (LinearLayout) findViewById(R.id.bg_reg_edit_username);
+//		bgEditRegPassword = (LinearLayout) findViewById(R.id.bg_reg_edit_password);
+//		bgEditRegEmail = (LinearLayout) findViewById(R.id.bg_reg_edit_email);
+
+		editLoginUserName = (EditText) findViewById(R.id.edit_login_username);
+		editLoginPassword = (EditText) findViewById(R.id.edit_login_password);
+		editRegUserName = (EditText) findViewById(R.id.edit_reg_username);
+		editRegPassword = (EditText) findViewById(R.id.edit_reg_password);
+		editRegEmail = (EditText) findViewById(R.id.edit_reg_email);
+		editRegUserName.setHintTextColor(0xFFcccccc);
+		editRegPassword.setHintTextColor(0xFFcccccc);
+		editRegEmail.setHintTextColor(0xFFcccccc);
+
+		editLoginUserName.setOnFocusChangeListener(this);
+		editLoginPassword.setOnFocusChangeListener(this);
+		editRegUserName.setOnFocusChangeListener(this);
+		editRegPassword.setOnFocusChangeListener(this);
+		editRegEmail.setOnFocusChangeListener(this);
+		editLoginPassword.setOnEditorActionListener(this);
+		editRegEmail.setOnEditorActionListener(this);
+
+		btnGoReg = (Button) findViewById(R.id.btn_go_reg);
+		btnReg = (Button) findViewById(R.id.btn_reg);
+		btnLogin = (Button) findViewById(R.id.btn_login);
+
+		btnGoReg.setOnClickListener(this);
+		btnReg.setOnClickListener(this);
+		btnLogin.setOnClickListener(this);
+
+	}
+	
+	@Override
+	protected Dialog onCreateDialog(int id) {
+		switch (id) {
+		case ID_DIALOG_PROGRESS:
+			//进度条
+			progressDialog = new PicDialogProgress(this);
+			return progressDialog;
+		}
+
+		return super.onCreateDialog(id);
+	}
+
+	@Override
+	public void onFocusChange(View v, boolean hasFocus) {
+	}
+	
+	
+	ApiReturnResultListener apiReturnResultListener = new ApiReturnResultListener() {
+
+		@Override
+		public <T> void onReturnSucceedResult(int requestCode, ApiResult<T> apiResult) {
+			if (progressDialog != null) {
+				progressDialog.cancel();
+			}
+			if (requestCode == REQ_CODE_LOGIN) {
+				PicApp.getApp(RegAndLoginActivity.this).getService().registerHeartBeatCheckAlarm();
+				Toast.makeText(RegAndLoginActivity.this, "登录成功",Toast.LENGTH_SHORT).show();
+				finish();
+			} else if (requestCode == REQ_CODE_REG) {
+				Toast.makeText(RegAndLoginActivity.this, "注册成功",Toast.LENGTH_SHORT).show();
+				OwnerRequestParam params = new OwnerRequestParam();
+				params.setUsername(regUsername.toLowerCase());
+				params.setPassword(regPassword);
+				userApi.login(REQ_CODE_LOGIN , params);
+				showDialog(ID_DIALOG_PROGRESS);
+			}
+		}
+
+		@Override
+		public <T> void onReturnFailResult(int requestCode, ApiResult<T> apiResult) {
+			if (progressDialog != null) {
+				progressDialog.cancel();
+			}
+			if (requestCode == REQ_CODE_LOGIN) {
+				Toast.makeText(RegAndLoginActivity.this, "登录失败",Toast.LENGTH_SHORT).show();
+			} else if (requestCode == REQ_CODE_REG) {
+				Toast.makeText(RegAndLoginActivity.this, "注册成功",Toast.LENGTH_SHORT).show();
+			}
+		}
+	};
+
+	@Override
+	public void onClick(View v) {
+		switch (v.getId()) {
+		case R.id.btn_go_reg:
+			goToRegPage();
+			break;
+		case R.id.btn_reg:
+			regUsername = editRegUserName.getText().toString().trim();
+			regPassword = editRegPassword.getText().toString().trim();
+			String email = editRegEmail.getText().toString().trim();
+			if (validateRegUserName(regUsername) && validatePassword(regPassword) && validateEmail(email)) {
+				OwnerRequestParam params = new OwnerRequestParam();
+				params.setUsername(regUsername.toLowerCase());
+				params.setPassword(regPassword);
+				params.setEmail(email);
+				userApi.register(REQ_CODE_REG,params);
+				showDialog(ID_DIALOG_PROGRESS);
+			}
+			break;
+		case R.id.btn_login:
+			String loginUsername = editLoginUserName.getText().toString().trim();
+			String loginPassword = editLoginPassword.getText().toString().trim();
+			if (validateLoginUserName(loginUsername) && validatePassword(loginPassword)) {
+				OwnerRequestParam params = new OwnerRequestParam();
+				params.setUsername(loginUsername.toLowerCase());
+				params.setPassword(loginPassword);
+				userApi.login(REQ_CODE_LOGIN,params);
+				showDialog(ID_DIALOG_PROGRESS);
+			}
+			break;
+		}
+	}
+
+	private boolean validateEmail(String email) {
+		if (Utils.isNullOrEmpty(email)) {
+			Toast.makeText(this, "您还没有输入联系邮箱", Toast.LENGTH_SHORT).show();
+			return false;
+		}
+		if (!Utils.isEmail(email)) {
+			Toast.makeText(this, "您请输入的邮箱格式不正确", Toast.LENGTH_SHORT).show();
+			return false;
+		}
+		return true;
+	}
+
+	private boolean validatePassword(String password) {
+		if (Utils.isNullOrEmpty(password)) {
+			Toast.makeText(this, "你还没有输入密码", Toast.LENGTH_SHORT).show();
+			return false;
+		}
+		if (!Utils.isPassword(password)) {
+			Toast.makeText(this, "密码为6–16位字符", Toast.LENGTH_SHORT).show();
+			return false;
+		}
+		return true;
+	}
+
+	private boolean validateRegUserName(String username) {
+		if (Utils.isNullOrEmpty(username)) {
+			Toast.makeText(this, "您还没有输入用户名", Toast.LENGTH_SHORT).show();
+			return false;
+		}
+		if (!Utils.isRegUserName(username)) {
+			Toast.makeText(this, "用户名为5–20位字母/数字/下划线或组合", Toast.LENGTH_SHORT).show();
+			return false;
+		}
+		return true;
+	}
+	
+	private boolean validateLoginUserName(String username) {
+		if (Utils.isNullOrEmpty(username)) {
+			Toast.makeText(this, "您还没有输入用户名", Toast.LENGTH_SHORT).show();
+			return false;
+		}
+		if (!Utils.isLoginUserName(username)) {
+			Toast.makeText(this, "用户名为5–20位字母/数字/下划线或组合", Toast.LENGTH_SHORT).show();
+			return false;
+		}
+		return true;
+	}
+
+	private void goToRegPage() {
+		ivTitle.setText(getResources().getString(R.string.reg_title));
+		tabContent.scrollToPage(1);
+		currentPageIndex = 1;
+		editRegUserName.setText(editLoginUserName.getText());
+		editRegPassword.setText(editLoginPassword.getText());
+	}
+
+	private void goToLoginPage() {
+		ivTitle.setText(getResources().getString(R.string.login_title));
+		tabContent.scrollToPage(0);
+		currentPageIndex = 0;
+	}
+
+	@Override
+	public void onBackPressed() {
+		if (!INTENT_PAGE_REG.equalsIgnoreCase(intentToPage) && currentPageIndex == 1) {
+			goToLoginPage();
+		} else {
+			super.onBackPressed();
+		}
+	}
+
+	@Override
+	public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+		switch (v.getId()) {
+		case R.id.edit_login_password:
+			if (actionId == EditorInfo.IME_ACTION_DONE) {
+				String loginUsername = editLoginUserName.getText().toString().trim();
+				String loginPassword = editLoginPassword.getText().toString().trim();
+				if (validateLoginUserName(loginUsername) && validatePassword(loginPassword)) {
+//					userApi.login(REQ_CODE_LOGIN, loginUsername.toLowerCase() + "@gozap.com", loginPassword);
+					showDialog(ID_DIALOG_PROGRESS);
+				}
+			}
+			break;
+		case R.id.edit_reg_email:
+			if (actionId == EditorInfo.IME_ACTION_DONE) {
+				regUsername = editRegUserName.getText().toString().trim();
+				regPassword = editRegPassword.getText().toString().trim();
+				String email = editRegEmail.getText().toString().trim();
+				if (validateRegUserName(regUsername) && validatePassword(regPassword) && validateEmail(email)) {
+//					userApi.register(REQ_CODE_REG, regUsername.toLowerCase() + "@gozap.com", regPassword, email);
+					showDialog(ID_DIALOG_PROGRESS);
+				}
+			}
+			break;
+		}
+		return false;
+	}
+
+}
