@@ -122,7 +122,7 @@ public class PicListActivity extends Activity implements View.OnClickListener{
 		private ImageLoaderManager imageLoaderManager;
 
 		public ListAdapter(ArrayList<Avatar> list) {
-			imageLoaderManager = new ImageLoaderManager(EditActivity.this,new Handler(), this);
+			imageLoaderManager = new ImageLoaderManager(PicListActivity.this,new Handler(), this);
 			this.list = list;
 		}
 
