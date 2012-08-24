@@ -22,7 +22,7 @@ public class PicTitleActvity extends BaseActvity implements OnClickListener{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.pictitle);
 		
-		filePath = getIntent().getStringExtra("filePath");
+		filePath = getIntent().getStringExtra("mCurrentFile");
 		
 		initComponents();
 		updateUI();
@@ -59,6 +59,7 @@ public class PicTitleActvity extends BaseActvity implements OnClickListener{
 			//title 处理
 			Intent intent = new Intent(this,DishActivity.class);
 			intent.putExtra("picTitle", title);
+			intent.putExtra("mCurrentFile", filePath);
 			startActivity(intent);
 			break;
 

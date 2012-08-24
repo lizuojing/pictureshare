@@ -3,16 +3,20 @@ package com.android.app;
 import java.util.ArrayList;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
+import android.widget.AdapterView.OnItemClickListener;
 
 import com.android.app.entity.Avatar;
 import com.android.app.image.ImageLoaderManager;
@@ -51,7 +55,16 @@ public class PicListActivity extends BaseActvity implements View.OnClickListener
 		});
 		
 		listView = (ListView) findViewById(R.id.listView1);
+		listView.setOnItemClickListener(new OnItemClickListener() {
 
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+					long arg3) {
+				Intent intent = new Intent(PicListActivity.this,DishActivity.class);
+				startActivity(intent);
+
+			}
+		});
 		ListAdapter adapter = new ListAdapter(loadData());
 		listView.setAdapter(adapter);
 

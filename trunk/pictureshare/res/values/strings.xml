@@ -17,6 +17,7 @@
     <string name="pick_photo">本地图库</string>
     <string name="pick_image">选择图片</string>
     <string name="delete">删除</string>
+    <string name="create">新建</string>
     <string name="share">分享</string>
     <string name="detail">detal</string>
     <string name="back_to_one">回到一级</string>
@@ -37,6 +38,7 @@
 	<string name="reg_username_hint">5-20位字母/数字/下划线</string>
 	<string name="reg_password_hint">6-16位字符</string>
 	<string name="reg_email_hint">请输入联系邮箱</string>
+	<string name="reg_phone_hint">请输入联系电话</string>
 
 	<string name="pic_title_hint">请输入图片标题</string>
 
