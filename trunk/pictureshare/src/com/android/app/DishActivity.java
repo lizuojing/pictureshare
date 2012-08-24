@@ -13,6 +13,7 @@ import android.view.View.OnClickListener;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import com.android.app.service.PicService;
 import com.android.app.view.FanShapedView;
 
 /**
@@ -40,13 +41,16 @@ public class DishActivity extends ActivityGroup {
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
 		setContentView(R.layout.dish);
+		
+		PicService.allActivity.add(this);
+		
 
 		eachLayout = (LinearLayout) findViewById(R.id.each_layout);
 		fanShapedView = (FanShapedView) findViewById(R.id.fanshaped);
 
 		eachLayout.addView(getLocalActivityManager().startActivity(
 				"contact",
-				new Intent(this, RectActiivity.class)
+				new Intent(this, PicTakeActivity.class)
 						.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
 				.getDecorView());
 
@@ -78,7 +82,6 @@ public class DishActivity extends ActivityGroup {
 	protected void onDestroy() {
 		super.onDestroy();
 		fanShapedView.recycle();
-		System.exit(0);
 	}
 
 	private void updateUI() {
@@ -88,6 +91,5 @@ public class DishActivity extends ActivityGroup {
 
 	private void initComponents() {
 		// imageView = (ImageView)findViewById(R.id.media_image);
-
 	}
 }

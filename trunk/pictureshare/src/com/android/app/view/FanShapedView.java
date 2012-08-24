@@ -110,6 +110,14 @@ public class FanShapedView extends View {
 		paint = new Paint(Paint.ANTI_ALIAS_FLAG);
 		paint.setAntiAlias(true);
 		
+		if(menuBitmaps==null) {
+			menuBitmaps = new LinkedList<Bitmap>();
+		}
+		
+		if(homeItem==null) {
+			homeItem = new LinkedList<String>();
+		}
+		
 		
 		fanshapedBitmap = BitmapFactory.decodeResource(resources, R.drawable.panzi);
 		

@@ -3,13 +3,10 @@ package com.android.app;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.android.app.data.SettingLoader;
-
-public class WelcomeActivity extends Activity {
+public class WelcomeActivity extends BaseActvity {
 	private Timer mTimer;
 
 	@Override

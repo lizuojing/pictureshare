@@ -1,6 +1,5 @@
 package com.android.app;
 
-import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -15,7 +14,7 @@ import android.widget.ImageView;
  * @author Administrator
  * 
  */
-public class PicTakeActivity extends Activity {
+public class PicTakeActivity extends BaseActvity {
 	private static final String TAG = "PicTakeActivity";
 	protected static final String ACTION_3D = "action_3d";
 	private Button btn_back;

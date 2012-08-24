@@ -15,8 +15,10 @@ import android.os.Message;
 import android.util.Log;
 
 import com.android.app.PicApp;
+import com.android.app.R;
 import com.android.app.intent.PicIntent;
 import com.android.app.receceiver.HeartBeatCheckReceiver;
+import com.android.app.utils.Utils;
 
 /**
  * 消息机制实现方案
@@ -36,7 +38,7 @@ public class PicService extends Service {
 	private int interval = HB_DEFAULT_ITV;
 	private static ArrayList<ServiceHandler> mServiceHandlers = new ArrayList<ServiceHandler>();
 
-	private static ArrayList<Activity> allActivity;
+	public static ArrayList<Activity> allActivity = new ArrayList<Activity>();
 	private ServiceHandler mHandler = null;
 
 	public static abstract class ServiceHandler extends Handler {
@@ -91,7 +93,6 @@ public class PicService extends Service {
 	@Override
 	public void onCreate() {
 		Log.i(TAG, "onCreate is running");
-		allActivity = new ArrayList<Activity>();
 		super.onCreate();
 	}
 
@@ -99,6 +100,8 @@ public class PicService extends Service {
 	public void onStart(Intent intent, int startId) {
 		Log.i(TAG, "onStart is running");
 //		registerHeartBeatCheckAlarm();//发送心跳包的时机 
+		
+		Utils.showNotification(this, R.drawable.android_default, "有新的通知消息。","有新的通知消息。" + Utils.formatTime(System.currentTimeMillis()));
 		super.onStart(intent, startId);
 	}
 

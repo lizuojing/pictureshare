@@ -38,5 +38,6 @@
 	<string name="reg_password_hint">6-16位字符</string>
 	<string name="reg_email_hint">请输入联系邮箱</string>
 
+	<string name="pic_title_hint">请输入图片标题</string>
 
 </resources>

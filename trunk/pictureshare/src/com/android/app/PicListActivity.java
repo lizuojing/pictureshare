@@ -2,9 +2,7 @@ package com.android.app;
 
 import java.util.ArrayList;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
@@ -20,7 +18,7 @@ import com.android.app.entity.Avatar;
 import com.android.app.image.ImageLoaderManager;
 import com.android.app.view.MainItem;
 
-public class PicListActivity extends Activity implements View.OnClickListener{
+public class PicListActivity extends BaseActvity implements View.OnClickListener{
 	
 	private Button backButton;
 	private EditText search_edit;
@@ -165,7 +163,8 @@ public class PicListActivity extends Activity implements View.OnClickListener{
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.button1:
-			finish();
+//			finish();
+			super.onBackPressed();
 			break;
 
 		default:

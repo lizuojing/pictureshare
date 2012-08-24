@@ -1,12 +1,11 @@
 package com.android.app;
 
-import com.android.app.entity.MyView;
-
-import android.app.Activity;
 import android.os.Bundle;
 import android.widget.ImageView;
 
-public class RectActiivity extends Activity {
+import com.android.app.entity.MyView;
+
+public class RectActiivity extends BaseActvity {
 	MyView myView;
 	ImageView myImageView;
 
