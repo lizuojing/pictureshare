@@ -8,7 +8,7 @@ import android.widget.ImageView;
 
 import com.android.app.entity.MyView;
 
-public class RectActiivity extends BaseActvity implements OnClickListener{
+public class RectActiivity extends BaseActvity implements OnClickListener {
 	MyView myView;
 	ImageView myImageView;
 	private ImageView searchButton;
@@ -19,28 +19,34 @@ public class RectActiivity extends BaseActvity implements OnClickListener{
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.picedit_area);
-		
+
 		initComponents();
-		
+
 		filePath = getIntent().getStringExtra("mCurrentFile");
-		
+
 		myView = (MyView) findViewById(R.id.MyView_font);
-		myView.setBitmap(filePath);
-		
-		
+//		myView.setBitmap(filePath);
+
 	}
 
 	private void initComponents() {
-		searchButton = (ImageView)findViewById(R.id.searchButton);
+		searchButton = (ImageView) findViewById(R.id.searchButton);
 		searchButton.setOnClickListener(this);
-		
+
+	}
+
+	@Override
+	protected void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+		myView.setBitmap(filePath);
 	}
 
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.searchButton:
-			Intent intent = new Intent(this,DishActivity.class);
+			Intent intent = new Intent(this, DishActivity.class);
 			intent.putExtra("mCurrentFile", filePath);
 			startActivity(intent);
 			break;
@@ -48,7 +54,7 @@ public class RectActiivity extends BaseActvity implements OnClickListener{
 		default:
 			break;
 		}
-		
+
 	}
 
 }

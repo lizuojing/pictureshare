@@ -55,6 +55,7 @@ public class MyView extends SurfaceView implements SurfaceHolder.Callback {
 	private int BitmapWidth, BitmapHeight;
 
 	private Thread thread;
+
 	public MyView(Context context) {
 		super(context);
 		holder = this.getHolder();// 获取holder
@@ -124,23 +125,25 @@ public class MyView extends SurfaceView implements SurfaceHolder.Callback {
 
 	public void initBitmap() {
 		Log.i(TAG, "initBitmap create");
-		if(bitmap==null) {
-			BitmapFactory.Options options=new BitmapFactory.Options();
-//	        options.inSampleSize = 2;//压缩处理 或者 使用缩略图
-			bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.a3431587_s, options);
-//				((BitmapDrawable) getResources().getDrawable(
-//					R.drawable.a3431587_s)).getBitmap();
+		if (bitmap == null) {
+			BitmapFactory.Options options = new BitmapFactory.Options();
+			// options.inSampleSize = 2;//压缩处理 或者 使用缩略图
+			bitmap = BitmapFactory.decodeResource(getResources(),
+					R.drawable.a3431587_s, options);
+			// ((BitmapDrawable) getResources().getDrawable(
+			// R.drawable.a3431587_s)).getBitmap();
 		}
 		DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
 		BitmapWidth = displayMetrics.heightPixels;
 		BitmapHeight = displayMetrics.widthPixels;
 		// 构造渲染器BitmapShader
-		bmp = Bitmap.createScaledBitmap(bitmap, BitmapHeight, BitmapWidth, true);
+		bmp = Bitmap
+				.createScaledBitmap(bitmap, BitmapHeight, BitmapWidth, true);
 		bitmapShader = new BitmapShader(bmp, Shader.TileMode.CLAMP,
 				Shader.TileMode.CLAMP);
 		bmp = toGrayscale(bmp);
+		isMove = true;
 	}
-
 
 	public static Bitmap toGrayscale(Bitmap bmpOriginal) {
 		int width, height;
@@ -174,13 +177,13 @@ public class MyView extends SurfaceView implements SurfaceHolder.Callback {
 	@Override
 	public void surfaceDestroyed(SurfaceHolder holder) {
 		this.destroyDrawingCache();
-		if(thread!=null) {
+		if (thread != null) {
 			thread.interrupt();
 			thread = null;
 		}
 		Log.i(TAG, "suface Destroyed");
 	}
-	
+
 	// 内部类的内部类
 	class MyThread implements Runnable {
 
@@ -199,14 +202,14 @@ public class MyView extends SurfaceView implements SurfaceHolder.Callback {
 					mPaint.setStrokeWidth(5);
 					canvas.drawBitmap(bmp, new Matrix(), mPaint);
 					canvas.restore();
-					drawLine(canvas, left_top.getCenterPoint(),
-							left_bottom.getCenterPoint());
-					drawLine(canvas, left_bottom.getCenterPoint(),
-							right_bottom.getCenterPoint());
-					drawLine(canvas, right_bottom.getCenterPoint(),
-							right_top.getCenterPoint());
-					drawLine(canvas, right_top.getCenterPoint(),
-							left_top.getCenterPoint());
+					drawLine(canvas, left_top.getCenterPoint(), left_bottom
+							.getCenterPoint());
+					drawLine(canvas, left_bottom.getCenterPoint(), right_bottom
+							.getCenterPoint());
+					drawLine(canvas, right_bottom.getCenterPoint(), right_top
+							.getCenterPoint());
+					drawLine(canvas, right_top.getCenterPoint(), left_top
+							.getCenterPoint());
 
 					drawPointRect(canvas, left_top);
 					drawPointRect(canvas, left_bottom);
