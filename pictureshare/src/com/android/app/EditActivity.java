@@ -2,7 +2,6 @@ package com.android.app;
 
 import java.util.ArrayList;
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
@@ -23,7 +22,7 @@ import com.android.app.entity.Avatar;
 import com.android.app.image.ImageLoaderManager;
 import com.android.app.view.MainItem;
 
-public class EditActivity extends Activity implements View.OnClickListener{
+public class EditActivity extends BaseActvity implements View.OnClickListener{
 	private static final String TAG = "EditActivity";
 	private ListView listView;
 	private Button finishButton;
@@ -180,7 +179,8 @@ public class EditActivity extends Activity implements View.OnClickListener{
 		switch (v.getId()) {
 		case R.id.button1:
 			Log.i(TAG, "edit finish");
-			finish();
+//			finish();
+			super.onBackPressed();
 			break;
 
 		default:

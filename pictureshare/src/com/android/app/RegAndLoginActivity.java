@@ -1,6 +1,5 @@
 package com.android.app;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -9,11 +8,9 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnFocusChangeListener;
-import android.view.ViewGroup.LayoutParams;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.TextView.OnEditorActionListener;
@@ -22,12 +19,11 @@ import com.android.app.api.ApiResult;
 import com.android.app.api.ApiReturnResultListener;
 import com.android.app.api.OwnerRequestParam;
 import com.android.app.api.UserApi;
-import com.android.app.service.PicService;
 import com.android.app.utils.Utils;
 import com.android.app.view.PicDialogProgress;
 import com.android.app.view.TabContent;
 
-public class RegAndLoginActivity extends Activity implements OnFocusChangeListener, OnClickListener,
+public class RegAndLoginActivity extends BaseActvity implements OnFocusChangeListener, OnClickListener,
 		OnEditorActionListener {
 
 	private static final int ID_DIALOG_PROGRESS = 1;

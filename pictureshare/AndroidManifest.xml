@@ -48,8 +48,10 @@
         <activity android:name=".SettingActivity" />
         <activity android:name=".DishActivity" />
         <activity android:name=".PicListActivity" />
+        <activity android:name=".RectActiivity" />
         <activity android:name=".RegAndLoginActivity" />
         <activity android:name=".MainActivity" />
+        <activity android:name=".PicTitleActvity" />
         <service android:name=".service.PicService"/>
     </application>
 

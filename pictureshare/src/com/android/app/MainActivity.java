@@ -1,12 +1,17 @@
 package com.android.app;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -40,6 +45,7 @@ import android.widget.AdapterView.OnItemClickListener;
 
 import com.android.app.entity.Avatar;
 import com.android.app.image.ImageLoaderManager;
+import com.android.app.service.PicService;
 import com.android.app.utils.Utils;
 import com.android.app.view.MainItem;
 
@@ -49,7 +55,7 @@ import com.android.app.view.MainItem;
  * @author Administrator
  * 
  */
-public class MainActivity extends Activity implements View.OnClickListener {
+public class MainActivity extends BaseActvity implements View.OnClickListener {
 
 	protected static final int GET_IMAGE = 2000;
 	protected static final String TAG = "MainActivity";
@@ -73,7 +79,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
 
@@ -178,23 +183,23 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
 				@Override
 				public void onClick(View v) {
-					Intent getImage = new Intent(Intent.ACTION_GET_CONTENT);
-					getImage.addCategory(Intent.CATEGORY_OPENABLE);
-					getImage.setType("image/*");
-					getImage.putExtra("crop", "true");
+					Intent getImage = new Intent(Intent.ACTION_GET_CONTENT); 
+                    getImage.addCategory(Intent.CATEGORY_OPENABLE);
+                    //getImage.setType("image/jpeg"); 
+                    getImage.setType("image/*"); 
+                    getImage.putExtra("crop", "true");
+                    
+                    getImage.putExtra("aspectX", 1); 
+                    getImage.putExtra("aspectY", 1);
+                    getImage.putExtra("outputX", 320);
+                    getImage.putExtra("outputY", 320);
+                    getImage.putExtra("scale",           true);
+                    getImage.putExtra("noFaceDetection", true);
+                    getImage.putExtra("setWallpaper",    false);
+                    getImage.putExtra("return-data", true);
 
-					getImage.putExtra("aspectX", 1);
-					getImage.putExtra("aspectY", 1);
-					getImage.putExtra("outputX", 320);
-					getImage.putExtra("outputY", 320);
-					getImage.putExtra("scale", true);
-					getImage.putExtra("noFaceDetection", true);
-					getImage.putExtra("setWallpaper", false);
-					getImage.putExtra("return-data", true);
+                    startActivityForResult(Intent.createChooser(getImage, getResources().getString(R.string.pick_image)), GET_IMAGE);
 
-					startActivityForResult(Intent.createChooser(getImage,
-							getResources().getString(R.string.pick_image)),
-							GET_IMAGE);
 				}
 			});
 		}
@@ -214,6 +219,20 @@ public class MainActivity extends Activity implements View.OnClickListener {
 						} else if (bitmap == null && path == null) {
 
 						}
+						String filepath = new File(Utils.getCacheDir(),getPhotoFileName()).getAbsolutePath();
+						
+						boolean writeResult = writeImage(filepath, bitmap);
+						
+						if (writeResult)
+						{
+							Intent intent = new Intent(this, PicTitleActvity.class);
+							intent.putExtra("path", filepath);
+							startActivity(intent);
+							
+							finish();
+							
+							return;
+						}
 					}
 
 				}
@@ -224,13 +243,35 @@ public class MainActivity extends Activity implements View.OnClickListener {
 					intent.putExtra("mCurrentFile", mCurrentPhotoFile
 							.getAbsolutePath());
 				}
-				intent.setClass(this, DishActivity.class);
+				intent.setClass(this, RectActiivity.class);
 				startActivity(intent);
 			}
 		}
 
 	}
 
+	
+	private boolean writeImage(String path, Bitmap bitmap)
+	{
+		boolean result = false;
+		
+        try 
+        { // catches IOException below 
+        	if(!Utils.isNullOrEmpty(path)&&bitmap!=null) {
+                File f = new File(path); 
+                FileOutputStream osf = new FileOutputStream(f);
+                result = bitmap.compress(Bitmap.CompressFormat.JPEG, 100, osf);
+                osf.flush();
+        	}
+        } 
+        catch (IOException ioe) 
+        {
+        	Log.e(TAG,ioe.toString());
+        	result = false;
+        }
+        
+        return result;
+    }
 	private String getPhotoFileName() {
 		Date date = new Date(System.currentTimeMillis());
 		SimpleDateFormat dateFormat = new SimpleDateFormat(
@@ -375,19 +416,16 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
 		@Override
 		public int getCount() {
-			// TODO Auto-generated method stub
 			return list.size();
 		}
 
 		@Override
 		public Object getItem(int position) {
-			// TODO Auto-generated method stub
 			return list.get(position);
 		}
 
 		@Override
 		public long getItemId(int position) {
-			// TODO Auto-generated method stub
 			return position;
 		}
 
@@ -406,6 +444,31 @@ public class MainActivity extends Activity implements View.OnClickListener {
 			return convertView;
 		}
 
+	}
+	
+//	@Override
+//	protected Dialog onCreateDialog(int id) {
+//		return super.onCreateDialog(id);
+//	}
+	
+	@Override
+	public void onBackPressed() {
+		new AlertDialog.Builder(this).setTitle("确定退出吗？").setPositiveButton("确定", new  DialogInterface.OnClickListener() {
+			
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				// TODO Auto-generated method stub
+				PicService.promptExitApp(MainActivity.this);
+				dialog.dismiss();
+			}
+		}).setNegativeButton("取消", new  DialogInterface.OnClickListener() {
+			
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				dialog.dismiss();
+			}
+		}).show();
+//		super.onBackPressed();
 	}
 
 	@Override

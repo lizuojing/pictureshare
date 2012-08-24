@@ -1,9 +1,9 @@
 package com.android.app;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 /**
@@ -11,12 +11,13 @@ import android.widget.Toast;
  * @author Administrator
  *
  */
-public class SettingActivity extends Activity implements OnClickListener{
+public class SettingActivity extends BaseActvity implements OnClickListener{
 	private RelativeLayout svrSetting;
 	private RelativeLayout personalSetting;
 	private RelativeLayout picSetting;
 	private RelativeLayout valuationSetting;
 	private RelativeLayout commonSetting;
+	private Button backButton;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -28,12 +29,15 @@ public class SettingActivity extends Activity implements OnClickListener{
 	}
 
 	private void initComponents() {
+		
+		backButton = (Button)findViewById(R.id.button1);
 		svrSetting = (RelativeLayout)findViewById(R.id.svr_setting);
 		personalSetting = (RelativeLayout)findViewById(R.id.personal_setting);
 		picSetting = (RelativeLayout)findViewById(R.id.pic_setting);
 		valuationSetting = (RelativeLayout)findViewById(R.id.valuation_setting);
 		commonSetting = (RelativeLayout)findViewById(R.id.common_setting);
 		
+		backButton.setOnClickListener(this);
 		svrSetting.setOnClickListener(this);
 		personalSetting.setOnClickListener(this);
 		picSetting.setOnClickListener(this);
@@ -44,6 +48,9 @@ public class SettingActivity extends Activity implements OnClickListener{
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
+		case R.id.button1:
+			super.onBackPressed();
+			break;
 		case R.id.svr_setting:
 			Toast.makeText(this, "服务器设置", Toast.LENGTH_SHORT).show();
 			break;

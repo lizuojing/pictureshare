@@ -12,6 +12,7 @@ import android.view.View.OnTouchListener;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.android.app.service.PicService;
 import com.baidu.mapapi.BMapManager;
 import com.baidu.mapapi.GeoPoint;
 import com.baidu.mapapi.MKGeneralListener;
@@ -32,12 +33,14 @@ public class PMapActivity extends MapActivity implements View.OnClickListener{
 	private Button shareButton;
 	private Button detalButton;
 	private Button backToOneButton;
+	private Button backButton;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.map);
+		PicService.allActivity.add(this);
 
 		mBMapMan = new BMapManager(getApplication());
 		mBMapMan.init("1F572AAE2DC844C03D5AF0C9A001026E03BD1618", new MKGeneralListener() {
@@ -123,11 +126,13 @@ public class PMapActivity extends MapActivity implements View.OnClickListener{
 	}
 
 	private void initComponents() {
+		backButton = (Button)findViewById(R.id.button1);
 		deleteButton = (Button)findViewById(R.id.button2);
 		shareButton = (Button)findViewById(R.id.button3);
 		detalButton = (Button)findViewById(R.id.button4);
 		backToOneButton = (Button)findViewById(R.id.button5);
 		
+		backButton.setOnClickListener(this);
 		deleteButton.setOnClickListener(this);
 		shareButton.setOnClickListener(this);
 		detalButton.setOnClickListener(this);
@@ -185,6 +190,9 @@ public class PMapActivity extends MapActivity implements View.OnClickListener{
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
+		case R.id.button1:
+			super.onBackPressed();
+			break;
 		case R.id.button2:
 			Toast.makeText(this, "删除", Toast.LENGTH_SHORT).show();
 			break;

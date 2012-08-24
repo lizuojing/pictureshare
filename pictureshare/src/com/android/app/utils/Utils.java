@@ -7,7 +7,14 @@ import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.android.app.MainActivity;
+import com.android.app.R;
+
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Environment;
 import android.util.DisplayMetrics;
 import android.view.WindowManager;
@@ -119,4 +126,33 @@ public class Utils {
 		}
 		return false;
 	}
+	
+	public static void showNotification(Context context, int id, String title, String message)
+	{
+		NotificationManager notificationManager = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
+
+        String tickerText = message;
+
+        Notification notification = new Notification(R.drawable.android_default, tickerText, System.currentTimeMillis());
+        notification.defaults |= Notification.DEFAULT_SOUND;
+
+        Intent intent = new Intent(context, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.putExtra("from_notification", true);
+        
+        PendingIntent contentIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        
+        notification.setLatestEventInfo(context, title, tickerText, contentIntent);
+        
+        notification.flags |= Notification.FLAG_ONGOING_EVENT;
+        notification.flags |= Notification.FLAG_AUTO_CANCEL;
+
+        notificationManager.notify(id, notification);
+	}
+	
+	public static void deleteNotification(Context context, int id) 
+	{
+        NotificationManager notificationManager = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.cancel(id);
+    }
 }

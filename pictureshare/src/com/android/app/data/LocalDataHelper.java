@@ -113,5 +113,8 @@ public class LocalDataHelper {
 	public void close() {
 		mDatabaseHelper.close();
 	}
+	
+	
+	
 
 }
