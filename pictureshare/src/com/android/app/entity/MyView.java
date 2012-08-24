@@ -12,7 +12,6 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Shader;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.PathShape;
 import android.util.AttributeSet;
@@ -23,6 +22,7 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 import com.android.app.R;
+import com.android.app.utils.Utils;
 
 public class MyView extends SurfaceView implements SurfaceHolder.Callback {
 
@@ -36,10 +36,6 @@ public class MyView extends SurfaceView implements SurfaceHolder.Callback {
 	public static int right_bottom_int = 3;
 	public static int right_top_int = 4;
 
-	public Rect left_top = new Rect(80, 100, touchLen);
-	public Rect left_bottom = new Rect(80, 700, touchLen);
-	public Rect right_bottom = new Rect(400, 700, touchLen);
-	public Rect right_top = new Rect(400, 100, touchLen);
 	Paint mPaint = new Paint();
 
 	SurfaceHolder holder;
@@ -56,12 +52,28 @@ public class MyView extends SurfaceView implements SurfaceHolder.Callback {
 
 	private Thread thread;
 
+	private Rect left_top;
+
+	private Rect left_bottom;
+
+	private Rect right_bottom;
+
+	private Rect right_top;
+
 	public MyView(Context context) {
 		super(context);
 		holder = this.getHolder();// 获取holder
 		holder.addCallback(this);
 		setFocusable(true);
+		initPoints(context);
 		initBitmap();
+	}
+
+	private void initPoints(Context context) {
+		left_top = new Rect(Utils.dipToPixels(context, 80), 100, touchLen);
+		left_bottom = new Rect(Utils.dipToPixels(context, 80), 600, touchLen);
+		right_bottom = new Rect(Utils.getScreenWidth(context)-Utils.dipToPixels(context, 80),600, touchLen);
+		right_top = new Rect(Utils.getScreenWidth(context)-Utils.dipToPixels(context, 80),100, touchLen);
 	}
 
 	public MyView(Context context, AttributeSet attrs) {
@@ -69,6 +81,7 @@ public class MyView extends SurfaceView implements SurfaceHolder.Callback {
 		holder = this.getHolder();// 获取holder
 		holder.addCallback(this);
 		setFocusable(true);
+		initPoints(context);
 		initBitmap();
 	}
 
