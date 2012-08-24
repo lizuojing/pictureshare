@@ -86,9 +86,13 @@ public class MyView extends SurfaceView implements SurfaceHolder.Callback {
 	}
 
 	public void setBitmap(String filePath) {
-		Bitmap bitmap = BitmapFactory.decodeFile(filePath);
-		this.bitmap = bitmap;
-		initBitmap();
+		try {
+			Bitmap bitmap = BitmapFactory.decodeFile(filePath);
+			this.bitmap = bitmap;
+			initBitmap();
+		} catch (OutOfMemoryError e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override

@@ -1,5 +1,6 @@
 package com.android.app;
 
+import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -34,6 +35,8 @@ public class PMapActivity extends MapActivity implements View.OnClickListener{
 	private Button detalButton;
 	private Button backToOneButton;
 	private Button backButton;
+	
+	private boolean isDelete = false;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -123,6 +126,15 @@ public class PMapActivity extends MapActivity implements View.OnClickListener{
 		mMapView.getOverlays().add(mylocTest);
 		
 		initComponents();
+		updateUI();
+	}
+
+	private void updateUI() {
+		if(!isDelete) {
+			deleteButton.setText(getResources().getString(R.string.create));
+		}else {
+			deleteButton.setText(getResources().getString(R.string.delete));
+		}
 	}
 
 	private void initComponents() {
@@ -194,16 +206,25 @@ public class PMapActivity extends MapActivity implements View.OnClickListener{
 			super.onBackPressed();
 			break;
 		case R.id.button2:
-			Toast.makeText(this, "删除", Toast.LENGTH_SHORT).show();
+			isDelete = !isDelete;
+			if(!isDelete) {
+				deleteButton.setText(getResources().getString(R.string.create));
+			}else {
+				deleteButton.setText(getResources().getString(R.string.delete));
+			}
+//			Toast.makeText(this, "删除", Toast.LENGTH_SHORT).show();
 			break;
 		case R.id.button3:
-			Toast.makeText(this, "回到一级", Toast.LENGTH_SHORT).show();
+//			Toast.makeText(this, "回到一级", Toast.LENGTH_SHORT).show();
+			Intent intent = new Intent(this,MainActivity.class);
+			startActivity(intent);
 			break;
 		case R.id.button4:
 			Toast.makeText(this, "分享", Toast.LENGTH_SHORT).show();
 			break;
 		case R.id.button5:
 			Toast.makeText(this, "detal", Toast.LENGTH_SHORT).show();
+			//发送左上右下坐标
 			break;
 
 			

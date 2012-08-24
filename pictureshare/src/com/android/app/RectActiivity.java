@@ -46,7 +46,7 @@ public class RectActiivity extends BaseActvity implements OnClickListener {
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.searchButton:
-			Intent intent = new Intent(this, DishActivity.class);
+			Intent intent = new Intent(this, PicTitleActvity.class);
 			intent.putExtra("mCurrentFile", filePath);
 			startActivity(intent);
 			break;
