@@ -19,6 +19,8 @@ public class Rect extends Point {
 
 	public Rect(float x, float y, float radius) {
 		pointCenter = new Point(x, y);
+		this.x = x;
+		this.y = y;
 		this.radius = radius;
 		p_PC.setPoint(pointCenter.getX() + radius, pointCenter.getY() - radius);
 		p_PP.setPoint(pointCenter.getX() + radius, pointCenter.getY() + radius);
@@ -28,6 +30,8 @@ public class Rect extends Point {
 
 	public void changeCenter(Point newCenter) {
 		pointCenter = newCenter;
+		x = newCenter.x;
+		y = newCenter.y;
 		p_PC.setPoint(pointCenter.getX() + radius, pointCenter.getY() - radius);
 		p_PP.setPoint(pointCenter.getX() + radius, pointCenter.getY() + radius);
 		p_CC.setPoint(pointCenter.getX() - radius, pointCenter.getY() - radius);

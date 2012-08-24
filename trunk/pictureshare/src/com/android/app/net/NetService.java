@@ -54,7 +54,8 @@ public class NetService {
 	 * @param params
 	 * @return HttpResultJson
 	 */
-	public static HttpResultJson httpPostReturnJson(Context context, String url, List<NameValuePair> params) {
+	public static HttpResultJson httpPostReturnJson(Context context,
+			String url, List<NameValuePair> params) {
 		HttpResultJson result = new HttpResultJson();
 		if (!checkNetwork(context)) {
 			result.setResultCode(HttpResult.RESULT_FAIL);
@@ -119,7 +120,8 @@ public class NetService {
 		return result;
 	}
 
-	public static HttpResultJson updateFile(Context context, String url, List<NameValuePair> params,NameValuePair fileNVPair) {
+	public static HttpResultJson updateFile(Context context, String url,
+			List<NameValuePair> params, NameValuePair fileNVPair) {
 		HttpResultJson result = new HttpResultJson();
 		if (!checkNetwork(context)) {
 			result.setResultCode(HttpResult.RESULT_FAIL);
@@ -137,21 +139,24 @@ public class NetService {
 			return result;
 		}
 		post.addHeader("Accept-Encoding", "GZIP");
-		MultipartEntity entity=null;
+		MultipartEntity entity = null;
 		try {
-			entity=new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE);
-			if(params!=null){
-				for(int i=0;i<params.size();i++){
-					NameValuePair pair=params.get(i);
-					StringBody stringBody=new StringBody(URLEncoder.encode(pair.getValue(),"UTF-8"));
-					FormBodyPart formBodyPart=new FormBodyPart(URLEncoder.encode(pair.getName()),stringBody );
+			entity = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE);
+			if (params != null) {
+				for (int i = 0; i < params.size(); i++) {
+					NameValuePair pair = params.get(i);
+					StringBody stringBody = new StringBody(URLEncoder.encode(
+							pair.getValue(), "UTF-8"));
+					FormBodyPart formBodyPart = new FormBodyPart(
+							URLEncoder.encode(pair.getName()), stringBody);
 					entity.addPart(formBodyPart);
 				}
 			}
-			if(fileNVPair!=null){
-				File file=new File(fileNVPair.getValue());
-				FileBody fileBody=new FileBody(file);
-				FormBodyPart formBodyPart=new FormBodyPart(URLEncoder.encode(fileNVPair.getName()),fileBody );
+			if (fileNVPair != null) {
+				File file = new File(fileNVPair.getValue());
+				FileBody fileBody = new FileBody(file);
+				FormBodyPart formBodyPart = new FormBodyPart(
+						URLEncoder.encode(fileNVPair.getName()), fileBody);
 				entity.addPart(formBodyPart);
 			}
 		} catch (UnsupportedEncodingException e) {
@@ -195,7 +200,7 @@ public class NetService {
 		parseResponseToJson(response, result);
 		return result;
 	}
-	
+
 	/**
 	 * 以get方式,向服务端发送请求,并获取json格式的返回结果
 	 * 
@@ -204,7 +209,8 @@ public class NetService {
 	 * @param params
 	 * @return HttpResultJson
 	 */
-	public static HttpResultJson httpGetReturnJson(Context context, String url, List<NameValuePair> params) {
+	public static HttpResultJson httpGetReturnJson(Context context, String url,
+			List<NameValuePair> params) {
 
 		HttpResultJson result = new HttpResultJson();
 
@@ -278,7 +284,8 @@ public class NetService {
 	 * @param params
 	 * @return HttpResultXml
 	 */
-	public static HttpResultXml httpPostReturnXml(Context context, String url, List<NameValuePair> params) {
+	public static HttpResultXml httpPostReturnXml(Context context, String url,
+			List<NameValuePair> params) {
 		HttpResultXml result = new HttpResultXml();
 		if (!checkNetwork(context)) {
 			result.setResultCode(HttpResult.RESULT_FAIL);
@@ -311,7 +318,7 @@ public class NetService {
 		HttpResponse response;
 		try {
 			response = executeHttpPost(client, post);
-		}  catch (Exception e) {
+		} catch (Exception e) {
 			int failCode = HttpFailCode.UNDEFINED;
 			if (e instanceof ConnectTimeoutException) {
 				failCode = HttpFailCode.CONNECT_TIME_OUT;
@@ -341,7 +348,8 @@ public class NetService {
 		return result;
 	}
 
-	public static HttpEntity downloadImg(Context context, String urlStr) throws Exception {
+	public static HttpEntity downloadImg(Context context, String urlStr)
+			throws Exception {
 		HttpClient client = CustomHttpClient.getInstance();
 		CustomHttpGet get = new CustomHttpGet(urlStr);
 		get.setResendEnabled(false);
@@ -369,21 +377,23 @@ public class NetService {
 
 	/**
 	 * get 请求
+	 * 
 	 * @param client
 	 * @param get
 	 * @return
 	 * @throws IOException
 	 * @throws ClientProtocolException
 	 */
-	private static HttpResponse executeHttpGet(HttpClient client, CustomHttpGet get) throws IOException,
-			ClientProtocolException {
+	private static HttpResponse executeHttpGet(HttpClient client,
+			CustomHttpGet get) throws IOException, ClientProtocolException {
 		HttpResponse httpResponse = null;
 		try {
 			httpResponse = client.execute(get);
 		} catch (ClientProtocolException e) {
 			throw e;
 		} catch (IOException e) {
-			if ((e instanceof ConnectTimeoutException || e instanceof SocketTimeoutException
+			if ((e instanceof ConnectTimeoutException
+					|| e instanceof SocketTimeoutException
 					|| e instanceof UnknownHostException || e instanceof ConnectionPoolTimeoutException)
 					&& get.isNeedResend()) {
 				return executeHttpGet(client, get);
@@ -396,21 +406,23 @@ public class NetService {
 
 	/**
 	 * post 请求
+	 * 
 	 * @param client
 	 * @param post
 	 * @return
 	 * @throws IOException
 	 * @throws ClientProtocolException
 	 */
-	private static HttpResponse executeHttpPost(HttpClient client, CustomHttpPost post) throws IOException,
-			ClientProtocolException {
+	private static HttpResponse executeHttpPost(HttpClient client,
+			CustomHttpPost post) throws IOException, ClientProtocolException {
 		HttpResponse httpResponse = null;
 		try {
 			httpResponse = client.execute(post);
 		} catch (ClientProtocolException e) {
 			throw e;
 		} catch (IOException e) {
-			if ((e instanceof ConnectTimeoutException || e instanceof SocketTimeoutException
+			if ((e instanceof ConnectTimeoutException
+					|| e instanceof SocketTimeoutException
 					|| e instanceof UnknownHostException || e instanceof ConnectionPoolTimeoutException)
 					&& post.isNeedResend()) {
 				return executeHttpPost(client, post);
@@ -428,7 +440,8 @@ public class NetService {
 	 * @param result
 	 * @return HttpResultJson
 	 */
-	private static HttpResultJson parseResponseToJson(HttpResponse response, HttpResultJson result) {
+	private static HttpResultJson parseResponseToJson(HttpResponse response,
+			HttpResultJson result) {
 		HttpEntity entity = response.getEntity();
 		InputStream inputStream = null;
 		try {
@@ -496,7 +509,8 @@ public class NetService {
 	 * @param result
 	 * @return
 	 */
-	private static HttpResultXml parseResponseToXml(HttpResponse response, HttpResultXml result) {
+	private static HttpResultXml parseResponseToXml(HttpResponse response,
+			HttpResultXml result) {
 		HttpEntity entity = response.getEntity();
 		InputStream inputStream = null;
 		try {
@@ -513,7 +527,8 @@ public class NetService {
 			} else {
 				inputStream = bis;
 			}
-			XmlPullParser parser = XmlPullParserFactory.newInstance().newPullParser();
+			XmlPullParser parser = XmlPullParserFactory.newInstance()
+					.newPullParser();
 			parser.setInput(inputStream, "utf-8");
 			int eventType = parser.getEventType();
 			while (eventType != XmlPullParser.END_DOCUMENT) {
@@ -567,7 +582,8 @@ public class NetService {
 	 * @param e
 	 * @param failCode
 	 */
-	private static void createFailHttpResult(Exception e, int failCode, HttpResult result) {
+	private static void createFailHttpResult(Exception e, int failCode,
+			HttpResult result) {
 		result.setResultCode(HttpResult.RESULT_FAIL);
 		result.setFailCode(failCode);
 		result.setFailMessage(e.toString());
@@ -575,7 +591,8 @@ public class NetService {
 	}
 
 	public static boolean checkNetwork(Context context) {
-		ConnectivityManager conn = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+		ConnectivityManager conn = (ConnectivityManager) context
+				.getSystemService(Context.CONNECTIVITY_SERVICE);
 		NetworkInfo net = conn.getActiveNetworkInfo();
 		if (net != null && net.isConnectedOrConnecting()) {
 			return true;
