@@ -9,7 +9,6 @@ import java.util.ArrayList;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -225,12 +224,9 @@ public class MainActivity extends BaseActvity implements View.OnClickListener {
 						
 						if (writeResult)
 						{
-							Intent intent = new Intent(this, PicTitleActvity.class);
-							intent.putExtra("path", filepath);
+							Intent intent = new Intent(this, RectActiivity.class);
+							intent.putExtra("mCurrentFile", filepath);
 							startActivity(intent);
-							
-							finish();
-							
 							return;
 						}
 					}
@@ -475,7 +471,7 @@ public class MainActivity extends BaseActvity implements View.OnClickListener {
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.button1:
-			Intent editIntent = new Intent(this, EditActivity.class);
+			Intent editIntent = new Intent(this, RectActiivity.class);
 			startActivity(editIntent);
 			break;
 		case R.id.imageView2:

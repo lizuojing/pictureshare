@@ -1,16 +1,32 @@
 package com.android.app.entity;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.BitmapShader;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.ColorMatrix;
+import android.graphics.ColorMatrixColorFilter;
+import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.graphics.Path;
+import android.graphics.Shader;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ShapeDrawable;
+import android.graphics.drawable.shapes.PathShape;
 import android.util.AttributeSet;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+import com.android.app.R;
+
 public class MyView extends SurfaceView implements SurfaceHolder.Callback {
+
+	private static final String TAG = "MyView";
 
 	public static int touchLen = 40;
 
@@ -30,6 +46,36 @@ public class MyView extends SurfaceView implements SurfaceHolder.Callback {
 	int tempRectInt;
 	Point tempPoint;
 	boolean isMove = true;
+	Bitmap bmp;
+	BitmapShader shader;
+	private BitmapShader bitmapShader = null;
+	private Bitmap bitmap = null;
+	private ShapeDrawable shapeDrawable = null;
+
+	private int BitmapWidth, BitmapHeight;
+
+	private Thread thread;
+	public MyView(Context context) {
+		super(context);
+		holder = this.getHolder();// 获取holder
+		holder.addCallback(this);
+		setFocusable(true);
+		initBitmap();
+	}
+
+	public MyView(Context context, AttributeSet attrs) {
+		super(context, attrs);
+		holder = this.getHolder();// 获取holder
+		holder.addCallback(this);
+		setFocusable(true);
+		initBitmap();
+	}
+
+	public void setBitmap(String filePath) {
+		Bitmap bitmap = BitmapFactory.decodeFile(filePath);
+		this.bitmap = bitmap;
+		initBitmap();
+	}
 
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
@@ -76,20 +122,41 @@ public class MyView extends SurfaceView implements SurfaceHolder.Callback {
 		return true;
 	}
 
-	public MyView(Context context) {
-		super(context);
-		holder = this.getHolder();// 获取holder
-		holder.addCallback(this);
-		setFocusable(true);
-
+	public void initBitmap() {
+		Log.i(TAG, "initBitmap create");
+		if(bitmap==null) {
+			BitmapFactory.Options options=new BitmapFactory.Options();
+//	        options.inSampleSize = 2;//压缩处理 或者 使用缩略图
+			bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.a3431587_s, options);
+//				((BitmapDrawable) getResources().getDrawable(
+//					R.drawable.a3431587_s)).getBitmap();
+		}
+		DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
+		BitmapWidth = displayMetrics.heightPixels;
+		BitmapHeight = displayMetrics.widthPixels;
+		// 构造渲染器BitmapShader
+		bmp = Bitmap.createScaledBitmap(bitmap, BitmapHeight, BitmapWidth, true);
+		bitmapShader = new BitmapShader(bmp, Shader.TileMode.CLAMP,
+				Shader.TileMode.CLAMP);
+		bmp = toGrayscale(bmp);
 	}
 
-	public MyView(Context context, AttributeSet attrs) {
-		super(context, attrs);
-		holder = this.getHolder();// 获取holder
-		holder.addCallback(this);
-		setFocusable(true);
 
+	public static Bitmap toGrayscale(Bitmap bmpOriginal) {
+		int width, height;
+		height = bmpOriginal.getHeight();
+		width = bmpOriginal.getWidth();
+
+		Bitmap bmpGrayscale = Bitmap.createBitmap(width, height,
+				Bitmap.Config.RGB_565);
+		Canvas c = new Canvas(bmpGrayscale);
+		Paint paint = new Paint();
+		ColorMatrix cm = new ColorMatrix();
+		cm.setSaturation(0);
+		ColorMatrixColorFilter f = new ColorMatrixColorFilter(cm);
+		paint.setColorFilter(f);
+		c.drawBitmap(bmpOriginal, 0, 0, paint);
+		return bmpGrayscale;
 	}
 
 	@Override
@@ -99,15 +166,21 @@ public class MyView extends SurfaceView implements SurfaceHolder.Callback {
 
 	@Override
 	public void surfaceCreated(SurfaceHolder holder) {
-		
-		new Thread(new MyThread()).start();
+		Log.i(TAG, "suface create");
+		thread = new Thread(new MyThread());
+		thread.start();
 	}
 
 	@Override
 	public void surfaceDestroyed(SurfaceHolder holder) {
-
+		this.destroyDrawingCache();
+		if(thread!=null) {
+			thread.interrupt();
+			thread = null;
+		}
+		Log.i(TAG, "suface Destroyed");
 	}
-
+	
 	// 内部类的内部类
 	class MyThread implements Runnable {
 
@@ -121,8 +194,11 @@ public class MyView extends SurfaceView implements SurfaceHolder.Callback {
 					Canvas canvas = null;
 
 					canvas = holder.lockCanvas(null);// 获取画布
-					canvas.drawColor(Color.BLACK);
-					mPaint.setColor(Color.WHITE);
+					canvas.save();
+					mPaint.setColor(Color.BLACK);
+					mPaint.setStrokeWidth(5);
+					canvas.drawBitmap(bmp, new Matrix(), mPaint);
+					canvas.restore();
 					drawLine(canvas, left_top.getCenterPoint(),
 							left_bottom.getCenterPoint());
 					drawLine(canvas, left_bottom.getCenterPoint(),
@@ -136,10 +212,26 @@ public class MyView extends SurfaceView implements SurfaceHolder.Callback {
 					drawPointRect(canvas, left_bottom);
 					drawPointRect(canvas, right_top);
 					drawPointRect(canvas, right_bottom);
+					Path path = new Path();
+					mPaint.setColor(Color.WHITE);
+					path.moveTo(left_top.x, left_top.y);
+					path.lineTo(left_bottom.x, left_bottom.y);
+					path.lineTo(right_bottom.x, right_bottom.y);
+					path.lineTo(right_top.x, right_top.y);
+					path.close();
+
+					shapeDrawable = new ShapeDrawable(new PathShape(path,
+							BitmapWidth, BitmapHeight));
+					// 得到画笔并设置渲染器
+					shapeDrawable.getPaint().setShader(bitmapShader);
+					// 设置显示区域
+					shapeDrawable.setBounds(0, 0, BitmapWidth, BitmapHeight);
+					// 绘制shapeDrawable
+					shapeDrawable.draw(canvas);
 
 					holder.unlockCanvasAndPost(canvas);// 解锁画布，提交画好的图像
-
 					isMove = false;
+
 				}
 
 				try {
@@ -150,6 +242,19 @@ public class MyView extends SurfaceView implements SurfaceHolder.Callback {
 				}
 			}
 		}
+	}
+
+	@Override
+	protected void onDraw(Canvas canvas) {
+		super.onDraw(canvas);
+		Path path = new Path();
+		mPaint.setColor(Color.WHITE);
+		path.moveTo(left_top.x, left_top.y);
+		path.lineTo(left_bottom.x, left_bottom.y);
+		path.lineTo(right_bottom.x, right_bottom.y);
+		path.lineTo(right_top.x, right_top.y);
+		path.close();
+		canvas.drawPath(path, mPaint);
 	}
 
 	public void drawLine(Canvas canvas, Point p1, Point p2) {

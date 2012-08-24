@@ -47,12 +47,10 @@ public class DishActivity extends ActivityGroup {
 
 		eachLayout = (LinearLayout) findViewById(R.id.each_layout);
 		fanShapedView = (FanShapedView) findViewById(R.id.fanshaped);
-
-		eachLayout.addView(getLocalActivityManager().startActivity(
-				"contact",
-				new Intent(this, PicTakeActivity.class)
-						.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
-				.getDecorView());
+		Intent intent = new Intent(this, PicTakeActivity.class);
+		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		intent.putExtra("mCurrentFile", filePath);
+		eachLayout.addView(getLocalActivityManager().startActivity("contact",intent).getDecorView());
 
 		setListener();
 
