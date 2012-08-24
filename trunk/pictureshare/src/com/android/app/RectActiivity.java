@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.ImageView;
 
 import com.android.app.entity.MyView;
@@ -13,6 +14,7 @@ public class RectActiivity extends BaseActvity implements OnClickListener {
 	ImageView myImageView;
 	private ImageView searchButton;
 	private String filePath;
+	private Button backButton;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +33,9 @@ public class RectActiivity extends BaseActvity implements OnClickListener {
 
 	private void initComponents() {
 		searchButton = (ImageView) findViewById(R.id.searchButton);
+		backButton = (Button)findViewById(R.id.button1);
 		searchButton.setOnClickListener(this);
+		backButton.setOnClickListener(this);
 
 	}
 
@@ -49,6 +53,9 @@ public class RectActiivity extends BaseActvity implements OnClickListener {
 			Intent intent = new Intent(this, PicTitleActvity.class);
 			intent.putExtra("mCurrentFile", filePath);
 			startActivity(intent);
+			break;
+		case R.id.button1:
+			super.onBackPressed();
 			break;
 
 		default:
