@@ -311,25 +311,20 @@ public class FanShapedView extends View {
 		return true;
 	}
 	
-	/**
-	 * 向下动画
-	 */
-	public void moveDownAnimation() {
-		
-//		animation = new RotateAnimation(0, -180, RotateAnimation.RELATIVE_TO_SELF, 0.5f,
-//				RotateAnimation.RELATIVE_TO_SELF, 0.5f);
-//		animation.setInterpolator(new LinearInterpolator());
-//		animation.setDuration(250);
-//		animation.setFillAfter(true);
-		
-		Animation animation;
-		animation = new RotateAnimation(0, -180, Animation.RELATIVE_TO_SELF,
-		0.5f, Animation.RELATIVE_TO_SELF, 1.0f);
-		animation.setFillAfter(true);
-		animation.setDuration(250);
-		startAnimation(animation);
-	}
+
 	
+
+	/**
+	 * 向下
+	 */
+	public void moveDownHandle(){
+		Bitmap temp = menuBitmaps.getFirst();
+		menuBitmaps.removeFirst();
+		menuBitmaps.addLast(temp);
+		String str = homeItem.getFirst();
+		homeItem.removeFirst();
+		homeItem.addLast(str);
+	}
 	
 	/**
 	 * 向上
@@ -341,7 +336,6 @@ public class FanShapedView extends View {
 		String str = homeItem.getLast();
 		homeItem.removeLast();
 		homeItem.addFirst(str);
-		moveUpAnimation();
 	}
 	
 	public Bitmap getFirstBitmap(){
