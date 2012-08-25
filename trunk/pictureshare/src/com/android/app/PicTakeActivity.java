@@ -2,6 +2,7 @@ package com.android.app;
 
 import java.util.ArrayList;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -36,6 +37,7 @@ public class PicTakeActivity extends BaseActvity implements OnClickListener{
 	
 	private ArrayList<Avatar> list = null;
 	private ListAdapter listAdapter;
+	private ImageView bottom_button;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -112,9 +114,11 @@ public class PicTakeActivity extends BaseActvity implements OnClickListener{
 	private void initComponents() {
 		btn_back = (Button)findViewById(R.id.button1);
 		imageView = (ImageView)findViewById(R.id.imageView4);
+		bottom_button = (ImageView)findViewById(R.id.imageView1);
 		listView = (ListView)findViewById(R.id.listView1);
 		
 		btn_back.setOnClickListener(this);
+		bottom_button.setOnClickListener(this);
 		
 //		listAdapter = new ListAdapter();
 //		listView.setAdapter(listAdapter);
@@ -126,6 +130,10 @@ public class PicTakeActivity extends BaseActvity implements OnClickListener{
 		switch (v.getId()) {
 		case R.id.button1:
 			super.onBackPressed();
+			break;
+		case R.id.imageView1:
+			Intent intent = new Intent(this,PMapActivity.class);
+			startActivity(intent);
 			break;
 
 		default:

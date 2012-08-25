@@ -37,8 +37,8 @@ public class DishActivity extends ActivityGroup {
 		filePath = getIntent().getStringExtra("mCurrentFile");
 		Log.i(TAG, "filePath is " + filePath);
 
-		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
-		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
+//		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+//		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
 		setContentView(R.layout.dish);
 		
