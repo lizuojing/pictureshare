@@ -9,6 +9,7 @@ import java.util.ArrayList;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -47,6 +48,8 @@ import com.android.app.image.ImageLoaderManager;
 import com.android.app.service.PicService;
 import com.android.app.utils.Utils;
 import com.android.app.view.MainItem;
+import com.android.app.view.PicDialog;
+import com.android.app.view.PicDialog.OnButtonClickListener;
 
 /**
  * 主页面
@@ -58,6 +61,7 @@ public class MainActivity extends BaseActvity implements View.OnClickListener {
 
 	protected static final int GET_IMAGE = 2000;
 	protected static final String TAG = "MainActivity";
+	private static final int ID_EXIT = 2012;
 	private ListView listView;
 	private Button editButton;
 	private ImageView mapImage;
@@ -295,6 +299,33 @@ public class MainActivity extends BaseActvity implements View.OnClickListener {
 		});
 
 	}
+	
+	@Override
+	protected Dialog onCreateDialog(int id) {
+		PicDialog dialog = null;
+		switch (id) {
+		case ID_EXIT:
+			dialog = new PicDialog(this, new OnButtonClickListener() {
+				@Override
+				public void onOkButtonClicked(PicDialog dialog) {
+					PicService.promptExitApp(MainActivity.this);
+					dialog.cancel();
+				}
+
+				@Override
+				public void onCancleButtonClicked(PicDialog dialog) {
+					dialog.cancel();
+				}
+			});
+			dialog.setTitle("确定退出吗？");
+			dialog.setOkButtonText("确定");
+			dialog.setCancleButtonText("取消");
+			return dialog;
+		default:
+			break;
+		}
+		return dialog;
+	}
 
 	private void initComponents() {
 		editButton = (Button) findViewById(R.id.button1);
@@ -449,7 +480,8 @@ public class MainActivity extends BaseActvity implements View.OnClickListener {
 	
 	@Override
 	public void onBackPressed() {
-		new AlertDialog.Builder(this).setTitle("确定退出吗？").setPositiveButton("确定", new  DialogInterface.OnClickListener() {
+		showDialog(ID_EXIT);
+		/*new AlertDialog.Builder(this).setTitle("确定退出吗？").setPositiveButton("确定", new  DialogInterface.OnClickListener() {
 			
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
@@ -463,7 +495,7 @@ public class MainActivity extends BaseActvity implements View.OnClickListener {
 			public void onClick(DialogInterface dialog, int which) {
 				dialog.dismiss();
 			}
-		}).show();
+		}).show();*/
 //		super.onBackPressed();
 	}
 

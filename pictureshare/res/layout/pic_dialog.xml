@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent"
+	android:layout_height="wrap_content"
+	android:minWidth="244dip"
+	android:maxWidth="244dip"
+	android:background="@drawable/button_bg"
+	android:orientation="vertical"
+	android:paddingBottom="12.5dip"
+	android:paddingLeft="17.5dip"
+	android:paddingRight="17.5dip"
+	android:paddingTop="10dip" >
+	<TextView
+		android:id="@+id/tv_title"
+		android:layout_width="209dip"
+		android:layout_height="wrap_content"
+		android:shadowColor="#FF1d456c"
+		android:shadowDx="0.0"
+		android:shadowDy="2.0"
+		android:shadowRadius="0.1"
+		android:visibility="gone" />
+	<LinearLayout
+		android:id="@+id/divideLine"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginBottom="6.5dip"
+		android:layout_marginTop="5.5dip"
+		android:background="@drawable/button_bg"
+		android:visibility="gone" />
+	<TextView
+		android:id="@+id/tv_text"
+		android:layout_width="209dip"
+		android:layout_height="wrap_content"
+		android:shadowColor="#FF1d456c"
+		android:shadowDx="0.0"
+		android:shadowDy="2.0"
+		android:shadowRadius="0.1"
+		android:visibility="gone" />
+	<RelativeLayout
+		android:layout_width="214dip"
+		android:layout_height="wrap_content" >
+		<Button
+			android:id="@+id/btn_ok"
+			android:layout_width="80dip"
+			android:layout_height="wrap_content"
+			android:layout_alignParentLeft="true"
+			android:layout_marginTop="11.5dip"
+			android:shadowColor="#FF1d456c"
+			android:shadowDx="0.0"
+			android:shadowDy="2.0"
+			android:shadowRadius="0.1"
+			android:visibility="gone" />
+		<Button
+			android:id="@+id/btn_cancle"
+			android:layout_width="80dip"
+			android:layout_height="wrap_content"
+			android:layout_alignParentRight="true"
+			android:layout_marginTop="11.5dip"
+			android:shadowColor="#FF1d456c"
+			android:shadowDx="0.0"
+			android:shadowDy="2.0"
+			android:shadowRadius="0.1"
+			android:visibility="gone" />
+	</RelativeLayout>
+</LinearLayout>
