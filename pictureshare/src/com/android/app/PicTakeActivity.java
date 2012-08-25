@@ -100,8 +100,13 @@ public class PicTakeActivity extends BaseActvity implements OnClickListener{
 
 
 	private void updateUI() {
-		Bitmap bitmap = BitmapFactory.decodeFile(filePath);
-		imageView.setImageBitmap(bitmap);
+		try {
+			Bitmap bitmap = BitmapFactory.decodeFile(filePath);
+			imageView.setImageBitmap(bitmap);
+		} catch (OutOfMemoryError e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	private void initComponents() {
@@ -111,8 +116,8 @@ public class PicTakeActivity extends BaseActvity implements OnClickListener{
 		
 		btn_back.setOnClickListener(this);
 		
-		listAdapter = new ListAdapter();
-		listView.setAdapter(listAdapter);
+//		listAdapter = new ListAdapter();
+//		listView.setAdapter(listAdapter);
 		
 	}
 

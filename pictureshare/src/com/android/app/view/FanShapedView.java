@@ -30,6 +30,9 @@ import android.util.Log;
 import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.LinearInterpolator;
+import android.view.animation.RotateAnimation;
 
 import com.android.app.R;
 
@@ -122,31 +125,31 @@ public class FanShapedView extends View {
 		fanshapedBitmap = BitmapFactory.decodeResource(resources, R.drawable.panzi);
 		
 		if (autoInitRes) {
-			Bitmap temp = BitmapFactory.decodeResource(resources, R.drawable.home_tab_contact_selected);
+			Bitmap temp = BitmapFactory.decodeResource(resources, R.drawable.turntable_icon_one);
 			menuBitmaps.add(temp);
-			temp = BitmapFactory.decodeResource(resources, R.drawable.home_tab_im);
+			temp = BitmapFactory.decodeResource(resources, R.drawable.turntable_icon_two);
 			menuBitmaps.add(temp);
-//			temp = BitmapFactory.decodeResource(resources, R.drawable.home_tab_call);
-//			menuBitmaps.add(temp);
-			temp = BitmapFactory.decodeResource(resources, R.drawable.home_tab_im_selected);
+			temp = BitmapFactory.decodeResource(resources, R.drawable.turntable_icon_three);
 			menuBitmaps.add(temp);
-//			temp = BitmapFactory.decodeResource(resources, R.drawable.home_tab_dial_selected);
-//			menuBitmaps.add(temp);
-			temp = BitmapFactory.decodeResource(resources, R.drawable.home_tab_mail_selected);
+			temp = BitmapFactory.decodeResource(resources, R.drawable.turntable_icon_four);
 			menuBitmaps.add(temp);
-//			temp = BitmapFactory.decodeResource(resources, R.drawable.home_tab_sns);
-//			menuBitmaps.add(temp);
-//			temp = BitmapFactory.decodeResource(resources, R.drawable.home_tab_setting_selected);
-//			menuBitmaps.add(temp);
+			temp = BitmapFactory.decodeResource(resources, R.drawable.turntable_icon_five);
+			menuBitmaps.add(temp);
+			temp = BitmapFactory.decodeResource(resources, R.drawable.turntable_icon_six);
+			menuBitmaps.add(temp);
+			temp = BitmapFactory.decodeResource(resources, R.drawable.turntable_icon_seven);
+			menuBitmaps.add(temp);
+			temp = BitmapFactory.decodeResource(resources, R.drawable.turntable_icon_eight);
+			menuBitmaps.add(temp);
 			
 			homeItem.add("contact");
 			homeItem.add("im");
 			homeItem.add("call");
 			homeItem.add("message");
-//			homeItem.add("usage");
-//			homeItem.add("money");
-//			homeItem.add("sns");
-//			homeItem.add("more");
+			homeItem.add("usage");
+			homeItem.add("money");
+			homeItem.add("sns");
+			homeItem.add("more");
 		}
 		
 	}
@@ -191,6 +194,14 @@ public class FanShapedView extends View {
 //		canvas.translate(-(0.61f *screenWidth), -(0.11f *screenWidth));
 //		canvas.drawBitmap(menuBitmaps.get(2), null, thirdImgRect, null);
 //		canvas.restore();
+		
+		Rect bgRect = new Rect((int)(0.10 * screenWidth), (int)(0.23 * screenWidth), (int)(0.65 * screenWidth), (int)(0.50 * screenWidth));
+		Bitmap bg = BitmapFactory.decodeResource(getResources(), R.drawable.select_block_blue);
+		canvas.save();
+		canvas.rotate(-45);//45度方向图标
+		canvas.translate(-(0.37f *screenWidth), (0.25f *screenWidth));
+		canvas.drawBitmap(bg, null, bgRect, null);
+		canvas.restore();
 		
 		canvas.save();
 		canvas.rotate(-45);//45度方向图标
@@ -299,16 +310,30 @@ public class FanShapedView extends View {
 		}
 		return true;
 	}
-
-	public void moveDownHandle(){
-		Bitmap temp = menuBitmaps.getFirst();
-		menuBitmaps.removeFirst();
-		menuBitmaps.addLast(temp);
-		String str = homeItem.getFirst();
-		homeItem.removeFirst();
-		homeItem.addLast(str);
+	
+	/**
+	 * 向下动画
+	 */
+	public void moveDownAnimation() {
+		
+//		animation = new RotateAnimation(0, -180, RotateAnimation.RELATIVE_TO_SELF, 0.5f,
+//				RotateAnimation.RELATIVE_TO_SELF, 0.5f);
+//		animation.setInterpolator(new LinearInterpolator());
+//		animation.setDuration(250);
+//		animation.setFillAfter(true);
+		
+		Animation animation;
+		animation = new RotateAnimation(0, -180, Animation.RELATIVE_TO_SELF,
+		0.5f, Animation.RELATIVE_TO_SELF, 1.0f);
+		animation.setFillAfter(true);
+		animation.setDuration(250);
+		startAnimation(animation);
 	}
 	
+	
+	/**
+	 * 向上
+	 */
 	public void moveUpHandle(){
 		Bitmap temp = menuBitmaps.getLast();
 		menuBitmaps.removeLast();
@@ -316,6 +341,7 @@ public class FanShapedView extends View {
 		String str = homeItem.getLast();
 		homeItem.removeLast();
 		homeItem.addFirst(str);
+		moveUpAnimation();
 	}
 	
 	public Bitmap getFirstBitmap(){
