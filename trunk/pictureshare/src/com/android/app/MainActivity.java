@@ -285,8 +285,8 @@ public class MainActivity extends BaseActvity implements View.OnClickListener {
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 					long arg3) {
-				Toast.makeText(MainActivity.this, "positon is " + arg2,
-						Toast.LENGTH_SHORT).show();
+//				Toast.makeText(MainActivity.this, "positon is " + arg2,
+//						Toast.LENGTH_SHORT).show();
 				Intent intent = new Intent(MainActivity.this,
 						PicListActivity.class);
 				startActivity(intent);
