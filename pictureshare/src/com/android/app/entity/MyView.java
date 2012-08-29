@@ -6,8 +6,6 @@ import android.graphics.BitmapFactory;
 import android.graphics.BitmapShader;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.ColorMatrix;
-import android.graphics.ColorMatrixColorFilter;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
@@ -46,6 +44,7 @@ public class MyView extends SurfaceView implements SurfaceHolder.Callback {
 	BitmapShader shader;
 	private BitmapShader bitmapShader = null;
 	private Bitmap bitmap = null;
+	private Bitmap dot = null;
 	private ShapeDrawable shapeDrawable = null;
 
 	private int BitmapWidth, BitmapHeight;
@@ -72,8 +71,11 @@ public class MyView extends SurfaceView implements SurfaceHolder.Callback {
 	private void initPoints(Context context) {
 		left_top = new Rect(Utils.dipToPixels(context, 80), 100, touchLen);
 		left_bottom = new Rect(Utils.dipToPixels(context, 80), 600, touchLen);
-		right_bottom = new Rect(Utils.getScreenWidth(context)-Utils.dipToPixels(context, 80),600, touchLen);
-		right_top = new Rect(Utils.getScreenWidth(context)-Utils.dipToPixels(context, 80),100, touchLen);
+		right_bottom = new Rect(Utils.getScreenWidth(context)
+				- Utils.dipToPixels(context, 80), 600, touchLen);
+		right_top = new Rect(Utils.getScreenWidth(context)
+				- Utils.dipToPixels(context, 80), 100, touchLen);
+		dot = BitmapFactory.decodeResource(getResources(), R.drawable.dot);
 	}
 
 	public MyView(Context context, AttributeSet attrs) {
@@ -121,6 +123,7 @@ public class MyView extends SurfaceView implements SurfaceHolder.Callback {
 				tempPoint = new Point(event.getX(), event.getY());
 
 				isMove = true;
+
 				if (left_top_int == tempRectInt) {
 					left_top.changeCenter(tempPoint);
 				} else if (left_bottom_int == tempRectInt) {
@@ -171,10 +174,11 @@ public class MyView extends SurfaceView implements SurfaceHolder.Callback {
 				Bitmap.Config.RGB_565);
 		Canvas c = new Canvas(bmpGrayscale);
 		Paint paint = new Paint();
-		ColorMatrix cm = new ColorMatrix();
-		cm.setSaturation(0);
-		ColorMatrixColorFilter f = new ColorMatrixColorFilter(cm);
-		paint.setColorFilter(f);
+		paint.setAlpha(120);
+		// ColorMatrix cm = new ColorMatrix();
+		// cm.setSaturation((float)0.3);
+		// ColorMatrixColorFilter f = new ColorMatrixColorFilter(cm);
+		// paint.setColorFilter(f);
 		c.drawBitmap(bmpOriginal, 0, 0, paint);
 		return bmpGrayscale;
 	}
@@ -214,24 +218,20 @@ public class MyView extends SurfaceView implements SurfaceHolder.Callback {
 					Canvas canvas = null;
 
 					canvas = holder.lockCanvas(null);// 获取画布
+					mPaint.setColor(Color.CYAN);
+					mPaint.setAntiAlias(true);
 					canvas.save();
-					mPaint.setColor(Color.BLACK);
-					mPaint.setStrokeWidth(5);
 					canvas.drawBitmap(bmp, new Matrix(), mPaint);
 					canvas.restore();
-					drawLine(canvas, left_top.getCenterPoint(), left_bottom
-							.getCenterPoint());
-					drawLine(canvas, left_bottom.getCenterPoint(), right_bottom
-							.getCenterPoint());
-					drawLine(canvas, right_bottom.getCenterPoint(), right_top
-							.getCenterPoint());
-					drawLine(canvas, right_top.getCenterPoint(), left_top
-							.getCenterPoint());
+					drawLine(canvas, left_top.getCenterPoint(),
+							left_bottom.getCenterPoint());
+					drawLine(canvas, left_bottom.getCenterPoint(),
+							right_bottom.getCenterPoint());
+					drawLine(canvas, right_bottom.getCenterPoint(),
+							right_top.getCenterPoint());
+					drawLine(canvas, right_top.getCenterPoint(),
+							left_top.getCenterPoint());
 
-					drawPointRect(canvas, left_top);
-					drawPointRect(canvas, left_bottom);
-					drawPointRect(canvas, right_top);
-					drawPointRect(canvas, right_bottom);
 					Path path = new Path();
 					mPaint.setColor(Color.WHITE);
 					path.moveTo(left_top.x, left_top.y);
@@ -242,50 +242,46 @@ public class MyView extends SurfaceView implements SurfaceHolder.Callback {
 
 					shapeDrawable = new ShapeDrawable(new PathShape(path,
 							BitmapWidth, BitmapHeight));
+
 					// 得到画笔并设置渲染器
 					shapeDrawable.getPaint().setShader(bitmapShader);
 					// 设置显示区域
 					shapeDrawable.setBounds(0, 0, BitmapWidth, BitmapHeight);
 					// 绘制shapeDrawable
 					shapeDrawable.draw(canvas);
+					mPaint.setColor(getResources().getColor(R.color.dotcolor));
+					mPaint.setAlpha(200);
+					drawPointCircle(canvas, left_top);
+
+					drawPointCircle(canvas, left_bottom);
+
+					drawPointCircle(canvas, right_top);
+
+					drawPointCircle(canvas, right_bottom);
 
 					holder.unlockCanvasAndPost(canvas);// 解锁画布，提交画好的图像
 					isMove = false;
 
 				}
-
-				try {
-					Thread.sleep(60);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				//
+				// try {
+				// Thread.sleep(10);
+				// } catch (InterruptedException e) {
+				// // TODO Auto-generated catch block
+				// e.printStackTrace();
+				// }
 			}
 		}
-	}
-
-	@Override
-	protected void onDraw(Canvas canvas) {
-		super.onDraw(canvas);
-		Path path = new Path();
-		mPaint.setColor(Color.WHITE);
-		path.moveTo(left_top.x, left_top.y);
-		path.lineTo(left_bottom.x, left_bottom.y);
-		path.lineTo(right_bottom.x, right_bottom.y);
-		path.lineTo(right_top.x, right_top.y);
-		path.close();
-		canvas.drawPath(path, mPaint);
 	}
 
 	public void drawLine(Canvas canvas, Point p1, Point p2) {
 		canvas.drawLine(p1.x, p1.y, p2.x, p2.y, mPaint);
 	};
 
-	public void drawPointRect(Canvas canvas, Rect rect) {
-		drawLine(canvas, rect.p_CP, rect.p_PP);
-		drawLine(canvas, rect.p_PP, rect.p_PC);
-		drawLine(canvas, rect.p_PC, rect.p_CC);
-		drawLine(canvas, rect.p_CC, rect.p_CP);
+	public void drawPointCircle(Canvas canvas, Rect rect) {
+
+		canvas.drawCircle(rect.x, rect.y, 20, mPaint);
+
 	}
 
 }
