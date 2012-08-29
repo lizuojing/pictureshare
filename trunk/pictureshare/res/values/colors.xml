@@ -8,5 +8,6 @@
     <color name="color_title_default">#fbfafb</color>
     <color name="color_list_item_default">#fbfafb</color>
     <color name="color_list_item_text_default">#848384</color>
+    <color name="dotcolor">#a9d9f9</color>
 
 </resources>
