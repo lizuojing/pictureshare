@@ -1,16 +1,3 @@
-/**
- * FanShapedView.java
- * com.turlet.fanshaped.view
- *
- * Function： TODO 
- *
- *   ver     date      		author
- * ──────────────────────────────────
- *   		 2011-12-23 		yfldyxl@163.com
- *
- * Copyright (c) 2011,  All Rights Reserved.
-*/
-
 package com.android.app.view;
 
 
@@ -27,22 +14,11 @@ import android.graphics.Rect;
 import android.os.Handler;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.LinearInterpolator;
-import android.view.animation.RotateAnimation;
 
 import com.android.app.R;
 
-/**
- * @ClassName: FanShapedView 
- * @Description: TODO
- * @author <a href="mailto:yfldyxl@163.com">yfldyxl@163.com</a>
- * @date 2011-12-23 下午6:00:03 
- * @version V1.0
- */
 public class FanShapedView extends View {
 	private static final String TAG = "MainActivity";
 	
@@ -64,7 +40,6 @@ public class FanShapedView extends View {
 	
 	private static  int screenWidth = -1;
 	private static  int screenHeight = -1;
-	private static  int size = 16;
 	private int downX = -1;
 	private int downY = -1;
 	public static int orient = 1;
@@ -159,8 +134,6 @@ public class FanShapedView extends View {
 		screenHeight = this.getHeight();
 		Log.i(TAG, "screenWidth="+screenWidth+"  screenHeight="+screenHeight);
 		screenWidth = screenWidth < screenHeight ? screenWidth:screenHeight;
-		
-		size = (int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, screenWidth/12f, resources.getDisplayMetrics());
 		
 		allBgRect = new Rect(0, 0, screenWidth, screenWidth);
 		

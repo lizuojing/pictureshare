@@ -20,31 +20,26 @@ import android.os.Handler;
 import android.provider.MediaStore;
 import android.provider.MediaStore.Images.Media;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup.LayoutParams;
-import android.view.animation.Animation;
-import android.view.animation.TranslateAnimation;
-import android.view.animation.Animation.AnimationListener;
+import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AbsListView;
+import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.AbsListView.OnScrollListener;
-import android.widget.AdapterView.OnItemClickListener;
 
 import com.android.app.entity.Avatar;
 import com.android.app.image.ImageLoaderManager;
 import com.android.app.service.PicService;
 import com.android.app.utils.Utils;
 import com.android.app.view.MainItem;
+import com.android.app.view.MediaPopupWindow;
 import com.android.app.view.PicDialog;
 import com.android.app.view.PicDialog.OnButtonClickListener;
 
@@ -54,7 +49,7 @@ import com.android.app.view.PicDialog.OnButtonClickListener;
  * @author Administrator
  * 
  */
-public class MainActivity extends BaseActvity implements View.OnClickListener {
+public class MainActivity extends BaseActivity implements View.OnClickListener {
 
 	protected static final int GET_IMAGE = 2000;
 	protected static final String TAG = "MainActivity";
@@ -64,11 +59,6 @@ public class MainActivity extends BaseActvity implements View.OnClickListener {
 	private ImageView mapImage;
 	private ImageView takePicImage;
 	private ImageView setImage;
-	private LinearLayout tab_share_layout;
-	private LinearLayout tab_share_mask;
-	private Button takePhoto;
-	private Button sharePhoto;
-	private LinearLayout tab_share_content;
 	protected File mCurrentPhotoFile;
 	private EditText search_edit;
 	private InputMethodManager inputMethodManager;
@@ -76,6 +66,7 @@ public class MainActivity extends BaseActvity implements View.OnClickListener {
 	private ArrayList<Avatar> list = null;
 	private Cursor photoCursor;
 	private ListAdapter adapter;
+	private MediaPopupWindow mediaPopup;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -84,84 +75,14 @@ public class MainActivity extends BaseActvity implements View.OnClickListener {
 
 		inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 		initComponents();
-		initShareTab();
 		registerButton();
 
 	}
 
-	private void initShareTab() {
-		tab_share_layout = (LinearLayout) findViewById(R.id.tab_share_layout);
-		tab_share_mask = (LinearLayout) findViewById(R.id.tab_share_mask);
-		tab_share_content = (LinearLayout) findViewById(R.id.tab_share_content);
-		tab_share_layout.getBackground().setAlpha(100);
-
-		// LinearLayout topLayout=new LinearLayout(this);
-		// LinearLayout.LayoutParams topLayoutLP= new
-		// LinearLayout.LayoutParams(LayoutParams.FILL_PARENT,Utils.dipToPixels(this,
-		// 3));
-		// topLayout.setBackgroundColor(0xffff4000);
-		// tab_share_mask.addView(topLayout,0,topLayoutLP);
-
-		LinearLayout.LayoutParams takePhotoLP = new LinearLayout.LayoutParams(
-				Utils.dipToPixels(this, 200), LayoutParams.WRAP_CONTENT);
-		takePhotoLP.gravity = Gravity.CENTER_HORIZONTAL
-				| Gravity.CENTER_VERTICAL;
-		takePhotoLP.setMargins(Utils.dipToPixels(this, 20), Utils.dipToPixels(
-				this, 15), Utils.dipToPixels(this, 20), 0);
-		takePhoto = new Button(this);
-		takePhoto.setText(getResources().getString(R.string.take_photo));
-
-		LinearLayout.LayoutParams sharePhotoLP = new LinearLayout.LayoutParams(
-				Utils.dipToPixels(this, 200), LayoutParams.WRAP_CONTENT);
-		sharePhotoLP.gravity = Gravity.CENTER_HORIZONTAL
-				| Gravity.CENTER_VERTICAL;
-		sharePhotoLP.setMargins(Utils.dipToPixels(this, 20), 0, Utils
-				.dipToPixels(this, 20), Utils.dipToPixels(this, 15));
-		sharePhoto = new Button(this);
-		sharePhoto.setText(getResources().getString(R.string.pick_photo));
-
-		tab_share_content.addView(takePhoto, takePhotoLP);
-		tab_share_content.addView(sharePhoto, sharePhotoLP);
-		registerShareButton();
-	}
-
-	private void showShare() {
-		float shareAnimationY = Utils.getScreenHeight(this) / 3;
-		boolean b = tab_share_layout.getVisibility() == View.VISIBLE;
-		tab_share_layout.setVisibility(View.VISIBLE);
-		TranslateAnimation shareAnimation = new TranslateAnimation(0, 0,
-				shareAnimationY, 0);
-		shareAnimation.setDuration(400);
-		if (!b) {
-			tab_share_mask.startAnimation(shareAnimation);
-		}
-	}
-
-	private void hideShare() {
-		float shareAnimationY = Utils.getScreenHeight(this) / 3;
-		TranslateAnimation hideShareAnimation = new TranslateAnimation(0, 0, 0,
-				shareAnimationY);
-		hideShareAnimation.setDuration(400);
-		hideShareAnimation.setAnimationListener(new AnimationListener() {
-			@Override
-			public void onAnimationStart(Animation animation) {
-			}
-
-			@Override
-			public void onAnimationRepeat(Animation animation) {
-			}
-
-			@Override
-			public void onAnimationEnd(Animation animation) {
-				tab_share_layout.setVisibility(View.GONE);
-			}
-		});
-		tab_share_mask.startAnimation(hideShareAnimation);
-	}
 
 	private void registerShareButton() {
-		if (takePhoto != null) {
-			takePhoto.setOnClickListener(new OnClickListener() {
+		if (mediaPopup!=null&&mediaPopup.getTakePhotoButton() != null) {
+			mediaPopup.getTakePhotoButton().setOnClickListener(new OnClickListener() {
 
 				@Override
 				public void onClick(View v) {
@@ -178,8 +99,8 @@ public class MainActivity extends BaseActvity implements View.OnClickListener {
 			});
 		}
 
-		if (sharePhoto != null) {
-			sharePhoto.setOnClickListener(new OnClickListener() {
+		if (mediaPopup!=null&&mediaPopup.getPickPhotoButton() != null) {
+			mediaPopup.getPickPhotoButton().setOnClickListener(new OnClickListener() {
 
 				@Override
 				public void onClick(View v) {
@@ -286,10 +207,7 @@ public class MainActivity extends BaseActvity implements View.OnClickListener {
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 					long arg3) {
-//				Toast.makeText(MainActivity.this, "positon is " + arg2,
-//						Toast.LENGTH_SHORT).show();
-				Intent intent = new Intent(MainActivity.this,
-						PicListActivity.class);
+				Intent intent = new Intent(MainActivity.this,PicListActivity.class);
 				startActivity(intent);
 
 			}
@@ -393,24 +311,8 @@ public class MainActivity extends BaseActvity implements View.OnClickListener {
 		photoCursor = context.getContentResolver().query(
 				Media.EXTERNAL_CONTENT_URI, projection, selection, null,
 				"_id" + " ASC");
-		// int idIndex = photoCursor.getColumnIndexOrThrow(Media._ID);
-		// int titleIndex = photoCursor.getColumnIndexOrThrow(Media.TITLE);
-		// int orientationIndex =
-		// photoCursor.getColumnIndexOrThrow(Media.ORIENTATION);
-		// int longitudeIndex =
-		// photoCursor.getColumnIndexOrThrow(Media.LONGITUDE);
-		// int latitudeIndex =
-		// photoCursor.getColumnIndexOrThrow(Media.LATITUDE);
-		// int nameIndex =
-		// photoCursor.getColumnIndexOrThrow(Media.DISPLAY_NAME);
 		
 		int dataIndex = photoCursor.getColumnIndexOrThrow(Media.DATA); // filepath
-		// int datetokenIndex =
-		// photoCursor.getColumnIndexOrThrow(Media.DATE_TAKEN);
-		// int mimetypeIndex =
-		// photoCursor.getColumnIndexOrThrow(Media.MIME_TYPE);
-		// int sizeIndex = photoCursor.getColumnIndexOrThrow(Media.SIZE);
-
 		Avatar avatar = null;
 
 		for (photoCursor.moveToFirst(); !photoCursor.isAfterLast(); photoCursor.moveToNext()) {
@@ -469,31 +371,12 @@ public class MainActivity extends BaseActvity implements View.OnClickListener {
 		}
 
 	}
-	
-//	@Override
-//	protected Dialog onCreateDialog(int id) {
-//		return super.onCreateDialog(id);
-//	}
-	
 	@Override
 	public void onBackPressed() {
+		if(mediaPopup!=null) {
+			mediaPopup.dismiss();
+		}
 		showDialog(ID_EXIT);
-		/*new AlertDialog.Builder(this).setTitle("确定退出吗？").setPositiveButton("确定", new  DialogInterface.OnClickListener() {
-			
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				// TODO Auto-generated method stub
-				PicService.promptExitApp(MainActivity.this);
-				dialog.dismiss();
-			}
-		}).setNegativeButton("取消", new  DialogInterface.OnClickListener() {
-			
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				dialog.dismiss();
-			}
-		}).show();*/
-//		super.onBackPressed();
 	}
 
 	@Override
@@ -508,14 +391,7 @@ public class MainActivity extends BaseActvity implements View.OnClickListener {
 			startActivity(mapIntent);
 			break;
 		case R.id.imageView3:
-			// Intent picIntent = new Intent(this,PicTakeActivity.class);
-			// startActivity(picIntent);
-			if (tab_share_layout.getVisibility() != View.VISIBLE) {
-				showShare();
-			} else {
-				hideShare();
-			}
-
+			showSharePopup();
 			break;
 		case R.id.imageView4:
 			Intent settingIntent = new Intent(this, SettingActivity.class);
@@ -526,5 +402,17 @@ public class MainActivity extends BaseActvity implements View.OnClickListener {
 			break;
 		}
 
+	}
+	
+	private void showSharePopup() {
+		if (mediaPopup == null) {
+			mediaPopup = new MediaPopupWindow(this, R.drawable.bg_share_popup_1);
+		}
+		int[] btnShareLoc = new int[2];
+		takePicImage.getLocationInWindow(btnShareLoc);
+		int offY = Utils.getScreenHeight(this) - btnShareLoc[1] + Utils.dipToPixels(this, 5);
+		int orientation = getResources().getConfiguration().orientation;
+		mediaPopup.show(takePicImage, orientation, 0, offY);
+		registerShareButton();
 	}
 }

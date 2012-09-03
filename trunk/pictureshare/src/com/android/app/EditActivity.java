@@ -22,7 +22,7 @@ import com.android.app.entity.Avatar;
 import com.android.app.image.ImageLoaderManager;
 import com.android.app.view.MainItem;
 
-public class EditActivity extends BaseActvity implements View.OnClickListener{
+public class EditActivity extends BaseActivity implements View.OnClickListener{
 	private static final String TAG = "EditActivity";
 	private ListView listView;
 	private Button finishButton;

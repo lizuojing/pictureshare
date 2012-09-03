@@ -11,7 +11,7 @@ import android.widget.Toast;
  * @author Administrator
  *
  */
-public class SettingActivity extends BaseActvity implements OnClickListener{
+public class SettingActivity extends BaseActivity implements OnClickListener{
 	private RelativeLayout svrSetting;
 	private RelativeLayout personalSetting;
 	private RelativeLayout picSetting;

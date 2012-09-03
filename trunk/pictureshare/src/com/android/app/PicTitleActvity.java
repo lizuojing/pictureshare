@@ -1,8 +1,10 @@
 package com.android.app;
 
+import java.io.IOException;
+
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.media.ExifInterface;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -10,7 +12,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 
-public class PicTitleActvity extends BaseActvity implements OnClickListener{
+import com.android.app.utils.ImageUtil;
+import com.android.app.utils.Utils;
+
+public class PicTitleActvity extends BaseActivity implements OnClickListener{
 	private Button backButton;
 	private EditText picTitle;
 	private ImageView picture;
@@ -29,13 +34,45 @@ public class PicTitleActvity extends BaseActvity implements OnClickListener{
 	}
 
 	private void updateUI() {
-		Bitmap bitmap = BitmapFactory.decodeFile(filePath);
+		Bitmap bitmap = getBitmap(filePath);
 		if(bitmap!=null) {
 			picture.setImageBitmap(bitmap);//TODO 图片处理
 		}else {
-			picture.setImageResource(R.drawable.startup);
-//			picture.setImageResource(R.drawable.android_default);
+//			picture.setImageResource(R.drawable.startup);
+			picture.setImageResource(R.drawable.android_default);
 		}
+	}
+
+	private Bitmap getBitmap(String filePath) {
+		int width=Utils.getScreenHeight(this)/4;
+		int photoOrientation=0;
+		try {
+			ExifInterface exifInterface=new ExifInterface(filePath);
+			photoOrientation=exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION, 0);
+			switch (photoOrientation) {
+			case ExifInterface.ORIENTATION_ROTATE_180:
+				photoOrientation=180;
+				break;
+			case ExifInterface.ORIENTATION_ROTATE_270:
+				photoOrientation=270;
+				break;
+			case ExifInterface.ORIENTATION_ROTATE_90:
+				photoOrientation=90;
+				break;
+			default:
+				photoOrientation=0;
+				break;
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		try {
+			return ImageUtil.getThumbnail(filePath,width, width,photoOrientation);
+		} catch (OutOfMemoryError e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		return null;
 	}
 
 	private void initComponents() {

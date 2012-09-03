@@ -52,6 +52,7 @@
         <activity android:name=".RegAndLoginActivity" />
         <activity android:name=".MainActivity" />
         <activity android:name=".PicTitleActvity" />
+        <activity android:name=".WeiboActivity" />
         <service android:name=".service.PicService"/>
     </application>
 

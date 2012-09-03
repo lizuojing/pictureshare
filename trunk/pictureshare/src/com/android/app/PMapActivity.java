@@ -6,18 +6,22 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Point;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.android.app.api.UserApi;
 import com.android.app.service.PicService;
+import com.android.app.utils.Utils;
+import com.android.app.view.OverItemT;
 import com.android.app.view.PicDialog;
 import com.android.app.view.PicDialog.OnButtonClickListener;
+import com.android.app.view.SharePopupWindow;
 import com.baidu.mapapi.BMapManager;
 import com.baidu.mapapi.GeoPoint;
 import com.baidu.mapapi.MKGeneralListener;
@@ -34,7 +38,8 @@ public class PMapActivity extends MapActivity implements View.OnClickListener{
 	protected static final int ID_DELETE_OVERLAY = 2000;
 	private BMapManager mBMapMan;
 	private MKLocationManager mLocationManager;
-	private MapView mMapView;
+	public static MapView mMapView;
+	public static View mPopView = null;
 	private Button deleteButton;
 	private Button shareButton;
 	private Button detalButton;
@@ -42,6 +47,8 @@ public class PMapActivity extends MapActivity implements View.OnClickListener{
 	private Button backButton;
 	
 	private boolean isDelete = false;
+	private SharePopupWindow sharePopup;
+	private OverItemT overitem;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -135,10 +142,37 @@ public class PMapActivity extends MapActivity implements View.OnClickListener{
 		mylocTest.enableCompass();    // 启用指南针
 		mMapView.getOverlays().add(mylocTest);
 		
+		createPopView();
+		
 		initComponents();
 		updateUI();
 	}
 
+	private void createPopView() {
+		 // 添加ItemizedOverlay
+		Drawable marker = getResources().getDrawable(R.drawable.iconmarka);  //得到需要标在地图上的资源
+		marker.setBounds(0, 0, marker.getIntrinsicWidth(), marker
+				.getIntrinsicHeight());   //为maker定义位置和边界
+		
+		overitem = new OverItemT(marker, this, 3);
+		mMapView.getOverlays().add(overitem); //添加ItemizedOverlay实例到mMapView
+		
+		// 创建点击mark时的弹出泡泡
+		mPopView=super.getLayoutInflater().inflate(R.layout.popview, null);
+		mMapView.addView( mPopView,
+                new MapView.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT,
+                		null, MapView.LayoutParams.TOP_LEFT));
+		mPopView.setVisibility(View.GONE);
+	}
+
+	@Override
+	protected void onStart() {
+		if (sharePopup != null) {
+			sharePopup.refreshWeiboButton();
+		}
+		super.onStart();
+	}
+	
 	private void updateUI() {
 		if(!isDelete) {
 			deleteButton.setText(getResources().getString(R.string.create));
@@ -148,11 +182,11 @@ public class PMapActivity extends MapActivity implements View.OnClickListener{
 	}
 
 	private void initComponents() {
-		backButton = (Button)findViewById(R.id.button1);
-		deleteButton = (Button)findViewById(R.id.button2);
-		shareButton = (Button)findViewById(R.id.button3);
-		detalButton = (Button)findViewById(R.id.button4);
-		backToOneButton = (Button)findViewById(R.id.button5);
+		backButton = (Button)findViewById(R.id.btn_back);
+		deleteButton = (Button)findViewById(R.id.btn_create_or_delete);
+		shareButton = (Button)findViewById(R.id.btn_share);
+		detalButton = (Button)findViewById(R.id.btn_detail);
+		backToOneButton = (Button)findViewById(R.id.btn_goback);
 		
 		backButton.setOnClickListener(this);
 		deleteButton.setOnClickListener(this);
@@ -166,7 +200,6 @@ public class PMapActivity extends MapActivity implements View.OnClickListener{
 		// TODO Auto-generated method stub
 		return false;
 	}
-	
 	
 	@Override
 	protected Dialog onCreateDialog(int id) {
@@ -239,13 +272,25 @@ public class PMapActivity extends MapActivity implements View.OnClickListener{
 	    }
 	}
 
+	private void showSharePopup() {
+		if (sharePopup == null) {
+			sharePopup = new SharePopupWindow(this, R.drawable.bg_share_popup_1);
+		}
+		int[] btnShareLoc = new int[2];
+		deleteButton.getLocationInWindow(btnShareLoc);
+//		int offX = btnShareLoc[0] - Utils.dipToPixels(this, 6);
+		int offY = Utils.getScreenHeight(this) - btnShareLoc[1] + Utils.dipToPixels(this, 5);
+		int orientation = getResources().getConfiguration().orientation;
+		sharePopup.show(deleteButton, orientation, 0, offY);
+	}
+	
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
-		case R.id.button1:
+		case R.id.btn_back:
 			super.onBackPressed();
 			break;
-		case R.id.button2:
+		case R.id.btn_create_or_delete:
 			isDelete = !isDelete;
 			if(!isDelete) {
 				deleteButton.setText(getResources().getString(R.string.create));
@@ -254,15 +299,15 @@ public class PMapActivity extends MapActivity implements View.OnClickListener{
 			}
 //			Toast.makeText(this, "删除", Toast.LENGTH_SHORT).show();
 			break;
-		case R.id.button3:
+		case R.id.btn_goback:
 //			Toast.makeText(this, "回到一级", Toast.LENGTH_SHORT).show();
 			Intent intent = new Intent(this,MainActivity.class);
 			startActivity(intent);
 			break;
-		case R.id.button4:
-			Toast.makeText(this, "分享", Toast.LENGTH_SHORT).show();
+		case R.id.btn_share:
+			showSharePopup();
 			break;
-		case R.id.button5:
+		case R.id.btn_detail:
 			Toast.makeText(this, "detal", Toast.LENGTH_SHORT).show();
 			//发送左上右下坐标
 			break;

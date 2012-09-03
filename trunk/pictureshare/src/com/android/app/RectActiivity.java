@@ -9,7 +9,7 @@ import android.widget.ImageView;
 
 import com.android.app.entity.MyView;
 
-public class RectActiivity extends BaseActvity implements OnClickListener {
+public class RectActiivity extends BaseActivity implements OnClickListener {
 	MyView myView;
 	ImageView myImageView;
 	private ImageView searchButton;
@@ -25,11 +25,14 @@ public class RectActiivity extends BaseActvity implements OnClickListener {
 		initComponents();
 
 		filePath = getIntent().getStringExtra("mCurrentFile");
+		
 
 		myView = (MyView) findViewById(R.id.MyView_font);
-//		myView.setBitmap(filePath);
+		myView.setBitmap(filePath,this);
 
 	}
+
+	
 
 	private void initComponents() {
 		searchButton = (ImageView) findViewById(R.id.searchButton);
@@ -43,7 +46,7 @@ public class RectActiivity extends BaseActvity implements OnClickListener {
 	protected void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
-		myView.setBitmap(filePath);
+		myView.setBitmap(filePath,this);
 	}
 
 	@Override
