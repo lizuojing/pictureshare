@@ -18,11 +18,13 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|right" >
 
+        
         <com.android.app.view.FanShapedView
             android:id="@+id/fanshaped"
             android:layout_width="200dip"
             android:layout_height="200dip" >
         </com.android.app.view.FanShapedView>
+       
     </FrameLayout>
 
 </FrameLayout>

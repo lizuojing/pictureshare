@@ -9,5 +9,9 @@
     <color name="color_list_item_default">#fbfafb</color>
     <color name="color_list_item_text_default">#848384</color>
     <color name="dotcolor">#a9d9f9</color>
+    <color name="transparent">#00000000</color>
+    <color name="font_share_title">#000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="translucence">#72000000</color>
 
 </resources>

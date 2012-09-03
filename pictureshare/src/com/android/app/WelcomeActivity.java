@@ -6,7 +6,7 @@ import java.util.TimerTask;
 import android.content.Intent;
 import android.os.Bundle;
 
-public class WelcomeActivity extends BaseActvity {
+public class WelcomeActivity extends BaseActivity {
 	private Timer mTimer;
 
 	@Override

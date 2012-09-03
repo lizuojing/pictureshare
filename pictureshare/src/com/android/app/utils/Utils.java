@@ -39,6 +39,10 @@ public class Utils {
 		}
 		return false;
 	}
+	
+	public static boolean isNotNullOrEmpty(String str) {
+		return !isNullOrEmpty(str);
+	}
 
 	public static String formatTime(long time) {
 		Date date = new Date(time);
@@ -155,4 +159,6 @@ public class Utils {
         NotificationManager notificationManager = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.cancel(id);
     }
+
+	
 }

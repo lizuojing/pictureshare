@@ -1,5 +1,7 @@
 package com.android.app.entity;
 
+import java.io.IOException;
+
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -12,6 +14,7 @@ import android.graphics.Path;
 import android.graphics.Shader;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.PathShape;
+import android.media.ExifInterface;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -20,6 +23,7 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 import com.android.app.R;
+import com.android.app.utils.ImageUtil;
 import com.android.app.utils.Utils;
 
 public class MyView extends SurfaceView implements SurfaceHolder.Callback {
@@ -44,8 +48,8 @@ public class MyView extends SurfaceView implements SurfaceHolder.Callback {
 	BitmapShader shader;
 	private BitmapShader bitmapShader = null;
 	private Bitmap bitmap = null;
-	private Bitmap dot = null;
 	private ShapeDrawable shapeDrawable = null;
+	
 
 	private int BitmapWidth, BitmapHeight;
 
@@ -75,7 +79,7 @@ public class MyView extends SurfaceView implements SurfaceHolder.Callback {
 				- Utils.dipToPixels(context, 80), 600, touchLen);
 		right_top = new Rect(Utils.getScreenWidth(context)
 				- Utils.dipToPixels(context, 80), 100, touchLen);
-		dot = BitmapFactory.decodeResource(getResources(), R.drawable.dot);
+//		dot = BitmapFactory.decodeResource(getResources(), R.drawable.dot);
 	}
 
 	public MyView(Context context, AttributeSet attrs) {
@@ -87,13 +91,36 @@ public class MyView extends SurfaceView implements SurfaceHolder.Callback {
 		initBitmap();
 	}
 
-	public void setBitmap(String filePath) {
+	public void setBitmap(String filePath, Context context) {
+		int width=Utils.getScreenHeight(context)/4;
+		int photoOrientation=0;
 		try {
-			Bitmap bitmap = BitmapFactory.decodeFile(filePath);
+			ExifInterface exifInterface=new ExifInterface(filePath);
+			photoOrientation=exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION, 0);
+			switch (photoOrientation) {
+			case ExifInterface.ORIENTATION_ROTATE_180:
+				photoOrientation=180;
+				break;
+			case ExifInterface.ORIENTATION_ROTATE_270:
+				photoOrientation=270;
+				break;
+			case ExifInterface.ORIENTATION_ROTATE_90:
+				photoOrientation=90;
+				break;
+			default:
+				photoOrientation=0;
+				break;
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		try {
+			Bitmap bitmap=ImageUtil.getThumbnail(filePath,width, width,photoOrientation);
 			this.bitmap = bitmap;
 			initBitmap();
-		} catch (OutOfMemoryError e) {
-			e.printStackTrace();
+		} catch (OutOfMemoryError e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
 		}
 	}
 

@@ -26,20 +26,24 @@
     <string name="setting_pic_setting">图片设置</string>
     <string name="setting_valuation">评价</string>
     <string name="setting_common">通用</string>
-    
     <string name="reg_title">注册</string>
     <string name="login_title">登录</string>
- 	<string name="reg_username">用户名:</string>
-	<string name="reg_password">密 码:</string>
-	<string name="reg_email">联系邮箱:</string>
-	<string name="reg_go_reg">去注册</string>
-	<string name="reg_reg">完成注册</string>
-	<string name="reg_login">登 录</string>
-	<string name="reg_username_hint">5-20位字母/数字/下划线</string>
-	<string name="reg_password_hint">6-16位字符</string>
-	<string name="reg_email_hint">请输入联系邮箱</string>
-	<string name="reg_phone_hint">请输入联系电话</string>
-
-	<string name="pic_title_hint">请输入图片标题</string>
-
+    <string name="reg_username">用户名:</string>
+    <string name="reg_password">密 码:</string>
+    <string name="reg_email">联系邮箱:</string>
+    <string name="reg_go_reg">去注册</string>
+    <string name="reg_reg">完成注册</string>
+    <string name="reg_login">登 录</string>
+    <string name="reg_username_hint">5-20位字母/数字/下划线</string>
+    <string name="reg_password_hint">6-16位字符</string>
+    <string name="reg_email_hint">请输入联系邮箱</string>
+    <string name="reg_phone_hint">请输入联系电话</string>
+    <string name="pic_title_hint">请输入图片标题</string>
+    <string name="share_popup_title">请选择分享平台</string>
+    <string name="share_popup_btn_share">分享</string>
+    <string name="weibo_sina_bind">新浪微博绑定成功</string>
+    <string name="weibo_tencent_bind">腾讯微博绑定成功</string>
+    <string name="weibo_renren_bind">人人网绑定成功</string>
+    <string name="weibo_qzone_bind">腾讯空间绑定成功</string>
+    <string name="toast_share_has_sent">已发送分享内容</string>
 </resources>

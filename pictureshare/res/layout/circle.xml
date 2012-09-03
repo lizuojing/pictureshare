@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/RelativeLayout1"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <Button
+        android:id="@+id/btn_center"
+        android:layout_width="40dip"
+        android:layout_height="40dip"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:background="@drawable/center_button" />
+
+    <Button
+        android:id="@+id/btn_top"
+        android:layout_width="40dip"
+        android:layout_height="40dip"
+        android:layout_above="@+id/btn_center"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="42dp"
+        android:background="@drawable/turntable_icon_one" />
+
+    <Button
+        android:id="@+id/btn_bottom"
+        android:layout_width="40dip"
+        android:layout_height="40dip"
+        android:layout_below="@+id/btn_center"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="42dp"
+        android:background="@drawable/turntable_icon_five" />
+
+    <Button
+        android:id="@+id/btn_left"
+        android:layout_width="40dip"
+        android:layout_height="40dip"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="42dp"
+        android:layout_toLeftOf="@+id/btn_center"
+        android:background="@drawable/turntable_icon_three" />
+
+    <Button
+        android:id="@+id/btn_right"
+        android:layout_width="40dip"
+        android:layout_height="40dip"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="42dp"
+        android:layout_toRightOf="@+id/btn_center"
+        android:background="@drawable/turntable_icon_four" />
+
+    <Button
+        android:id="@+id/btn_left_top"
+        android:layout_width="40dip"
+        android:layout_height="40dip"
+        android:layout_above="@+id/btn_center"
+        android:layout_toLeftOf="@id/btn_center"
+        android:layout_marginBottom="20dp"
+        android:layout_marginRight="20dp"
+        android:background="@drawable/turntable_icon_two" />
+
+    <Button
+        android:id="@+id/btn_left_bottom"
+        android:layout_width="40dip"
+        android:layout_height="40dip"
+        android:layout_below="@+id/btn_center"
+        android:layout_toLeftOf="@+id/btn_center"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="20dp"
+        android:background="@drawable/turntable_icon_four" />
+
+    <Button
+        android:id="@+id/btn_right_bottom"
+        android:layout_width="40dip"
+        android:layout_height="40dip"
+        android:layout_toRightOf="@+id/btn_center"
+        android:layout_below="@+id/btn_center"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="20dp"
+        android:background="@drawable/turntable_icon_six" />
+
+    <Button
+        android:id="@+id/btn_right_top"
+        android:layout_width="40dip"
+        android:layout_height="40dip"
+        android:layout_above="@+id/btn_center"
+        android:layout_toRightOf="@+id/btn_center"
+        android:layout_marginBottom="20dp"
+        android:layout_marginLeft="20dp"
+        android:background="@drawable/turntable_icon_eight" />
+
+</RelativeLayout>

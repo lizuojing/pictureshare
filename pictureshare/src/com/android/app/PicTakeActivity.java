@@ -1,17 +1,19 @@
 package com.android.app;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.ExifInterface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.view.View.OnClickListener;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -19,6 +21,8 @@ import android.widget.ListView;
 
 import com.android.app.entity.Avatar;
 import com.android.app.image.ImageLoaderManager;
+import com.android.app.utils.ImageUtil;
+import com.android.app.utils.Utils;
 import com.android.app.view.MainItem;
 
 /**
@@ -27,7 +31,7 @@ import com.android.app.view.MainItem;
  * @author Administrator
  * 
  */
-public class PicTakeActivity extends BaseActvity implements OnClickListener{
+public class PicTakeActivity extends BaseActivity implements OnClickListener{
 	private static final String TAG = "PicTakeActivity";
 	protected static final String ACTION_3D = "action_3d";
 	private Button btn_back;
@@ -41,7 +45,6 @@ public class PicTakeActivity extends BaseActvity implements OnClickListener{
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.picedit);
@@ -52,6 +55,38 @@ public class PicTakeActivity extends BaseActvity implements OnClickListener{
 		initComponents();
 		updateUI();
 		
+	}
+	
+	private Bitmap getBitmap(String filePath) {
+		int width=Utils.getScreenHeight(this)/4;
+		int photoOrientation=0;
+		try {
+			ExifInterface exifInterface=new ExifInterface(filePath);
+			photoOrientation=exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION, 0);
+			switch (photoOrientation) {
+			case ExifInterface.ORIENTATION_ROTATE_180:
+				photoOrientation=180;
+				break;
+			case ExifInterface.ORIENTATION_ROTATE_270:
+				photoOrientation=270;
+				break;
+			case ExifInterface.ORIENTATION_ROTATE_90:
+				photoOrientation=90;
+				break;
+			default:
+				photoOrientation=0;
+				break;
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		try {
+			return ImageUtil.getThumbnail(filePath,width, width,photoOrientation);
+		} catch (OutOfMemoryError e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		return null;
 	}
 	
 	private ArrayList<Avatar> loadData() {
@@ -103,16 +138,23 @@ public class PicTakeActivity extends BaseActvity implements OnClickListener{
 
 	private void updateUI() {
 		try {
-			Bitmap bitmap = BitmapFactory.decodeFile(filePath);
+			Bitmap bitmap = null;
+			if(Utils.isNotNullOrEmpty(filePath)) {
+				 bitmap = getBitmap(filePath);
+			}else {
+				bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.android_default);
+			}
 			imageView.setImageBitmap(bitmap);
 		} catch (OutOfMemoryError e) {
 			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
 	private void initComponents() {
-		btn_back = (Button)findViewById(R.id.button1);
+		btn_back = (Button)findViewById(R.id.btn_back);
 		imageView = (ImageView)findViewById(R.id.imageView4);
 		bottom_button = (ImageView)findViewById(R.id.imageView1);
 		listView = (ListView)findViewById(R.id.listView1);

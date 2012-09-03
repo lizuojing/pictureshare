@@ -23,7 +23,7 @@ import com.android.app.utils.Utils;
 import com.android.app.view.PicDialogProgress;
 import com.android.app.view.TabContent;
 
-public class RegAndLoginActivity extends BaseActvity implements OnFocusChangeListener, OnClickListener,
+public class RegAndLoginActivity extends BaseActivity implements OnFocusChangeListener, OnClickListener,
 		OnEditorActionListener {
 
 	private static final int ID_DIALOG_PROGRESS = 1;
