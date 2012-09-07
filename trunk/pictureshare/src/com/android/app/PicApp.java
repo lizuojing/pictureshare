@@ -6,7 +6,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.IBinder;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.WindowManager;
 
 import com.android.app.service.PicService;
 
@@ -28,6 +30,8 @@ public class PicApp extends Application {
 	        	picService = null;
 	        }
 	    };
+	private static int screenHeight;
+	private static int screenWidth;
 
 	@Override
 	public void onCreate() 
@@ -39,7 +43,11 @@ public class PicApp extends Application {
 		startService(new Intent(this, PicService.class));
 		bindService(new Intent(this, PicService.class), mConnection, Context.BIND_AUTO_CREATE);
 		
-		
+		DisplayMetrics dm = new DisplayMetrics();
+		WindowManager WM = (WindowManager)mContext.getSystemService(Context.WINDOW_SERVICE);
+		WM.getDefaultDisplay().getMetrics(dm);
+		screenHeight=dm.heightPixels;
+		screenWidth=dm.widthPixels;
 		
 	}
 	
@@ -73,6 +81,10 @@ public class PicApp extends Application {
 			mConnection = null;
 			stopService(new Intent(this, PicService.class));
 		}
+	}
+
+	public static int getScreenWidth() {
+		return screenWidth;
 	}
 	
 }

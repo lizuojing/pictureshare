@@ -1,8 +1,7 @@
 package com.android.app.view;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.os.AsyncTask;
+import android.util.AttributeSet;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -12,7 +11,7 @@ import com.android.app.entity.Avatar;
 import com.android.app.image.ImageLoaderManager;
 import com.android.app.utils.Utils;
 
-public class MainItem extends RelativeLayout {
+public class CellItem extends RelativeLayout {
 	
 
 	private static final int ID_IMAGE = 2012;
@@ -21,14 +20,16 @@ public class MainItem extends RelativeLayout {
 	private TextView mTitle;
 	private TextView mTime;
 	private ImageView mRightImage;
-	private LoadBitmapTask loadBitmapTask;
+	private ImageLoaderManager imageLoaderManager;
 
 
-	public MainItem(Context context, Avatar avatar) {
+	public CellItem(Context context, Avatar avatar, ImageLoaderManager imageLoaderManager) {
 		super(context);
+		this.imageLoaderManager = imageLoaderManager;
 		createLayout(context);
 		setItemData(avatar);
 	}
+	
 	
 	private void createLayout(Context context) {
 		setBackgroundColor(getResources().getColor(R.color.color_list_item_default));
@@ -74,14 +75,10 @@ public class MainItem extends RelativeLayout {
 	}
 
 	public void setItemData(Avatar avatar) {
-		mLeftImage.setImageResource(R.drawable.android_default);
-		if (loadBitmapTask != null) {
-			loadBitmapTask.cancel(true);
-			loadBitmapTask = null;
-		}
-		loadBitmapTask = new LoadBitmapTask();
-		if(avatar!=null){
-			loadBitmapTask.execute(avatar);
+		if(!Utils.isNullOrEmpty(avatar.getPath())) {
+			mLeftImage.setImageBitmap(imageLoaderManager.getImage(avatar.getPath(), R.drawable.android_default));
+		}else {
+			mLeftImage.setImageResource(R.drawable.android_default);
 		}
 		
 		mTitle.setText(avatar.getTitle());
@@ -89,16 +86,4 @@ public class MainItem extends RelativeLayout {
 		
 	}
 
-	class LoadBitmapTask extends AsyncTask<Avatar, Object, Bitmap>{
-		@Override
-		protected Bitmap doInBackground(Avatar... params) {
-			return params[0].getThumbnail();
-		}
-		@Override
-		protected void onPostExecute(Bitmap result) {
-			mLeftImage.setImageBitmap(result);
-			super.onPostExecute(result);
-		}
-		
-	}
 }

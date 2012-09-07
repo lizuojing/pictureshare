@@ -7,17 +7,20 @@ import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.android.app.MainActivity;
-import com.android.app.R;
-
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Environment;
 import android.util.DisplayMetrics;
 import android.view.WindowManager;
+
+import com.android.app.MainActivity;
+import com.android.app.R;
+import com.android.app.entity.VersionInfo;
 
 public class Utils {
 	private static final String Cache_Dir = "/Scaner/cache/";
@@ -160,5 +163,66 @@ public class Utils {
         notificationManager.cancel(id);
     }
 
+	public static int[] getVersionNum(String version) {
+		int[] versionIntArray = new int[4];
+		String[] versionStringArray = version.split("[.]");
+		int versionStringLenth = versionStringArray.length;
+		for (int i = 0; i < 4; i++) {
+			if (i < versionStringLenth) {
+				try {
+					versionIntArray[i] = Integer.parseInt(versionStringArray[i]);
+				} catch (Exception e) {
+					e.printStackTrace();
+					versionIntArray[i] = 0;
+				}
+			} else {
+				versionIntArray[i] = 0;
+			}
+		}
+		return versionIntArray;
+	}
+
+	/**
+	 * 获取本地app版本号
+	 * 
+	 * @param context
+	 * @return
+	 */
+	public static String getLocalAppVersion(Context context) {
+		PackageManager pm = context.getPackageManager();
+		String version = null;
+		try {
+			version = pm.getPackageInfo("com.gozap.chouti", 0).versionName;
+		} catch (NameNotFoundException e) {
+			e.printStackTrace();
+		}
+		return version;
+	}
+
 	
+	public static VersionInfo.UpdateType getAppVersionUpdateType(Context context, String newVersion) {
+		VersionInfo.UpdateType type = VersionInfo.UpdateType.NO_UPDATE;
+		String localVersion = getLocalAppVersion(context);
+		try {
+			int[] localVersionArray = getVersionNum(localVersion);
+			int[] newVersionArray = getVersionNum(newVersion);
+			if (newVersionArray[0] > localVersionArray[0]) {
+				return VersionInfo.UpdateType.UPDATE_AND_PROMPT;
+			} else if (newVersionArray[0] == localVersionArray[0]) {
+				if (newVersionArray[1] > localVersionArray[1]) {
+					return VersionInfo.UpdateType.UPDATE_AND_PROMPT;
+				} else if (newVersionArray[1] == localVersionArray[1]) {
+					if (newVersionArray[2] > localVersionArray[2]) {
+						return VersionInfo.UpdateType.UPDATE_AND_PROMPT;
+					} else if (newVersionArray[2] == localVersionArray[2]) {
+						if (newVersionArray[3] > localVersionArray[3]) {
+							return VersionInfo.UpdateType.UPDATE_NO_PROMPT;
+						}
+					}
+				}
+			}
+		} catch (Exception e) {
+		}
+		return type;
+	};
 }

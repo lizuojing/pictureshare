@@ -15,6 +15,7 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.MediaStore;
@@ -34,7 +35,11 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 
+import com.android.app.api.ApiResult;
+import com.android.app.api.ApiReturnResultListener;
+import com.android.app.api.OtherApi;
 import com.android.app.entity.Avatar;
+import com.android.app.entity.VersionInfo;
 import com.android.app.image.ImageLoaderManager;
 import com.android.app.service.PicService;
 import com.android.app.utils.Utils;
@@ -67,6 +72,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 	private Cursor photoCursor;
 	private ListAdapter adapter;
 	private MediaPopupWindow mediaPopup;
+	private LoadImagesFromSDCard loadTask;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -288,13 +294,15 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
 		loadPicData(this);
 		// 第一次加载
-//		AddItemToContainer(current_page, page_count);
 	}
 
 
 	public void loadPicData(Context context) {
+		loadTask = new LoadImagesFromSDCard();
+		loadTask.execute();
+		
 
-		String[] projection = new String[] { Media._ID, Media.MIME_TYPE,
+	/*	String[] projection = new String[] { Media._ID, Media.MIME_TYPE,
 				Media.TITLE, Media.ORIENTATION, Media.LONGITUDE,
 				Media.LATITUDE, Media.DISPLAY_NAME, Media.DATE_TAKEN,
 				Media.DATA, Media.SIZE };
@@ -327,18 +335,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 		 if( photoCursor != null ) {
 			 photoCursor.close();
 			 photoCursor= null;
-		 }
+		 }*/
 
 	}
 
 
 	class ListAdapter extends BaseAdapter {
-
-		private ImageLoaderManager imageLoaderManager;
-
-		public ListAdapter() {
-			imageLoaderManager = new ImageLoaderManager(MainActivity.this,new Handler(), this);
-		}
 
 		@Override
 		public int getCount() {
@@ -360,7 +362,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 			Avatar avatar = list.get(position);
 			MainItem item = null;
 			if (convertView == null) {
-				item = new MainItem(MainActivity.this, avatar,imageLoaderManager);
+				item = new MainItem(MainActivity.this, avatar);
 				convertView = item;
 			} else {
 				item = (MainItem) convertView;
@@ -371,6 +373,88 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 		}
 
 	}
+	
+	/**
+	 * Async task for loading the images from the SD card.
+	 * 有关具体的缩略图可以通过
+	 * getThumbnail(ContentResolver cr, long origId, int kind, BitmapFactory.Options options)或
+	 * getThumbnail(ContentResolver cr, long origId, long groupId, int kind, BitmapFactory.Options options) 
+	 * 方法获取，这两种方法返回Bitmap类型，而缩略图的分辨率可以从HEIGHT和WIDTH两个字段提取，
+	 * 在Android上缩略图分为两种，通过读取KIND字段来获得，分别为MICRO_KIND和MINI_KIND 分别为微型和迷你两种缩略模式，
+	 * 前者的分辨率更低。
+	 * @author Mihai Fonoage
+	 */
+	class LoadImagesFromSDCard extends AsyncTask<Object, Avatar, Object> {
+
+		/**
+		 * Load images from SD Card in the background, and display each image on
+		 * the screen.
+		 * 
+		 * @see android.os.AsyncTask#doInBackground(Params[])
+		 */
+		@Override
+		protected Object doInBackground(Object... params) {
+			// setProgressBarIndeterminateVisibility(true);
+			
+			String selection = Media.DATA + " like  " + "\'%/sdcard/dcim/%\'" + " or " + Media.DATA + " like  "
+					+ "\'%/sdcard/Pictures/%\'" + " or " + Media.DATA + " like  " + "\'%/sdcard/Images/%\'" + " or "
+					+ Media.DATA + " like  " + "\'%/sdcard/Camera/%\'" + " or " + Media.DATA + " like  "
+					+ "\'%/sdcard/Image/%\'" + " or " + Media.DATA + " like  " + "\'%/sdcard/Picture/%\'" + " or "
+					+ Media.DATA + " like  " + "\'%/sdcard/Photo/%\'" + " or " + Media.DATA + " like  "
+					+ "\'%/sdcard/Photos/%\'" + " or " + Media.DATA + " like  "
+					+ "\'%/sdcard/%MEDIA/%\'" ;
+			String[] projection = {Media._ID,Media.DATA,Media.ORIENTATION};
+			Cursor cursor = getApplicationContext().getContentResolver()
+					.query(Media.EXTERNAL_CONTENT_URI, projection, selection, null, "_id" + " DESC");
+			if(cursor==null){
+				return null;
+			}
+			int idIndex=cursor.getColumnIndexOrThrow(Media._ID);
+			int dataIndex=cursor.getColumnIndexOrThrow(Media.DATA);
+			int orientationIndex=cursor.getColumnIndexOrThrow(Media.ORIENTATION);
+			int count=cursor.getCount();
+			if (count > 0) {
+				for(int i=0;i<count;i++){
+					cursor.moveToPosition(i);
+					Avatar loadedImage = new Avatar();
+					loadedImage.setTitle("我的工作证");
+					loadedImage.setTime(System.currentTimeMillis());
+					loadedImage.setPath(cursor.getString(dataIndex));
+					loadedImage.orientation=cursor.getInt(orientationIndex);
+					File file=new File(loadedImage.getPath());
+					if(file!=null&&file.exists()&&isImagePath(loadedImage.getPath())){
+						list.add(loadedImage);
+					}
+				}
+			}
+			cursor.close();
+			return null;
+		}
+
+		private boolean isImagePath(String photoPath) {
+			if(Utils.isNullOrEmpty(photoPath)){
+				return false;
+			}
+			if(photoPath.toLowerCase().endsWith(".jpg")||photoPath.toLowerCase().endsWith(".jpeg")||photoPath.toLowerCase().endsWith(".png")
+					||photoPath.toLowerCase().endsWith(".bmp")||photoPath.toLowerCase().endsWith(".svg")||photoPath.toLowerCase().endsWith(".gif")){
+				return true;
+			}
+			return false;
+		}
+
+		/**
+		 * Set the visibility of the progress bar to false.
+		 * 
+		 * @see android.os.AsyncTask#onPostExecute(java.lang.Object)
+		 */
+		@Override
+		protected void onPostExecute(Object result) {
+			adapter.notifyDataSetChanged();
+			loadTask = null;
+		}
+	}
+	
+	
 	@Override
 	public void onBackPressed() {
 		if(mediaPopup!=null) {
@@ -383,8 +467,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.button1:
-			Intent editIntent = new Intent(this, RectActiivity.class);
-			startActivity(editIntent);
+//			Intent editIntent = new Intent(this, RectActiivity.class);
+//			startActivity(editIntent);
+			 checkAppUpdate();
+		
 			break;
 		case R.id.imageView2:
 			Intent mapIntent = new Intent(this, PMapActivity.class);
@@ -404,6 +490,36 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
 	}
 	
+	private void checkAppUpdate() {
+		OtherApi otherApi = new OtherApi(this);
+		otherApi.setReturnResultListener(new ApiReturnResultListener() {
+			@SuppressWarnings("unchecked")
+			@Override
+			public <T> void onReturnSucceedResult(int requestCode,
+					ApiResult<T> apiResult) {
+				ArrayList<VersionInfo> infos = (ArrayList<VersionInfo>) apiResult
+						.getEntities();
+				if (infos == null || infos.size() <= 0) {
+					return;
+				}
+				VersionInfo newVersionInfo = infos.get(0);
+				if (newVersionInfo.getUpdateType() != VersionInfo.UpdateType.NO_UPDATE) {
+
+				} else {
+
+				}
+			}
+
+			@Override
+			public <T> void onReturnFailResult(int requestCode,
+					ApiResult<T> apiResult) {
+				int failCode = apiResult.getFailCode();
+
+			}
+		});
+		otherApi.getLatestAppVersion(0);
+	}
+
 	private void showSharePopup() {
 		if (mediaPopup == null) {
 			mediaPopup = new MediaPopupWindow(this, R.drawable.bg_share_popup_1);

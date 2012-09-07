@@ -9,6 +9,8 @@ import android.content.Context;
  * 
  */
 public class AvatarApi extends BaseApi {
+	
+	private static final String AVATAR_UPLOAD_URL = "007/uploadphoto";
 
 	public AvatarApi(Context context) {
 		super(context);

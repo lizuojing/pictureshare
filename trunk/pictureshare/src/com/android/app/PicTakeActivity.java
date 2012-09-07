@@ -23,7 +23,7 @@ import com.android.app.entity.Avatar;
 import com.android.app.image.ImageLoaderManager;
 import com.android.app.utils.ImageUtil;
 import com.android.app.utils.Utils;
-import com.android.app.view.MainItem;
+import com.android.app.view.CellItem;
 
 /**
  * 拍照页面
@@ -210,12 +210,12 @@ public class PicTakeActivity extends BaseActivity implements OnClickListener{
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
 			Avatar avatar = list.get(position);
-			MainItem item = null;
+			CellItem item = null;
 			if (convertView == null) {
-				item = new MainItem(PicTakeActivity.this, avatar,imageLoaderManager);
+				item = new CellItem(PicTakeActivity.this, avatar,imageLoaderManager);
 				convertView = item;
 			} else {
-				item = (MainItem) convertView;
+				item = (CellItem) convertView;
 				item.setItemData(avatar);
 			}
 
