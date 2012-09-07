@@ -20,7 +20,7 @@ import android.widget.AdapterView.OnItemClickListener;
 
 import com.android.app.entity.Avatar;
 import com.android.app.image.ImageLoaderManager;
-import com.android.app.view.MainItem;
+import com.android.app.view.CellItem;
 
 public class EditActivity extends BaseActivity implements View.OnClickListener{
 	private static final String TAG = "EditActivity";
@@ -160,12 +160,12 @@ public class EditActivity extends BaseActivity implements View.OnClickListener{
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
 			Avatar avatar = list.get(position);
-			MainItem item = null;
+			CellItem item = null;
 			if (convertView == null) {
-				item = new MainItem(EditActivity.this, avatar,imageLoaderManager);
+				item = new CellItem(EditActivity.this, avatar,imageLoaderManager);
 				convertView = item;
 			} else {
-				item = (MainItem) convertView;
+				item = (CellItem) convertView;
 				item.setItemData(avatar);
 			}
 

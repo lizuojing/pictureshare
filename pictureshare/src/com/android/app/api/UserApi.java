@@ -2,15 +2,24 @@ package com.android.app.api;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
+
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
 import android.content.Context;
 import android.os.AsyncTask;
+
+import com.android.app.utils.Base64;
 
 /**
  * 用户相关api
@@ -217,5 +226,108 @@ public class UserApi extends BaseApi {
 	 */
 	public void addShare(OwnerRequestParam params) {
 		
+	}
+	
+	/**
+	 * 生成签名
+	 * 
+	 * @param baseString
+	 * @param oauth_consumer_secret
+	 * @return Signature
+	 */
+	public String getSignature(String baseString, String oauth_consumer_secret) {
+		String key = oauth_consumer_secret + "&";
+		String signature = null;
+		try {
+			signature = computeHmac(baseString, key);
+		} catch (InvalidKeyException e) {
+			e.printStackTrace();
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		} catch (IllegalStateException e) {
+			e.printStackTrace();
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+		return signature;
+	}
+
+	/**
+	 * 用 HmacSHA1 算法加密
+	 * 
+	 * @param baseString
+	 * @param key
+	 * @return
+	 * @throws NoSuchAlgorithmException
+	 * @throws InvalidKeyException
+	 * @throws IllegalStateException
+	 * @throws UnsupportedEncodingException
+	 */
+	private String computeHmac(String baseString, String key) throws NoSuchAlgorithmException, InvalidKeyException,
+			IllegalStateException, UnsupportedEncodingException {
+		// Mac类提供 消息验证码（Message Authentication Code，MAC）算法的功能。
+		// getInstance返回实现指定 MAC 算法的 Mac对象。
+		Mac mac = Mac.getInstance("HmacSHA1");
+
+		SecretKeySpec secret = new SecretKeySpec(key.getBytes(), mac.getAlgorithm());
+		mac.init(secret);
+		byte[] digest = mac.doFinal(baseString.getBytes());
+		return getBase64String(digest);
+	}
+
+	/**
+	 * Base64编码
+	 * 
+	 * @param bytes
+	 * @return
+	 */
+	private String getBase64String(byte[] bytes) {
+		byte[] encoded = Base64.encodeBase64(bytes);
+		return new String(encoded);
+	}
+
+	/**
+	 * 对baseString排序并encode编码(encode两次)
+	 * 
+	 * @param params
+	 * @return
+	 */
+	private String sortAndEncodeParams(List<NameValuePair> params) {
+		Collections.sort(params, new Comparator<NameValuePair>() {
+			@Override
+			public int compare(NameValuePair lhs, NameValuePair rhs) {
+				if (lhs.getName().compareTo(rhs.getName()) != 0) {
+					return lhs.getName().compareTo(rhs.getName());
+				} else {
+					return rhs.getValue().compareTo(lhs.getValue());
+				}
+			}
+		});
+		StringBuffer sb = new StringBuffer();
+
+		for (NameValuePair pair : params) {
+			String encodedName = null;
+			try {
+				encodedName = URLEncoder.encode(pair.getName(), "utf-8");
+				encodedName = URLEncoder.encode(encodedName, "utf-8");
+			} catch (UnsupportedEncodingException e) {
+				e.printStackTrace();
+			}
+			final String value = pair.getValue();
+			String encodedValue = null;
+			try {
+				encodedValue = value != null ? URLEncoder.encode(value, "utf-8") : "";
+				encodedValue = URLEncoder.encode(encodedValue, "utf-8");
+			} catch (UnsupportedEncodingException e) {
+				e.printStackTrace();
+			}
+			if (sb.length() > 0) {
+				sb.append("%26");
+			}
+			sb.append(encodedName);
+			sb.append("%3D");
+			sb.append(encodedValue);
+		}
+		return sb.toString();
 	}
 }
