@@ -38,17 +38,6 @@
         android:layout_below="@+id/relativeLayout2"
         android:background="@color/title_child_bg" >
 
-        <EditText
-            android:id="@+id/editText1"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginLeft="2dip"
-            android:layout_marginRight="2dip"
-            android:clickable="true"
-            android:focusable="false"
-            android:hint="@string/edit_hint" >
-        </EditText>
     </RelativeLayout>
 
     <FrameLayout
