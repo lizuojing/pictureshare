@@ -3,9 +3,8 @@ package com.android.app.api;
 import java.util.ArrayList;
 
 /**
- * api请求返回的结果
- * @author Administrator
- *
+ * api请求返回的结果结构上与HttpResult相似
+ * @param <T>
  */
 public class ApiResult<T> {
 	/**
