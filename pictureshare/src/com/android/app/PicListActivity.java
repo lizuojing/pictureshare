@@ -2,20 +2,16 @@ package com.android.app;
 
 import java.util.ArrayList;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.AdapterView.OnItemClickListener;
 
 import com.android.app.entity.Avatar;
 import com.android.app.image.ImageLoaderManager;
@@ -24,8 +20,6 @@ import com.android.app.view.CellItem;
 public class PicListActivity extends BaseActivity implements View.OnClickListener{
 	
 	private Button backButton;
-	private EditText search_edit;
-	private InputMethodManager inputMethodManager;
 	private ListView listView;
 
 	@Override
@@ -39,19 +33,6 @@ public class PicListActivity extends BaseActivity implements View.OnClickListene
 	private void initComponents() {
 		backButton = (Button)findViewById(R.id.button1);
 		backButton.setOnClickListener(this);
-		search_edit = (EditText)findViewById(R.id.editText1);
-		inputMethodManager = (InputMethodManager)this.getSystemService(Context.INPUT_METHOD_SERVICE);  
-		
-		search_edit.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				search_edit.setFocusable(true);
-				search_edit.setFocusableInTouchMode(true);
-				search_edit.requestFocus();
-				inputMethodManager.showSoftInput(search_edit, 0);
-			}
-		});
 		
 		listView = (ListView) findViewById(R.id.listView1);
 		listView.setOnItemClickListener(new OnItemClickListener() {
