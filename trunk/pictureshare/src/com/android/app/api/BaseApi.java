@@ -1,12 +1,8 @@
 package com.android.app.api;
 
 import android.content.Context;
-/**
- * api
- * @author Administrator
- *
- */
-public class BaseApi {
+
+public abstract class BaseApi {
 	protected Context context;
 	protected ApiReturnResultListener returnResultListener;
 

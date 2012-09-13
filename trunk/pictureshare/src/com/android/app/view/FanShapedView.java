@@ -9,6 +9,7 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.os.Handler;
@@ -297,6 +298,7 @@ public class FanShapedView extends View {
 		String str = homeItem.getFirst();
 		homeItem.removeFirst();
 		homeItem.addLast(str);
+		
 	}
 	
 	/**

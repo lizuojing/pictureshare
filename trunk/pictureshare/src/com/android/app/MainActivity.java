@@ -17,6 +17,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.provider.MediaStore;
 import android.provider.MediaStore.Images.Media;
@@ -37,6 +38,7 @@ import android.widget.ListView;
 
 import com.android.app.api.ApiResult;
 import com.android.app.api.ApiReturnResultListener;
+import com.android.app.api.AvatarApi;
 import com.android.app.api.OtherApi;
 import com.android.app.entity.Avatar;
 import com.android.app.entity.VersionInfo;
@@ -469,7 +471,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 		case R.id.button1:
 //			Intent editIntent = new Intent(this, RectActiivity.class);
 //			startActivity(editIntent);
-			 checkAppUpdate();
+//			 checkAppUpdate();
+			File directory = Environment.getExternalStorageDirectory();
+			String filepath = directory.getAbsoluteFile()+"/Camera/683kb.jpg";
+			uploadpicture(filepath);
 		
 			break;
 		case R.id.imageView2:
@@ -490,6 +495,26 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
 	}
 	
+	private void uploadpicture(String filepath) {
+		AvatarApi avatarApi = new AvatarApi(this);
+		avatarApi.setReturnResultListener(new ApiReturnResultListener() {
+			@Override
+			public <T> void onReturnSucceedResult(int requestCode,
+					ApiResult<T> apiResult) {
+				Log.i(TAG, "apiResult is " + apiResult.getResultCode());
+			
+			}
+
+			@Override
+			public <T> void onReturnFailResult(int requestCode,
+					ApiResult<T> apiResult) {
+				int failCode = apiResult.getFailCode();
+
+			}
+		});
+		avatarApi.uploadAvatar(MainActivity.this,0,filepath);
+	}
+	
 	private void checkAppUpdate() {
 		OtherApi otherApi = new OtherApi(this);
 		otherApi.setReturnResultListener(new ApiReturnResultListener() {
@@ -497,6 +522,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 			@Override
 			public <T> void onReturnSucceedResult(int requestCode,
 					ApiResult<T> apiResult) {
+				Log.i(TAG, "apiResult is " + apiResult.getResultCode());
 				ArrayList<VersionInfo> infos = (ArrayList<VersionInfo>) apiResult
 						.getEntities();
 				if (infos == null || infos.size() <= 0) {

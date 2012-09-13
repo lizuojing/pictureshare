@@ -331,6 +331,7 @@ public class NetService {
 			return result;
 		}
 		StatusLine status = response.getStatusLine();
+		Log.i("MainActivity", "status is " + status);
 		int statusCode = status.getStatusCode();
 		if (statusCode != HttpStatus.SC_OK) {
 			result.setResultCode(HttpResult.RESULT_FAIL);

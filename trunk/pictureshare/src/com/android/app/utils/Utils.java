@@ -1,6 +1,11 @@
 package com.android.app.utils;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -14,6 +19,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.database.Cursor;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Environment;
 import android.util.DisplayMetrics;
 import android.view.WindowManager;
@@ -225,4 +234,78 @@ public class Utils {
 		}
 		return type;
 	};
+	
+	public static String inputStream2String(InputStream inStream) throws IOException
+	{
+		
+		if (inStream != null)
+		{
+			StringWriter writer = new StringWriter();
+			char[] buffer = new char[1024];
+			
+			BufferedReader reader = new BufferedReader(new InputStreamReader(inStream, "UTF-8"));
+				
+			int n;
+
+			while ((n = reader.read(buffer)) != -1)
+			{
+				writer.write(buffer, 0, n);
+			}
+
+			return writer.toString();
+		}
+		else
+		{
+			return "";
+		}
+	}
+	
+	public static final Uri PREFERRED_APN_URI = Uri.parse("content://telephony/carriers/preferapn");
+	
+	public final static class APNData
+	{
+		// other infos....
+		
+		public String proxy = null;
+		public int port = 0;
+		
+		public APNData(String proxy, int port)
+		{
+			this.proxy = proxy;
+			this.port = port;
+		}
+		
+		public boolean hasProxy()
+		{
+			return (proxy != null && !proxy.equals("")) && (port != 0);
+		}
+	}
+	
+	public static APNData getPreferAPNData(Context context)
+	{
+		//判断wifi是否可用
+		ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);  
+    	NetworkInfo activeNetInfo = connectivityManager.getActiveNetworkInfo(); 
+    	boolean WifiOK= ( activeNetInfo != null && activeNetInfo.getType() == ConnectivityManager.TYPE_WIFI );
+		if(!WifiOK){
+			Cursor cursor = context.getContentResolver().query(PREFERRED_APN_URI, null, null, null, null);
+			if (cursor != null && cursor.moveToFirst())
+			{
+				String proxy = cursor.getString(cursor.getColumnIndex("proxy"));
+				int port = cursor.getInt(cursor.getColumnIndex("port"));
+				String mcc = cursor.getString(cursor.getColumnIndex("mcc"));   
+	            String mnc = cursor.getString(cursor.getColumnIndex("mnc"));
+	            if( mcc!=null && mcc.equals("460") && mnc!=null && (mnc.equals("03")|| mnc.equals("05")) ) {
+	            	//电信手机， 电信wap接入点get请求返回404
+	            	cursor.close();
+	            	return null;
+	            }
+				
+				cursor.close();
+				return new APNData(proxy, port);
+			}
+		}
+		
+		return null;
+	}
 }

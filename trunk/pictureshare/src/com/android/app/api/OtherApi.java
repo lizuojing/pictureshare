@@ -12,7 +12,6 @@ import org.xmlpull.v1.XmlPullParserException;
 import android.content.Context;
 import android.os.AsyncTask;
 
-import com.android.app.config.ApiConfig;
 import com.android.app.config.Config;
 import com.android.app.entity.VersionInfo;
 import com.android.app.net.HttpResult;
@@ -26,7 +25,7 @@ import com.android.app.utils.Utils;
 public class OtherApi extends BaseApi {
 
 	// 版本服务url
-	private static final String VERSION_SERVICE_URL = "007/getversio";
+	private static final String VERSION_SERVICE_URL = "007/getversion";
     protected static final String TAG = "OtherApi";
 
 	public OtherApi(Context context) {
@@ -43,15 +42,16 @@ public class OtherApi extends BaseApi {
 			protected ApiResult<VersionInfo> doInBackground(Object... strs) {
 				ApiResult<VersionInfo> apiResult = new ApiResult<VersionInfo>();
 				apiResult.setResultCode(ApiResult.RESULT_FAIL);
-//				List<NameValuePair> params = new ArrayList<NameValuePair>();
+				List<NameValuePair> params = new ArrayList<NameValuePair>();
 //				params.add(new BasicNameValuePair("method", "sys.versionCtl.get"));
-//
-//				// 后期要将IP_50 替换为 Utils.getPlatform()
+
+				//params={"params":{"version":"1.0"}}
+				// 后期要将IP_50 替换为 Utils.getPlatform()
 //				String value = "<item>" + "<name>xinrebang</name>" + "<type>" + "AR_21" + "</type>" + "<page>1</page>"
 //						+ "<pages>1</pages>" + "</item>";
 //
 //				value = XORencode(value, ApiConfig.APP_SECRET);
-//				params.add(new BasicNameValuePair("params", value));
+				params.add(new BasicNameValuePair("params", "{'params':{'version':'1.0'}}"));
 //				params.add(new BasicNameValuePair("oauth_consumer_key", ApiConfig.APP_KEY));
 //
 //				String baseString = ApiConfig.APP_SECRET + "&" + ApiConfig.APP_KEY + "&sys.versionCtl.get&" + value;
@@ -59,7 +59,7 @@ public class OtherApi extends BaseApi {
 //				params.add(new BasicNameValuePair("oauth_signature", signature));
 
 				HttpResultXml result = NetService.httpPostReturnXml(context,
-						Config.Server_URL + VERSION_SERVICE_URL,null/*, params*/);
+						Config.Server_URL + VERSION_SERVICE_URL, params);
 
 				if (result.getResultCode() == HttpResult.RESULT_OK) {
 					apiResult.setResultCode(ApiResult.RESULT_OK);
