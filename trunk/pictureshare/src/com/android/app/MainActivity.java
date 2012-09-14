@@ -456,11 +456,19 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 		}
 	}
 	
+	@Override
+	protected void onResume() {
+		if(mediaPopup!=null) {
+			mediaPopup.dismiss(); 
+		}
+		super.onResume();
+	}
 	
 	@Override
 	public void onBackPressed() {
+		Log.i(TAG, "onBackPressed is running");
 		if(mediaPopup!=null) {
-			mediaPopup.dismiss();
+			mediaPopup.dismiss(); 
 		}
 		showDialog(ID_EXIT);
 	}

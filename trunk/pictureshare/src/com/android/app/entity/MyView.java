@@ -245,6 +245,9 @@ public class MyView extends SurfaceView implements SurfaceHolder.Callback {
 					Canvas canvas = null;
 
 					canvas = holder.lockCanvas(null);// 获取画布
+					if(canvas==null) {
+						return;
+					}
 					mPaint.setColor(Color.CYAN);
 					mPaint.setAntiAlias(true);
 					canvas.save();
