@@ -204,7 +204,7 @@ public class FanShapedView extends View {
 		int y = (int) event.getY();
 		switch (action) {
 		case MotionEvent.ACTION_DOWN:
-			if (onfirstImgRect.contains(x, y)) {//隐藏
+			if (onfirstImgRect!=null&&onfirstImgRect.contains(x, y)) {//隐藏
 				Log.i(TAG, "隐藏");
 //				this.setVisibility(GONE);
 				downX = -1;
@@ -213,32 +213,32 @@ public class FanShapedView extends View {
 				paddlingAction = PaddlingAction.no;
 				return this.performClick();
 			}
-			if (secondImgRect.contains(x, y)) {
+			if (secondImgRect!=null&&secondImgRect.contains(x, y)) {
 				moveDownHandle();
 			}
-			if (thirdImgRect.contains(x, x)) {
-				moveDownHandle();
-				moveDownHandle();
-			}
-			if (fourImgRect.contains(x, x)) {
-				moveDownHandle();
+			if (thirdImgRect!=null&&thirdImgRect.contains(x, x)) {
 				moveDownHandle();
 				moveDownHandle();
 			}
-			if (fiveImgRect.contains(x, x)) {
-				moveDownHandle();
+			if (fourImgRect!=null&&fourImgRect.contains(x, x)) {
 				moveDownHandle();
 				moveDownHandle();
 				moveDownHandle();
 			}
-			if (sixtImgRect.contains(x, x)) {
-				moveDownHandle();
+			if (fiveImgRect!=null&&fiveImgRect.contains(x, x)) {
 				moveDownHandle();
 				moveDownHandle();
 				moveDownHandle();
 				moveDownHandle();
 			}
-			if (allBgRect.contains(x, y)) {
+			if (sixtImgRect!=null&&sixtImgRect.contains(x, x)) {
+				moveDownHandle();
+				moveDownHandle();
+				moveDownHandle();
+				moveDownHandle();
+				moveDownHandle();
+			}
+			if (allBgRect!=null&&allBgRect.contains(x, y)) {
 				Log.i(TAG, "ACTION_DOWN");
 				downX = x;
 				downY = y;
