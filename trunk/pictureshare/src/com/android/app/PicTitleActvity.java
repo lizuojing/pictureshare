@@ -94,7 +94,7 @@ public class PicTitleActvity extends BaseActivity implements OnClickListener{
 		case R.id.confirm:
 			String title = picTitle.getText().toString();
 			//title 处理
-			Intent intent = new Intent(this,DishActivity.class);
+			Intent intent = new Intent(this,PicListActivity.class);
 			intent.putExtra("picTitle", title);
 			intent.putExtra("mCurrentFile", filePath);
 			startActivity(intent);
