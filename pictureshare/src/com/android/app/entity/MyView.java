@@ -245,53 +245,52 @@ public class MyView extends SurfaceView implements SurfaceHolder.Callback {
 					Canvas canvas = null;
 
 					canvas = holder.lockCanvas(null);// 获取画布
-					if(canvas==null) {
-						return;
+					if(canvas!=null) {
+						mPaint.setColor(Color.CYAN);
+						mPaint.setAntiAlias(true);
+						canvas.save();
+						canvas.drawBitmap(bmp, new Matrix(), mPaint);
+						canvas.restore();
+						drawLine(canvas, left_top.getCenterPoint(),
+								left_bottom.getCenterPoint());
+						drawLine(canvas, left_bottom.getCenterPoint(),
+								right_bottom.getCenterPoint());
+						drawLine(canvas, right_bottom.getCenterPoint(),
+								right_top.getCenterPoint());
+						drawLine(canvas, right_top.getCenterPoint(),
+								left_top.getCenterPoint());
+
+						Path path = new Path();
+						mPaint.setColor(Color.WHITE);
+						path.moveTo(left_top.x, left_top.y);
+						path.lineTo(left_bottom.x, left_bottom.y);
+						path.lineTo(right_bottom.x, right_bottom.y);
+						path.lineTo(right_top.x, right_top.y);
+						path.close();
+
+						shapeDrawable = new ShapeDrawable(new PathShape(path,
+								BitmapWidth, BitmapHeight));
+
+						// 得到画笔并设置渲染器
+						shapeDrawable.getPaint().setShader(bitmapShader);
+						// 设置显示区域
+						shapeDrawable.setBounds(0, 0, BitmapWidth, BitmapHeight);
+						// 绘制shapeDrawable
+						shapeDrawable.draw(canvas);
+						mPaint.setColor(getResources().getColor(R.color.dotcolor));
+						mPaint.setAlpha(200);
+						drawPointCircle(canvas, left_top);
+
+						drawPointCircle(canvas, left_bottom);
+
+						drawPointCircle(canvas, right_top);
+
+						drawPointCircle(canvas, right_bottom);
+
+						holder.unlockCanvasAndPost(canvas);// 解锁画布，提交画好的图像
+						isMove = false;
+
 					}
-					mPaint.setColor(Color.CYAN);
-					mPaint.setAntiAlias(true);
-					canvas.save();
-					canvas.drawBitmap(bmp, new Matrix(), mPaint);
-					canvas.restore();
-					drawLine(canvas, left_top.getCenterPoint(),
-							left_bottom.getCenterPoint());
-					drawLine(canvas, left_bottom.getCenterPoint(),
-							right_bottom.getCenterPoint());
-					drawLine(canvas, right_bottom.getCenterPoint(),
-							right_top.getCenterPoint());
-					drawLine(canvas, right_top.getCenterPoint(),
-							left_top.getCenterPoint());
-
-					Path path = new Path();
-					mPaint.setColor(Color.WHITE);
-					path.moveTo(left_top.x, left_top.y);
-					path.lineTo(left_bottom.x, left_bottom.y);
-					path.lineTo(right_bottom.x, right_bottom.y);
-					path.lineTo(right_top.x, right_top.y);
-					path.close();
-
-					shapeDrawable = new ShapeDrawable(new PathShape(path,
-							BitmapWidth, BitmapHeight));
-
-					// 得到画笔并设置渲染器
-					shapeDrawable.getPaint().setShader(bitmapShader);
-					// 设置显示区域
-					shapeDrawable.setBounds(0, 0, BitmapWidth, BitmapHeight);
-					// 绘制shapeDrawable
-					shapeDrawable.draw(canvas);
-					mPaint.setColor(getResources().getColor(R.color.dotcolor));
-					mPaint.setAlpha(200);
-					drawPointCircle(canvas, left_top);
-
-					drawPointCircle(canvas, left_bottom);
-
-					drawPointCircle(canvas, right_top);
-
-					drawPointCircle(canvas, right_bottom);
-
-					holder.unlockCanvasAndPost(canvas);// 解锁画布，提交画好的图像
-					isMove = false;
-
 				}
 				//
 				// try {
