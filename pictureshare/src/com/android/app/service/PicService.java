@@ -101,7 +101,7 @@ public class PicService extends Service {
 		Log.i(TAG, "onStart is running");
 //		registerHeartBeatCheckAlarm();//发送心跳包的时机 
 		
-		Utils.showNotification(this, R.drawable.android_default, "有新的通知消息。","有新的通知消息。" + Utils.formatTime(System.currentTimeMillis()));
+//		Utils.showNotification(this, R.drawable.android_default, "有新的通知消息。","有新的通知消息。" + Utils.formatTime(System.currentTimeMillis()));
 		super.onStart(intent, startId);
 	}
 

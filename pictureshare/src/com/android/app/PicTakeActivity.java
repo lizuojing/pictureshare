@@ -7,13 +7,14 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.ExifInterface;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.View.OnClickListener;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -56,6 +57,7 @@ public class PicTakeActivity extends BaseActivity implements OnClickListener{
 		updateUI();
 		
 	}
+	
 	
 	private Bitmap getBitmap(String filePath) {
 		int width=Utils.getScreenHeight(this)/4;
@@ -170,14 +172,19 @@ public class PicTakeActivity extends BaseActivity implements OnClickListener{
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
-		case R.id.button1:
+		case R.id.imageView1:
+//			Intent intent = new Intent(this,PMapActivity.class);
+//			startActivity(intent);
+
+			//TODO 用浏览器打开指定的url
+			Intent viewIntent = new Intent(Intent.ACTION_VIEW,Uri.parse("http://www.baidu.com"));
+			startActivity(viewIntent);
+
+			break;
+			
+		case R.id.btn_back:
 			super.onBackPressed();
 			break;
-		case R.id.imageView1:
-			Intent intent = new Intent(this,PMapActivity.class);
-			startActivity(intent);
-			break;
-
 		default:
 			break;
 		}

@@ -17,24 +17,21 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
-import android.os.Handler;
 import android.provider.MediaStore;
 import android.provider.MediaStore.Images.Media;
 import android.util.Log;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.View.OnClickListener;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.AbsListView;
-import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
-import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Toast;
+import android.widget.AdapterView.OnItemClickListener;
 
 import com.android.app.api.ApiResult;
 import com.android.app.api.ApiReturnResultListener;
@@ -42,7 +39,6 @@ import com.android.app.api.AvatarApi;
 import com.android.app.api.OtherApi;
 import com.android.app.entity.Avatar;
 import com.android.app.entity.VersionInfo;
-import com.android.app.image.ImageLoaderManager;
 import com.android.app.service.PicService;
 import com.android.app.utils.Utils;
 import com.android.app.view.MainItem;
@@ -62,7 +58,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 	protected static final String TAG = "MainActivity";
 	private static final int ID_EXIT = 2012;
 	private ListView listView;
-	private Button editButton;
+	private CheckBox editButton;
 	private ImageView mapImage;
 	private ImageView takePicImage;
 	private ImageView setImage;
@@ -71,7 +67,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 	private InputMethodManager inputMethodManager;
 
 	private ArrayList<Avatar> list = null;
-	private Cursor photoCursor;
 	private ListAdapter adapter;
 	private MediaPopupWindow mediaPopup;
 	private LoadImagesFromSDCard loadTask;
@@ -215,9 +210,23 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 					long arg3) {
-				Intent intent = new Intent(MainActivity.this,PicListActivity.class);
-				startActivity(intent);
-
+				if(editButton.isChecked()) {
+					Intent intent = new Intent(MainActivity.this,RectActiivity.class);
+					Avatar avatar = list.get(arg2);
+					if(Utils.isNotNullOrEmpty(avatar.getPath())) {
+						intent.putExtra("mCurrentFile",avatar.getPath());
+						startActivity(intent);
+					}else {
+						Toast.makeText(MainActivity.this, "没有可编辑的图片哦！", Toast.LENGTH_SHORT).show();
+					}
+				}else {
+					Intent intent = new Intent(MainActivity.this,PicListActivity.class);
+					startActivity(intent);
+				}
+				
+//				File directory = Environment.getExternalStorageDirectory();
+//				String filepath = directory.getAbsoluteFile()+"/Camera/683kb.jpg";
+//				uploadpicture(filepath);
 			}
 		});
 
@@ -251,7 +260,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 	}
 
 	private void initComponents() {
-		editButton = (Button) findViewById(R.id.button1);
+		editButton = (CheckBox) findViewById(R.id.button1);
 		mapImage = (ImageView) findViewById(R.id.imageView2);
 		takePicImage = (ImageView) findViewById(R.id.imageView3);
 		setImage = (ImageView) findViewById(R.id.imageView4);
@@ -272,22 +281,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 		});
 
 		listView = (ListView) findViewById(R.id.listView1);
-
-		listView.setOnScrollListener(new OnScrollListener() {
-
-			@Override
-			public void onScrollStateChanged(AbsListView view, int scrollState) {
-				// 滚动到最顶端
-				Log.i("LazyScroll", "Scroll to top");
-			}
-
-			@Override
-			public void onScroll(AbsListView view, int firstVisibleItem,
-					int visibleItemCount, int totalItemCount) {
-				// 滚动到最低端
-			}
-		});
-
 		if (list == null) {
 			list = new ArrayList<Avatar>();
 		}
@@ -302,43 +295,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 	public void loadPicData(Context context) {
 		loadTask = new LoadImagesFromSDCard();
 		loadTask.execute();
-		
-
-	/*	String[] projection = new String[] { Media._ID, Media.MIME_TYPE,
-				Media.TITLE, Media.ORIENTATION, Media.LONGITUDE,
-				Media.LATITUDE, Media.DISPLAY_NAME, Media.DATE_TAKEN,
-				Media.DATA, Media.SIZE };
-		// 4.0.4系统，手机闪存是mnt/sdcard（原本是sd卡的路径），sd卡变成了mnt/external1
-		String selection = Media.DATA + " LIKE  " + "\'%/sdcard%/DCIM/%\'"
-				+ " OR " + Media.DATA + " LIKE  " + "\'%/sdcard%/Pictures/%\'"
-				+ " OR " + Media.DATA + " LIKE  " + "\'%/sdcard%/Images/%\'"
-				+ " OR " + Media.DATA + " LIKE  " + "\'%/sdcard%/Camera/%\'"
-				+ " OR " + Media.DATA + " LIKE  " + "\'%mnt/external%/DCIM/%\'"
-				+ " OR " + Media.DATA + " LIKE  "
-				+ "\'%mnt/external%/Pictures/%\'" + " OR " + Media.DATA
-				+ " LIKE  " + "\'%mnt/external%/Images/%\'" + " OR "
-				+ Media.DATA + " LIKE  " + "\'%mnt/external%/Camera/%\'";
-		photoCursor = context.getContentResolver().query(
-				Media.EXTERNAL_CONTENT_URI, projection, selection, null,
-				"_id" + " ASC");
-		
-		int dataIndex = photoCursor.getColumnIndexOrThrow(Media.DATA); // filepath
-		Avatar avatar = null;
-
-		for (photoCursor.moveToFirst(); !photoCursor.isAfterLast(); photoCursor.moveToNext()) {
-			avatar = new Avatar();
-			avatar.setPath(photoCursor.getString(dataIndex));
-			avatar.setTitle("我的工作证");
-			avatar.setTime(System.currentTimeMillis());
-			list.add(avatar);
-			photoCursor.moveToNext();
-		}
-		        
-		 if( photoCursor != null ) {
-			 photoCursor.close();
-			 photoCursor= null;
-		 }*/
-
 	}
 
 
@@ -411,7 +367,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 			if(cursor==null){
 				return null;
 			}
-			int idIndex=cursor.getColumnIndexOrThrow(Media._ID);
+//			int idIndex=cursor.getColumnIndexOrThrow(Media._ID);
 			int dataIndex=cursor.getColumnIndexOrThrow(Media.DATA);
 			int orientationIndex=cursor.getColumnIndexOrThrow(Media.ORIENTATION);
 			int count=cursor.getCount();
@@ -476,15 +432,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
-		case R.id.button1:
-//			Intent editIntent = new Intent(this, RectActiivity.class);
-//			startActivity(editIntent);
-//			 checkAppUpdate();
-			File directory = Environment.getExternalStorageDirectory();
-			String filepath = directory.getAbsoluteFile()+"/Camera/683kb.jpg";
-			uploadpicture(filepath);
-		
-			break;
 		case R.id.imageView2:
 			Intent mapIntent = new Intent(this, PMapActivity.class);
 			startActivity(mapIntent);
@@ -502,7 +449,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 		}
 
 	}
-	
+
 	private void uploadpicture(String filepath) {
 		AvatarApi avatarApi = new AvatarApi(this);
 		avatarApi.setReturnResultListener(new ApiReturnResultListener() {
