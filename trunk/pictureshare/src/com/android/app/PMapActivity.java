@@ -20,8 +20,8 @@ import com.android.app.service.PicService;
 import com.android.app.utils.Utils;
 import com.android.app.view.OverItemT;
 import com.android.app.view.PicDialog;
-import com.android.app.view.PicDialog.OnButtonClickListener;
 import com.android.app.view.SharePopupWindow;
+import com.android.app.view.PicDialog.OnButtonClickListener;
 import com.baidu.mapapi.BMapManager;
 import com.baidu.mapapi.GeoPoint;
 import com.baidu.mapapi.MKGeneralListener;
@@ -52,7 +52,6 @@ public class PMapActivity extends MapActivity implements View.OnClickListener{
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.map);
 		PicService.allActivity.add(this);
@@ -61,12 +60,12 @@ public class PMapActivity extends MapActivity implements View.OnClickListener{
 		mBMapMan.init("1F572AAE2DC844C03D5AF0C9A001026E03BD1618", new MKGeneralListener() {
 		    @Override
 		    public void onGetPermissionState(int iError) {
-		        // TODO 返回授权验证错误，通过错误代码判断原因，MKEvent中常量值。
+		        //  返回授权验证错误，通过错误代码判断原因，MKEvent中常量值。
 		    	Log.i(TAG, "permission error is " + iError);
 		    }
 		    @Override
 		    public void onGetNetworkState(int iError) {
-		        // TODO 返回网络错误，通过错误代码判断原因，MKEvent中常量值。
+		        // 返回网络错误，通过错误代码判断原因，MKEvent中常量值。
 		    	Log.i(TAG, "Network error is " + iError);
 		    }
 		});
@@ -197,7 +196,6 @@ public class PMapActivity extends MapActivity implements View.OnClickListener{
 
 	@Override
 	protected boolean isRouteDisplayed() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 	
@@ -273,8 +271,9 @@ public class PMapActivity extends MapActivity implements View.OnClickListener{
 	}
 
 	private void showSharePopup() {
+		String picUrl = null;//TODO 需要获取要分享的url
 		if (sharePopup == null) {
-			sharePopup = new SharePopupWindow(this, R.drawable.bg_share_popup_1);
+			sharePopup = new SharePopupWindow(this,picUrl, R.drawable.bg_share_popup_1);
 		}
 		int[] btnShareLoc = new int[2];
 		deleteButton.getLocationInWindow(btnShareLoc);

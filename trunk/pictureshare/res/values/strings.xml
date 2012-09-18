@@ -46,4 +46,7 @@
     <string name="weibo_renren_bind">人人网绑定成功</string>
     <string name="weibo_qzone_bind">腾讯空间绑定成功</string>
     <string name="toast_share_has_sent">已发送分享内容</string>
+    <string name="share_popup_input_limit">还可以输入 %d 个字</string>
+    <string name="toast_share_type_list_null">请至少选择一个分享平台</string>
+    <string name="toast_share_content_null">分享的内容不能为空</string>
 </resources>

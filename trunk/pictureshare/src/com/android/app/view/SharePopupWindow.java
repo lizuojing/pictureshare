@@ -1,20 +1,27 @@
 package com.android.app.view;
 
+
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Handler;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
+import android.view.View.OnClickListener;
+import android.view.View.OnFocusChangeListener;
+import android.view.View.OnTouchListener;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -22,6 +29,7 @@ import android.widget.EditText;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.app.R;
@@ -53,11 +61,15 @@ public class SharePopupWindow extends PopupWindow implements OnClickListener, Sh
 	private Button btnTencent;
 	private Button btnQzone;
 	private Button btnRenren;
+	private SPEditText editText;
+	private TextView tvInputLimit;
 	private Button btnShare;
+	private String picUrl;
 
-	public SharePopupWindow(Context context, int backgroundRes) {
+	public SharePopupWindow(Context context,String picUrl, int backgroundRes) {
 		super(context);
 		this.context = context;
+		this.picUrl = picUrl;
 		this.backgroundRes = backgroundRes;
 		this.setFocusable(true);
 
@@ -80,7 +92,7 @@ public class SharePopupWindow extends PopupWindow implements OnClickListener, Sh
 	}
 
 	private void refreshLocation() {
-		rootView.setPadding(rootView.getPaddingRight(), rootView.getPaddingTop(), rootView.getPaddingRight(), offY < 0 ? 0
+		rootView.setPadding(offX < 0 ? 0 : offX, rootView.getPaddingTop(), rootView.getPaddingRight(), offY < 0 ? 0
 				: offY);
 		setWindowOrientation();
 	}
@@ -106,9 +118,25 @@ public class SharePopupWindow extends PopupWindow implements OnClickListener, Sh
 		btnRenren = (Button) rootView.findViewById(R.id.btn_renren);
 		btnQzone = (Button) rootView.findViewById(R.id.btn_qzone);
 
-
+		editText = (SPEditText) rootView.findViewById(R.id.edit);
+		tvInputLimit = (TextView) rootView.findViewById(R.id.tv_input_limit);
 		btnShare = (Button) rootView.findViewById(R.id.btn_share);
 		
+		bgView.setSpEditText(editText);
+		editText.setOnClickListener(this);
+		editText.setOnFocusChangeListener(new OnFocusChangeListener() {
+			@Override
+			public void onFocusChange(View v, boolean hasFocus) {
+				if(hasFocus){
+					new Handler().postDelayed(new Runnable() {
+						@Override
+						public void run() {
+							((ScrollView) bgView).smoothScrollBy(0, editText.getBottom());
+						}
+					}, 300);
+				}
+			}
+		});
 
 		btnSina.setOnClickListener(this);
 		btnTencent.setOnClickListener(this);
@@ -119,6 +147,7 @@ public class SharePopupWindow extends PopupWindow implements OnClickListener, Sh
 	}
 
 	public void refreshLayout() {
+		initEditText();
 		refreshWeiboButton();
 	}
 
@@ -140,7 +169,11 @@ public class SharePopupWindow extends PopupWindow implements OnClickListener, Sh
 		btnRenren.setVisibility(hasRenrenBind ? View.INVISIBLE : View.VISIBLE);
 	}
 
-	
+	private void initEditText() {
+		refreshTips(editText.getText());
+		editText.addTextChangedListener(editTextWatcher);
+	}
+
 	/**
 	 * 如果offX 和 offY
 	 * 
@@ -173,6 +206,7 @@ public class SharePopupWindow extends PopupWindow implements OnClickListener, Sh
 		params.addRule(RelativeLayout.BELOW, R.id.check_sina);
 		params.addRule(RelativeLayout.ALIGN_LEFT, R.id.check_sina);
 		params.setMargins(0, Utils.dipToPixels(context, 8), 0, 0);
+		editText.setLines(4);
 		checkQzone.setLayoutParams(params);
 	}
 
@@ -182,8 +216,45 @@ public class SharePopupWindow extends PopupWindow implements OnClickListener, Sh
 		params.addRule(RelativeLayout.RIGHT_OF, R.id.check_renren);
 		params.addRule(RelativeLayout.ALIGN_TOP, R.id.check_renren);
 		params.setMargins(Utils.dipToPixels(context, 10), 0, 0, 0);
+		editText.setLines(2);
 		checkQzone.setLayoutParams(params);
 	};
+
+	TextWatcher editTextWatcher = new TextWatcher() {
+		@Override
+		public void onTextChanged(CharSequence s, int start, int before, int count) {
+			refreshTips(s);
+		}
+
+		@Override
+		public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+			refreshTips(s);
+		}
+
+		@Override
+		public void afterTextChanged(Editable s) {
+			byte[] bs = refreshTips(s);
+			if (bs.length > 280) {
+				String str = Utils.getStringFromByteArray(bs, 280, "GBK");
+				if (s.length() > str.length()) {
+					s.delete(str.length(), s.length());
+				}
+			}
+		}
+	};
+
+	private byte[] refreshTips(CharSequence s) {
+		byte[] bs = new byte[0];
+		try {
+			bs = s.toString().getBytes("GBK");
+			int length = bs.length;
+			tvInputLimit.setText(String.format(context.getString(R.string.share_popup_input_limit),
+					(280 - length) / 2));
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+		return bs;
+	}
 
 	public int getBackgroundRes() {
 		return backgroundRes;
@@ -192,7 +263,6 @@ public class SharePopupWindow extends PopupWindow implements OnClickListener, Sh
 	public void setBackgroundRes(int backgroundRes) {
 		this.backgroundRes = backgroundRes;
 	}
-
 
 	public int getOffX() {
 		return offX;
@@ -213,6 +283,16 @@ public class SharePopupWindow extends PopupWindow implements OnClickListener, Sh
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
+		case R.id.edit:
+			if (bgView instanceof ScrollView) {
+				new Handler().postDelayed(new Runnable() {
+					@Override
+					public void run() {
+						((ScrollView) bgView).smoothScrollBy(0, editText.getBottom());
+					}
+				}, 300);
+			}
+			break;
 		case R.id.btn_sina:
 			checkSina.setChecked(true);
 			goBindWeibo(AccountType.SINA);
@@ -230,6 +310,13 @@ public class SharePopupWindow extends PopupWindow implements OnClickListener, Sh
 			goBindWeibo(AccountType.QZONE);
 			break;
 		case R.id.btn_share:
+			String content = editText.getText().toString();
+			if (Utils.isNullOrEmpty(content)) {
+				if (context instanceof Activity) {
+					Toast.makeText(context, context.getResources().getString(R.string.toast_share_content_null), Toast.LENGTH_SHORT).show();
+				}
+				return;
+			}
 			WeiboApi api = new WeiboApi(context);
 			ArrayList<WeiboApi.AccountType> list = new ArrayList<WeiboApi.AccountType>();
 			if (checkSina.getVisibility() == View.VISIBLE && checkSina.isChecked()) {
@@ -244,8 +331,12 @@ public class SharePopupWindow extends PopupWindow implements OnClickListener, Sh
 			if (checkQzone.getVisibility() == View.VISIBLE && checkQzone.isChecked()) {
 				list.add(AccountType.QZONE);
 			}
-//			api.shareContent(context, list, content, StringUtils.getLinkComemntUrlById(context, link.getId()), picUrl,
-//					this);
+			if (list.size() <= 0) {
+				Toast.makeText(context, context.getResources().getString(R.string.toast_share_has_sent), Toast.LENGTH_SHORT).show();
+				return;
+			}
+			api.shareContent(context, list, content, null, picUrl,
+					this);
 			Toast.makeText(context, context.getResources().getString(R.string.toast_share_has_sent), Toast.LENGTH_SHORT).show();
 			dismiss();
 			break;
@@ -273,6 +364,7 @@ public class SharePopupWindow extends PopupWindow implements OnClickListener, Sh
 
 	@Override
 	public <T> void onReturnFailResult(AccountType type, Exception e) {
+		e.printStackTrace();
 
 	}
 
@@ -349,6 +441,7 @@ class SPEditText extends EditText {
 		try {
 			b = super.onTouchEvent(event);
 		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		return b;
 	}
