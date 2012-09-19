@@ -1,7 +1,5 @@
 package com.android.app;
 
-import java.util.ArrayList;
-
 import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
@@ -10,7 +8,6 @@ import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -19,7 +16,6 @@ import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.android.app.entity.Avatar;
 import com.android.app.service.PicService;
 import com.android.app.utils.Utils;
 import com.android.app.view.OverItemT;
@@ -54,7 +50,6 @@ public class PMapActivity extends MapActivity implements View.OnClickListener{
 	private SharePopupWindow sharePopup;
 	private OverItemT overitem;
 
-	@SuppressWarnings("unchecked")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -81,7 +76,7 @@ public class PMapActivity extends MapActivity implements View.OnClickListener{
 		mMapView.setBuiltInZoomControls(true); // 设置启用内置的缩放控件
 		mMapView.setDoubleClickZooming(false);
 		
-		mMapView.setOnTouchListener(new OnTouchListener() {
+/*		mMapView.setOnTouchListener(new OnTouchListener() {
 			
 			private float startX;
 			private float startY;
@@ -125,7 +120,7 @@ public class PMapActivity extends MapActivity implements View.OnClickListener{
 				}
 				return false;
 			}
-		});
+		});*/
 		
 
 		MapController mMapController = mMapView.getController(); // 得到mMapView的控制权,可以用它控制和驱动平移和缩放
@@ -263,23 +258,6 @@ public class PMapActivity extends MapActivity implements View.OnClickListener{
 		super.onResume();
 	}
 	
-	public class MyOverlay extends Overlay {
-		private GeoPoint geoPoint;
-	    public MyOverlay(GeoPoint geoPoint) {
-			super();
-			this.geoPoint = geoPoint;
-		}
-	    Paint paint = new Paint();
-	    @Override
-	    public void draw(Canvas canvas, MapView mapView, boolean shadow) {
-	        //在天安门的位置绘制一个String
-	        Point point = mMapView.getProjection().toPixels(geoPoint, null);
-//	        canvas.drawText("★这里是天安门", point.x, point.y, paint);
-	        canvas.drawBitmap(BitmapFactory.decodeResource(getResources(),R.drawable.annotation), point.x, point.y, paint);
-//	        canvas.drawBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher), null, paint);
-	    }
-	}
-
 	private void showSharePopup() {
 		String picUrl = null;//TODO 需要获取要分享的url
 		if (sharePopup == null) {
