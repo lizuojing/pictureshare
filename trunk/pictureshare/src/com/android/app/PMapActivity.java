@@ -1,5 +1,7 @@
 package com.android.app;
 
+import java.util.ArrayList;
+
 import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
@@ -8,6 +10,7 @@ import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -16,6 +19,7 @@ import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.android.app.entity.Avatar;
 import com.android.app.service.PicService;
 import com.android.app.utils.Utils;
 import com.android.app.view.OverItemT;
@@ -50,11 +54,13 @@ public class PMapActivity extends MapActivity implements View.OnClickListener{
 	private SharePopupWindow sharePopup;
 	private OverItemT overitem;
 
+	@SuppressWarnings("unchecked")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.map);
 		PicService.allActivity.add(this);
+		
 
 		mBMapMan = new BMapManager(getApplication());
 		mBMapMan.init("1F572AAE2DC844C03D5AF0C9A001026E03BD1618", new MKGeneralListener() {
@@ -148,12 +154,16 @@ public class PMapActivity extends MapActivity implements View.OnClickListener{
 	}
 
 	private void createPopView() {
-		 // 添加ItemizedOverlay
+		if(PicApp.list!=null&&PicApp.list.size()<=0) {
+			return;
+		}
+		
+		// 添加ItemizedOverlay
 		Drawable marker = getResources().getDrawable(R.drawable.iconmarka);  //得到需要标在地图上的资源
 		marker.setBounds(0, 0, marker.getIntrinsicWidth(), marker
 				.getIntrinsicHeight());   //为maker定义位置和边界
 		
-		overitem = new OverItemT(marker, this, 3);
+		overitem = new OverItemT(marker, this, PicApp.list);
 		mMapView.getOverlays().add(overitem); //添加ItemizedOverlay实例到mMapView
 		
 		// 创建点击mark时的弹出泡泡
