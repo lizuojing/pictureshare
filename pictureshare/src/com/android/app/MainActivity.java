@@ -1,8 +1,6 @@
 package com.android.app;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -40,6 +38,7 @@ import com.android.app.api.OtherApi;
 import com.android.app.entity.Avatar;
 import com.android.app.entity.VersionInfo;
 import com.android.app.service.PicService;
+import com.android.app.utils.ImageUtil;
 import com.android.app.utils.Utils;
 import com.android.app.view.MainItem;
 import com.android.app.view.MediaPopupWindow;
@@ -70,6 +69,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 	private ListAdapter adapter;
 	private MediaPopupWindow mediaPopup;
 	private LoadImagesFromSDCard loadTask;
+	public SyncPicListTask syncTask;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -145,7 +145,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 						}
 						String filepath = new File(Utils.getCacheDir(),getPhotoFileName()).getAbsolutePath();
 						
-						boolean writeResult = writeImage(filepath, bitmap);
+						boolean writeResult = ImageUtil.writeImage(filepath, bitmap);
 						
 						if (writeResult)
 						{
@@ -172,27 +172,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 	}
 
 	
-	private boolean writeImage(String path, Bitmap bitmap)
-	{
-		boolean result = false;
-		
-        try 
-        { // catches IOException below 
-        	if(!Utils.isNullOrEmpty(path)&&bitmap!=null) {
-                File f = new File(path); 
-                FileOutputStream osf = new FileOutputStream(f);
-                result = bitmap.compress(Bitmap.CompressFormat.JPEG, 100, osf);
-                osf.flush();
-        	}
-        } 
-        catch (IOException ioe) 
-        {
-        	Log.e(TAG,ioe.toString());
-        	result = false;
-        }
-        
-        return result;
-    }
+	
 	private String getPhotoFileName() {
 		Date date = new Date(System.currentTimeMillis());
 		SimpleDateFormat dateFormat = new SimpleDateFormat(
@@ -361,7 +341,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 					+ Media.DATA + " like  " + "\'%/sdcard/Photo/%\'" + " or " + Media.DATA + " like  "
 					+ "\'%/sdcard/Photos/%\'" + " or " + Media.DATA + " like  "
 					+ "\'%/sdcard/%MEDIA/%\'" ;
-			String[] projection = {Media._ID,Media.DATA,Media.ORIENTATION};
+			String[] projection = {Media._ID,Media.DATA,Media.ORIENTATION,Media.LATITUDE,Media.LONGITUDE};
 			Cursor cursor = getApplicationContext().getContentResolver()
 					.query(Media.EXTERNAL_CONTENT_URI, projection, selection, null, "_id" + " DESC");
 			if(cursor==null){
@@ -370,11 +350,17 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 //			int idIndex=cursor.getColumnIndexOrThrow(Media._ID);
 			int dataIndex=cursor.getColumnIndexOrThrow(Media.DATA);
 			int orientationIndex=cursor.getColumnIndexOrThrow(Media.ORIENTATION);
+			int latitudeIndex = cursor.getColumnIndexOrThrow(Media.LATITUDE);
+			int longitudeIndex = cursor.getColumnIndexOrThrow(Media.LONGITUDE);
+			
+			
 			int count=cursor.getCount();
 			if (count > 0) {
 				for(int i=0;i<count;i++){
 					cursor.moveToPosition(i);
 					Avatar loadedImage = new Avatar();
+					loadedImage.setLatitude(cursor.getDouble(latitudeIndex));
+					loadedImage.setLongitude(cursor.getDouble(longitudeIndex));
 					loadedImage.setTitle("我的工作证");
 					loadedImage.setTime(System.currentTimeMillis());
 					loadedImage.setPath(cursor.getString(dataIndex));
@@ -383,7 +369,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 					if(file!=null&&file.exists()&&isImagePath(loadedImage.getPath())){
 						list.add(loadedImage);
 					}
+					Log.i(TAG, "Latitude is " + cursor.getLong(latitudeIndex) + " longitude is " + cursor.getLong(longitudeIndex));
 				}
+				PicApp.list = list;
 			}
 			cursor.close();
 			return null;
@@ -409,6 +397,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 		protected void onPostExecute(Object result) {
 			adapter.notifyDataSetChanged();
 			loadTask = null;
+			
+			syncTask = new SyncPicListTask(list);
+			syncTask.execute();
 		}
 	}
 	
@@ -511,5 +502,34 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 		int orientation = getResources().getConfiguration().orientation;
 		mediaPopup.show(takePicImage, orientation, 0, offY);
 		registerShareButton();
+	}
+	
+	private final class SyncPicListTask extends AsyncTask<Void, Integer, Long> {
+		private ArrayList<Avatar> list;
+		public SyncPicListTask(ArrayList<Avatar> list) {
+			this.list = list;
+		}
+
+		@Override
+		protected Long doInBackground(Void... params) {
+			AvatarApi avatarApi = new AvatarApi(MainActivity.this);
+			avatarApi.uploadAvatarList(MainActivity.this, 1, list);
+			return null;
+		}
+
+		@Override
+		protected void onPostExecute(Long result) {
+			syncTask = null;
+			super.onPostExecute(result);
+		}
+
+		@Override
+		protected void onPreExecute() {
+			// TODO Auto-generated method stub
+			super.onPreExecute();
+		}
+		
+		
+		
 	}
 }

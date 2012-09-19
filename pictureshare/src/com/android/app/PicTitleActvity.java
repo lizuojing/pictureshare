@@ -1,11 +1,13 @@
 package com.android.app;
 
+import java.io.File;
 import java.io.IOException;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.media.ExifInterface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -16,11 +18,13 @@ import com.android.app.utils.ImageUtil;
 import com.android.app.utils.Utils;
 
 public class PicTitleActvity extends BaseActivity implements OnClickListener{
+	private static final String TAG = "PicTitleActvity";
 	private Button backButton;
 	private EditText picTitle;
 	private ImageView picture;
 	private ImageView confirmButton;
 	private String filePath;
+	private Bitmap bitmap;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +38,7 @@ public class PicTitleActvity extends BaseActivity implements OnClickListener{
 	}
 
 	private void updateUI() {
-		Bitmap bitmap = getBitmap(filePath);
+		bitmap = getBitmap(filePath);
 		if(bitmap!=null) {
 			picture.setImageBitmap(bitmap);//TODO 图片处理
 		}else {
@@ -92,6 +96,13 @@ public class PicTitleActvity extends BaseActivity implements OnClickListener{
 			finish();
 			break;
 		case R.id.confirm:
+			boolean mFromPicList = getIntent().getBooleanExtra("mFromPicList", false);
+			if(mFromPicList) {
+				//拷贝图片
+				String savepath = new File(Utils.getCacheDir(),filePath).getAbsolutePath();
+				boolean writeImage = ImageUtil.writeImage(savepath, bitmap);
+				Log.i(TAG, "writeImage is " + writeImage);
+			}
 			String title = picTitle.getText().toString();
 			//title 处理
 			Intent intent = new Intent(this,PicListActivity.class);

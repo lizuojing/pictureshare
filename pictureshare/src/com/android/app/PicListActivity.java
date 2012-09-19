@@ -10,17 +10,22 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.ListView;
+import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 
 import com.android.app.entity.Avatar;
 import com.android.app.image.ImageLoaderManager;
+import com.android.app.utils.Utils;
 import com.android.app.view.CellItem;
 
 public class PicListActivity extends BaseActivity implements View.OnClickListener{
 	
-	private Button backButton;
 	private ListView listView;
+	private CheckBox editButton;
+	private ArrayList<Avatar> list;
+	private Button backButton;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -31,8 +36,9 @@ public class PicListActivity extends BaseActivity implements View.OnClickListene
 	}
 	
 	private void initComponents() {
-		backButton = (Button)findViewById(R.id.button1);
+		backButton = (Button)findViewById(R.id.btn_back);
 		backButton.setOnClickListener(this);
+		editButton = (CheckBox)findViewById(R.id.btn_edit);
 		
 		listView = (ListView) findViewById(R.id.listView1);
 		listView.setOnItemClickListener(new OnItemClickListener() {
@@ -40,9 +46,20 @@ public class PicListActivity extends BaseActivity implements View.OnClickListene
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 					long arg3) {
-				Intent intent = new Intent(PicListActivity.this,DishActivity.class);
-				startActivity(intent);
-
+				if(editButton.isChecked()) {
+					Intent intent = new Intent(PicListActivity.this,RectActiivity.class);
+					Avatar avatar = list.get(arg2);
+					if(Utils.isNotNullOrEmpty(avatar.getPath())) {
+						intent.putExtra("mCurrentFile",avatar.getPath());
+						intent.putExtra("mFromPicList", true);
+						startActivity(intent);
+					}else {
+						Toast.makeText(PicListActivity.this, "没有可编辑的图片哦！", Toast.LENGTH_SHORT).show();
+					}
+				}else {
+					Intent intent = new Intent(PicListActivity.this,DishActivity.class);
+					startActivity(intent);
+				}
 			}
 		});
 		ListAdapter adapter = new ListAdapter(loadData());
@@ -51,7 +68,7 @@ public class PicListActivity extends BaseActivity implements View.OnClickListene
 	}
 	
 	private ArrayList<Avatar> loadData() {
-		ArrayList<Avatar> list = new ArrayList<Avatar>();
+		list = new ArrayList<Avatar>();
 		Avatar avatar = new Avatar();
 		avatar.setPath("");
 		avatar.setTitle("我的工作证");
@@ -155,7 +172,7 @@ public class PicListActivity extends BaseActivity implements View.OnClickListene
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
-		case R.id.button1:
+		case R.id.btn_back:
 //			finish();
 			super.onBackPressed();
 			break;

@@ -9,11 +9,13 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.Toast;
 
 import com.android.app.PMapActivity;
+import com.android.app.entity.Avatar;
 import com.baidu.mapapi.GeoPoint;
 import com.baidu.mapapi.ItemizedOverlay;
 import com.baidu.mapapi.MapView;
@@ -21,37 +23,51 @@ import com.baidu.mapapi.OverlayItem;
 import com.baidu.mapapi.Projection;
 
 public class OverItemT extends ItemizedOverlay<OverlayItem> {
+	private static final String TAG = "OverItemT";
 	public List<OverlayItem> mGeoList = new ArrayList<OverlayItem>();
 	private Drawable marker;
 	private Context mContext;
 
-	private double mLat1 = 39.90923; // point1纬度
+/*	private double mLat1 = 39.90923; // point1纬度
 	private double mLon1 = 116.357428; // point1经度
 
 	private double mLat2 = 39.90923;
 	private double mLon2 = 116.397428;
 
 	private double mLat3 = 39.90923;
-	private double mLon3 = 116.437428;
+	private double mLon3 = 116.437428;*/
 
-	public OverItemT(Drawable marker, Context context, int count) {
+	public OverItemT(Drawable marker, Context context, ArrayList<Avatar> list) {
 		super(boundCenterBottom(marker));
 
 		this.marker = marker;
 		this.mContext = context;
 
-		// 用给定的经纬度构造GeoPoint，单位是微度 (度 * 1E6)
+		for(int i=0;i<list.size();i++) {
+			Avatar avatar = list.get(i);
+			double lat = avatar.getLatitude();
+			double lon = avatar.getLongitude();
+			Log.i(TAG, "Latitude is " + lat + " longitude is " + lon);
+
+			if(lat!=0&&lon!=0) {
+				// 用给定的经纬度构造GeoPoint，单位是微度 (度 * 1E6)
+				GeoPoint p1 = new GeoPoint((int) (lat * 1E6), (int) (lon * 1E6));
+				// 构造OverlayItem的三个参数依次为：item的位置，标题文本，文字片段
+				mGeoList.add(new OverlayItem(p1, "P1", "point1"));
+			}
+		}
+		/*// 用给定的经纬度构造GeoPoint，单位是微度 (度 * 1E6)
 		GeoPoint p1 = new GeoPoint((int) (mLat1 * 1E6), (int) (mLon1 * 1E6));
 		GeoPoint p2 = new GeoPoint((int) (mLat2 * 1E6), (int) (mLon2 * 1E6));
 		
 		// 构造OverlayItem的三个参数依次为：item的位置，标题文本，文字片段
 		mGeoList.add(new OverlayItem(p1, "P1", "point1"));
 		mGeoList.add(new OverlayItem(p2, "P2", "point2"));
-		if(count == 3)
+		if(list.size() == 3)
 		{
 			GeoPoint p3 = new GeoPoint((int) (mLat3 * 1E6), (int) (mLon3 * 1E6));
 			mGeoList.add(new OverlayItem(p3, "P3", "point3"));
-		}
+		}*/
 		populate();  //createItem(int)方法构造item。一旦有了数据，在调用其它方法前，首先调用这个方法
 	}
 

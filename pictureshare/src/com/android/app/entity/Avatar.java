@@ -20,8 +20,8 @@ import com.android.app.utils.Utils;
 public class Avatar implements Parcelable {
 	private String avatarID;
 	private String ownerId;
-	private long longitude;
-	private long latitude;
+	private double longitude;
+	private double latitude;
 	private String path;// 文件名从文件路径中截取尾部部分得到
 	private String title;
 	private ArrayList<Comment> comments;
@@ -69,19 +69,19 @@ public class Avatar implements Parcelable {
 		this.ownerId = ownerId;
 	}
 
-	public long getLongitude() {
+	public double getLongitude() {
 		return longitude;
 	}
 
-	public void setLongitude(long longitude) {
+	public void setLongitude(double longitude) {
 		this.longitude = longitude;
 	}
 
-	public long getLatitude() {
+	public double getLatitude() {
 		return latitude;
 	}
 
-	public void setLatitude(long latitude) {
+	public void setLatitude(double latitude) {
 		this.latitude = latitude;
 	}
 

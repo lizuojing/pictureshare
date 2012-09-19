@@ -9,12 +9,14 @@ import java.net.HttpURLConnection;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
 import java.net.URL;
+import java.util.ArrayList;
 
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
 import com.android.app.config.Config;
+import com.android.app.entity.Avatar;
 import com.android.app.utils.Utils;
 import com.android.app.utils.Utils.APNData;
 
@@ -228,6 +230,47 @@ public class AvatarApi extends BaseApi {
 	 */
 	public void tacks(AvatarRequestParam params) {
 		
+	}
+
+
+	public void uploadAvatarList(final Context context, final int requestCode,
+			final ArrayList<Avatar> list) {
+		new AsyncTask<Void, Integer, ApiResult<String>>() {
+			@Override
+			protected ApiResult<String> doInBackground(Void... params) {
+				ApiResult<String> apiResult = new ApiResult<String>();
+				apiResult.setResultCode(ApiResult.RESULT_FAIL);
+				for(Avatar avatar : list) {
+					String filepath = avatar.getPath();
+					File f = new File(filepath);
+					FileInputStream fileInputStream = null;
+					try 
+					{
+						fileInputStream = new FileInputStream(f);
+					} 
+					catch (FileNotFoundException e)
+					{
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					String postImage = postImage(context, fileInputStream);
+					Log.i(TAG, "postImage is " + postImage);
+				}
+				return apiResult;
+			}
+
+			@Override
+			protected void onPostExecute(ApiResult<String> apiResult) {
+				if (returnResultListener == null) {
+					return;
+				}
+				if (apiResult.getResultCode() == ApiResult.RESULT_OK) {
+					returnResultListener.onReturnSucceedResult(requestCode,apiResult);
+				} else {
+					returnResultListener.onReturnFailResult(requestCode,apiResult);
+				}
+			}
+		}.execute();
 	}
 
 }

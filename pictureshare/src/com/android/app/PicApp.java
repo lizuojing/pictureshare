@@ -1,5 +1,7 @@
 package com.android.app;
 
+import java.util.ArrayList;
+
 import android.app.Application;
 import android.content.ComponentName;
 import android.content.Context;
@@ -10,12 +12,15 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.WindowManager;
 
+import com.android.app.entity.Avatar;
 import com.android.app.service.PicService;
 
 public class PicApp extends Application {
 	private static final String TAG = "PicApp";
 	private static Context mContext;
     private PicService picService;
+    
+    public static ArrayList<Avatar> list = null;
 	
 	  private ServiceConnection mConnection = new ServiceConnection() 
 	    {

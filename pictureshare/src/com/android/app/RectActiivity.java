@@ -21,7 +21,6 @@ public class RectActiivity extends BaseActivity implements OnClickListener {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.picedit_area);
-
 		initComponents();
 
 		filePath = getIntent().getStringExtra("mCurrentFile");
@@ -55,6 +54,7 @@ public class RectActiivity extends BaseActivity implements OnClickListener {
 		case R.id.searchButton:
 			Intent intent = new Intent(this, PicTitleActvity.class);
 			intent.putExtra("mCurrentFile", filePath);
+			intent.putExtra("mFromPicList", getIntent().getBooleanExtra("mFromPicList", false));
 			startActivity(intent);
 			break;
 		case R.id.button1:
