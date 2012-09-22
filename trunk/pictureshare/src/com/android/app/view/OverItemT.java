@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.android.app.PMapActivity;
 import com.android.app.R;
 import com.android.app.entity.Avatar;
+import com.android.app.view.PicDialog.OnButtonClickListener;
 import com.baidu.mapapi.GeoPoint;
 import com.baidu.mapapi.ItemizedOverlay;
 import com.baidu.mapapi.MapView;
@@ -117,35 +118,59 @@ public class OverItemT extends ItemizedOverlay<OverlayItem> {
 
 	@Override
 	// 处理当点击事件
-	protected boolean onTap(int i) {
+	protected boolean onTap(final int i) {
 		Log.i(TAG, "onTap is running");
-		setFocus(mGeoList.get(i));
-		// 更新气泡位置,并使之显示
-		GeoPoint pt = mGeoList.get(i).getPoint();
-		PMapActivity.mMapView.updateViewLayout(PMapActivity.mPopView,
-				new MapView.LayoutParams(LayoutParams.WRAP_CONTENT,
-						LayoutParams.WRAP_CONTENT, pt,
-						MapView.LayoutParams.BOTTOM_CENTER));
-		PMapActivity.mPopView.setVisibility(View.VISIBLE);
-		Toast.makeText(this.mContext, mGeoList.get(i).getSnippet(),
-				Toast.LENGTH_SHORT).show();
-		
-		
-		return true;
+		if (PMapActivity.currentStatus == PMapActivity.STATE_DEL) {
+			PicDialog dialog = new PicDialog(mContext,
+					new OnButtonClickListener() {
+						@Override
+						public void onOkButtonClicked(PicDialog dialog) {
+							mapView.getOverlays().clear();
+							populate();
+							dialog.cancel();
+
+						}
+
+						@Override
+						public void onCancleButtonClicked(PicDialog dialog) {
+							dialog.cancel();
+						}
+					});
+			dialog.setTitle("确定删除吗？");
+			dialog.setOkButtonText("确定");
+			dialog.setCancleButtonText("取消");
+			dialog.show();
+		} else {
+			setFocus(mGeoList.get(i));
+			// 更新气泡位置,并使之显示
+			GeoPoint pt = mGeoList.get(i).getPoint();
+			PMapActivity.mMapView.updateViewLayout(PMapActivity.mPopView,
+					new MapView.LayoutParams(LayoutParams.WRAP_CONTENT,
+							LayoutParams.WRAP_CONTENT, pt,
+							MapView.LayoutParams.BOTTOM_CENTER));
+			PMapActivity.mPopView.setVisibility(View.VISIBLE);
+			Toast.makeText(this.mContext, mGeoList.get(i).getSnippet(),
+					Toast.LENGTH_SHORT).show();
+		}
+
+		return super.onTap(i);
 	}
 
 	@Override
 	public boolean onTap(GeoPoint arg0, MapView mapView) {
-		Log.i(TAG, "onTap is running ----------");
+		this.mapView = mapView;
+		Log.i(TAG, "onTap is running ----------" + PMapActivity.currentStatus);
 		// 消去弹出的气泡
 		PMapActivity.mPopView.setVisibility(View.GONE);
 
-		Projection projection = mapView.getProjection();
-		Point point = projection.toPixels(arg0, null);
-		GeoPoint fromPixels = projection.fromPixels(point.x, point.y);
-		MyOverlay myOverlay = new MyOverlay(fromPixels);
-		mMyGeoList.add(myOverlay);
-		mapView.getOverlays().add(myOverlay);
+		if (PMapActivity.currentStatus == PMapActivity.STATE_CREATE) {
+			Projection projection = mapView.getProjection();
+			Point point = projection.toPixels(arg0, null);
+			GeoPoint fromPixels = projection.fromPixels(point.x, point.y);
+			MyOverlay myOverlay = new MyOverlay(fromPixels);
+			mMyGeoList.add(myOverlay);
+			mapView.getOverlays().add(myOverlay);
+		}
 
 		Log.i(TAG, "lat i " + arg0.getLatitudeE6() + " lon is "
 				+ arg0.getLongitudeE6());
@@ -167,8 +192,9 @@ public class OverItemT extends ItemizedOverlay<OverlayItem> {
 			// 在天安门的位置绘制一个String
 			Point point = mapView.getProjection().toPixels(geoPoint, null);
 			// canvas.drawText("★这里是天安门", point.x, point.y, paint);
-			canvas.drawBitmap(BitmapFactory.decodeResource(mContext.getResources(),
-					R.drawable.annotation), point.x, point.y, paint);
+			canvas.drawBitmap(BitmapFactory.decodeResource(mContext
+					.getResources(), R.drawable.annotation), point.x, point.y,
+					paint);
 			// canvas.drawBitmap(BitmapFactory.decodeResource(getResources(),
 			// R.drawable.ic_launcher), null, paint);
 		}
