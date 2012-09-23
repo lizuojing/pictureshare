@@ -235,26 +235,28 @@ public class AvatarApi extends BaseApi {
 
 	public void uploadAvatarList(final Context context, final int requestCode,
 			final ArrayList<Avatar> list) {
-		new AsyncTask<Void, Integer, ApiResult<String>>() {
+		/*new AsyncTask<Void, Integer, ApiResult<String>>() {
 			@Override
 			protected ApiResult<String> doInBackground(Void... params) {
 				ApiResult<String> apiResult = new ApiResult<String>();
 				apiResult.setResultCode(ApiResult.RESULT_FAIL);
-				for(Avatar avatar : list) {
-					String filepath = avatar.getPath();
-					File f = new File(filepath);
-					FileInputStream fileInputStream = null;
-					try 
-					{
-						fileInputStream = new FileInputStream(f);
-					} 
-					catch (FileNotFoundException e)
-					{
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+				if(list!=null&&list.size()>0) {
+					for(Avatar avatar : list) {
+						String filepath = avatar.getPath();
+						File f = new File(filepath);
+						FileInputStream fileInputStream = null;
+						try 
+						{
+							fileInputStream = new FileInputStream(f);
+						} 
+						catch (FileNotFoundException e)
+						{
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						String postImage = postImage(context, fileInputStream);
+						Log.i(TAG, "postImage is " + postImage);
 					}
-					String postImage = postImage(context, fileInputStream);
-					Log.i(TAG, "postImage is " + postImage);
 				}
 				return apiResult;
 			}
@@ -270,7 +272,7 @@ public class AvatarApi extends BaseApi {
 					returnResultListener.onReturnFailResult(requestCode,apiResult);
 				}
 			}
-		}.execute();
+		}.execute();*/
 	}
 
 }
