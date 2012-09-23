@@ -16,6 +16,7 @@ import android.view.ViewGroup.LayoutParams;
 import android.widget.Toast;
 
 import com.android.app.PMapActivity;
+import com.android.app.PicApp;
 import com.android.app.R;
 import com.android.app.entity.Avatar;
 import com.android.app.view.PicDialog.OnButtonClickListener;
@@ -33,8 +34,9 @@ public class OverItemT extends ItemizedOverlay<OverlayItem> {
 	private Drawable marker;
 	private Context mContext;
 	private MapView mapView;
+	private ArrayList<Avatar> list;
 
-	/*
+	/**
 	 * private double mLat1 = 39.90923; // point1纬度 private double mLon1 =
 	 * 116.357428; // point1经度
 	 * 
@@ -48,6 +50,7 @@ public class OverItemT extends ItemizedOverlay<OverlayItem> {
 
 		this.marker = marker;
 		this.mContext = context;
+		this.list = list;
 
 		for (int i = 0; i < list.size(); i++) {
 			Avatar avatar = list.get(i);
@@ -59,20 +62,9 @@ public class OverItemT extends ItemizedOverlay<OverlayItem> {
 				// 用给定的经纬度构造GeoPoint，单位是微度 (度 * 1E6)
 				GeoPoint p1 = new GeoPoint((int) (lat * 1E6), (int) (lon * 1E6));
 				// 构造OverlayItem的三个参数依次为：item的位置，标题文本，文字片段
-				mGeoList.add(new OverlayItem(p1, "P1", "point1"));
+				mGeoList.add(new OverlayItem(p1, "", "point1"));
 			}
 		}
-		/*
-		 * // 用给定的经纬度构造GeoPoint，单位是微度 (度 * 1E6) GeoPoint p1 = new GeoPoint((int)
-		 * (mLat1 * 1E6), (int) (mLon1 * 1E6)); GeoPoint p2 = new GeoPoint((int)
-		 * (mLat2 * 1E6), (int) (mLon2 * 1E6));
-		 * 
-		 * // 构造OverlayItem的三个参数依次为：item的位置，标题文本，文字片段 mGeoList.add(new
-		 * OverlayItem(p1, "P1", "point1")); mGeoList.add(new OverlayItem(p2,
-		 * "P2", "point2")); if(list.size() == 3) { GeoPoint p3 = new
-		 * GeoPoint((int) (mLat3 * 1E6), (int) (mLon3 * 1E6)); mGeoList.add(new
-		 * OverlayItem(p3, "P3", "point3")); }
-		 */
 		populate(); // createItem(int)方法构造item。一旦有了数据，在调用其它方法前，首先调用这个方法
 	}
 
@@ -80,9 +72,16 @@ public class OverItemT extends ItemizedOverlay<OverlayItem> {
 		populate();
 	}
 
-	@Override
+	/*@Override
 	public void draw(Canvas canvas, MapView mapView, boolean shadow) {
-
+		Log.i(TAG, "draw is running");
+		if (PMapActivity.currentStatus == PMapActivity.STATE_DEL) {
+			mapView.getOverlays().clear();
+//			mapView.getOverlays().add(this);
+			mapView.invalidate();
+			
+		}
+		
 		// Projection接口用于屏幕像素坐标和经纬度坐标之间的变换
 		Projection projection = mapView.getProjection();
 		for (int index = size() - 1; index >= 0; index--) { // 遍历mGeoList
@@ -102,7 +101,7 @@ public class OverItemT extends ItemizedOverlay<OverlayItem> {
 		super.draw(canvas, mapView, shadow);
 		// 调整一个drawable边界，使得（0，0）是这个drawable底部最后一行中心的一个像素
 		boundCenterBottom(marker);
-	}
+	}*/
 
 	@Override
 	protected OverlayItem createItem(int i) {
@@ -112,9 +111,10 @@ public class OverItemT extends ItemizedOverlay<OverlayItem> {
 
 	@Override
 	public int size() {
-		// TODO Auto-generated method stub
+		Log.i(TAG, "mGeoList.size() is " + mGeoList.size());
 		return mGeoList.size();
 	}
+	
 
 	@Override
 	// 处理当点击事件
@@ -125,8 +125,14 @@ public class OverItemT extends ItemizedOverlay<OverlayItem> {
 					new OnButtonClickListener() {
 						@Override
 						public void onOkButtonClicked(PicDialog dialog) {
+							Log.i(TAG, "mGeoList is " + mGeoList.size());
+							if(list.size()>0)
+								list.remove(i);
 							mapView.getOverlays().clear();
-							populate();
+							OverItemT overitem = new OverItemT(marker, mContext, list); 
+							mapView.getOverlays().add(overitem);
+							mapView.invalidate();
+							Log.i(TAG, "mGeoList is " + mGeoList.size());
 							dialog.cancel();
 
 						}
@@ -149,8 +155,6 @@ public class OverItemT extends ItemizedOverlay<OverlayItem> {
 							LayoutParams.WRAP_CONTENT, pt,
 							MapView.LayoutParams.BOTTOM_CENTER));
 			PMapActivity.mPopView.setVisibility(View.VISIBLE);
-			Toast.makeText(this.mContext, mGeoList.get(i).getSnippet(),
-					Toast.LENGTH_SHORT).show();
 		}
 
 		return super.onTap(i);
