@@ -53,7 +53,7 @@ public class OverItemT extends ItemizedOverlay<OverlayItem> {
 				Avatar avatar = list.get(i);
 				double lat = avatar.getLatitude();
 				double lon = avatar.getLongitude();
-				Log.i(TAG, "Latitude is " + lat + " longitude is " + lon);
+//				Log.i(TAG, "Latitude is " + lat + " longitude is " + lon);
 
 				if (lat != 0 && lon != 0) {
 					// 用给定的经纬度构造GeoPoint，单位是微度 (度 * 1E6)
@@ -156,8 +156,8 @@ public class OverItemT extends ItemizedOverlay<OverlayItem> {
 			Log.i(TAG, "lat is " + fromPixels.getLatitudeE6() / 1E6
 					+ " long is " + fromPixels.getLongitudeE6() / 1E6);
 
-			OverItemT overItem = new OverItemT(marker, mContext, list);
 //			OverItemT overItem = new OverItemT(mContext.getResources().getDrawable(R.drawable.annotation), mContext, list);
+			OverItemT overItem = new OverItemT(marker, mContext, list);
 			mapView.getOverlays().add(overItem);
 			mapView.invalidate();
 		}

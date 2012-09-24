@@ -1,5 +1,7 @@
 package com.android.app;
 
+import java.util.ArrayList;
+
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -9,6 +11,7 @@ import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.android.app.entity.Avatar;
 import com.android.app.service.PicService;
 import com.android.app.utils.Utils;
 import com.android.app.view.OverItemT;
@@ -76,6 +79,19 @@ public class PMapActivity extends MapActivity implements View.OnClickListener {
 		updateUI();
 	}
 
+	private ArrayList<Avatar> handleList(ArrayList<Avatar> list) {
+		for(int i=list.size()-1;i>=0;i--) {
+			Avatar loadedImage = list.get(i);
+			if(loadedImage.getLatitude()<=0||loadedImage.getLongitude()<=0) {
+				list.remove(loadedImage);
+			}
+		}
+		Log.i(TAG, "list size is " + list.size());
+		
+		return list;
+	}
+
+	
 	private void createPopView() {
 		if (PicApp.list != null && PicApp.list.size() <= 0) {
 			return;
@@ -86,7 +102,7 @@ public class PMapActivity extends MapActivity implements View.OnClickListener {
 		marker.setBounds(0, 0, marker.getIntrinsicWidth(), marker
 				.getIntrinsicHeight()); // 为maker定义位置和边界
 
-		overitem = new OverItemT(marker, this, PicApp.list);
+		overitem = new OverItemT(marker, this, handleList(PicApp.list));
 		mMapView.getOverlays().add(overitem); // 添加ItemizedOverlay实例到mMapView
 		
 		// 创建点击mark时的弹出泡泡
