@@ -27,7 +27,6 @@ import com.baidu.mapapi.Projection;
 public class OverItemT extends ItemizedOverlay<OverlayItem> {
 	private static final String TAG = "OverItemT";
 	public List<OverlayItem> mGeoList = new ArrayList<OverlayItem>();
-	public List<MyOverlay> mMyGeoList = new ArrayList<MyOverlay>();
 	private Drawable marker;
 	private Context mContext;
 	private MapView mapView;
@@ -72,30 +71,6 @@ public class OverItemT extends ItemizedOverlay<OverlayItem> {
 		populate();
 	}
 
-	/*
-	 * @Override public void draw(Canvas canvas, MapView mapView, boolean
-	 * shadow) { Log.i(TAG, "draw is running"); if (PMapActivity.currentStatus
-	 * == PMapActivity.STATE_DEL) { mapView.getOverlays().clear(); //
-	 * mapView.getOverlays().add(this); mapView.invalidate();
-	 * 
-	 * }
-	 * 
-	 * // Projection接口用于屏幕像素坐标和经纬度坐标之间的变换 Projection projection =
-	 * mapView.getProjection(); for (int index = size() - 1; index >= 0;
-	 * index--) { // 遍历mGeoList OverlayItem overLayItem = getItem(index); //
-	 * 得到给定索引的item
-	 * 
-	 * String title = overLayItem.getTitle(); // 把经纬度变换到相对于MapView左上角的屏幕像素坐标
-	 * Point point = projection.toPixels(overLayItem.getPoint(), null);
-	 * 
-	 * // 可在此处添加您的绘制代码 Paint paintText = new Paint();
-	 * paintText.setColor(Color.BLUE); paintText.setTextSize(15);
-	 * canvas.drawText(title, point.x - 30, point.y, paintText); // 绘制文本 }
-	 * 
-	 * super.draw(canvas, mapView, shadow); //
-	 * 调整一个drawable边界，使得（0，0）是这个drawable底部最后一行中心的一个像素 boundCenterBottom(marker);
-	 * }
-	 */
 
 	@Override
 	protected OverlayItem createItem(int i) {
@@ -165,14 +140,6 @@ public class OverItemT extends ItemizedOverlay<OverlayItem> {
 		// 消去弹出的气泡
 		PMapActivity.mPopView.setVisibility(View.GONE);
 
-		/*
-		 * if (PMapActivity.currentStatus == PMapActivity.STATE_CREATE) {
-		 * Projection projection = mapView.getProjection(); Point point =
-		 * projection.toPixels(arg0, null); GeoPoint fromPixels =
-		 * projection.fromPixels(point.x, point.y); MyOverlay myOverlay = new
-		 * MyOverlay(fromPixels); mMyGeoList.add(myOverlay);
-		 * mapView.getOverlays().add(myOverlay); }
-		 */
 
 		if (PMapActivity.currentStatus == PMapActivity.STATE_CREATE) {
 			mapView.getOverlays().clear();
@@ -189,7 +156,8 @@ public class OverItemT extends ItemizedOverlay<OverlayItem> {
 			Log.i(TAG, "lat is " + fromPixels.getLatitudeE6() / 1E6
 					+ " long is " + fromPixels.getLongitudeE6() / 1E6);
 
-			OverItemT overItem = new OverItemT(mContext.getResources().getDrawable(R.drawable.annotation), mContext, list);
+			OverItemT overItem = new OverItemT(marker, mContext, list);
+//			OverItemT overItem = new OverItemT(mContext.getResources().getDrawable(R.drawable.annotation), mContext, list);
 			mapView.getOverlays().add(overItem);
 			mapView.invalidate();
 		}
@@ -199,27 +167,4 @@ public class OverItemT extends ItemizedOverlay<OverlayItem> {
 		return super.onTap(arg0, mapView);
 	}
 
-	private class MyOverlay extends Overlay {
-		private GeoPoint geoPoint;
-
-		public MyOverlay(GeoPoint geoPoint) {
-			super();
-			this.geoPoint = geoPoint;
-		}
-
-		Paint paint = new Paint();
-
-		@Override
-		public void draw(Canvas canvas, MapView mapView, boolean shadow) {
-			Log.i(TAG, "my draw is running");
-			// 在天安门的位置绘制一个String
-			Point point = mapView.getProjection().toPixels(geoPoint, null);
-			// canvas.drawText("★这里是天安门", point.x, point.y, paint);
-			canvas.drawBitmap(BitmapFactory.decodeResource(mContext
-					.getResources(), R.drawable.annotation), point.x, point.y,
-					paint);
-			// canvas.drawBitmap(BitmapFactory.decodeResource(getResources(),
-			// R.drawable.ic_launcher), null, paint);
-		}
-	}
 }

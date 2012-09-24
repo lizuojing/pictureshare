@@ -359,10 +359,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 				for(int i=0;i<count;i++){
 					cursor.moveToPosition(i);
 					Avatar loadedImage = new Avatar();
-//					loadedImage.setLatitude(cursor.getDouble(latitudeIndex));
-//					loadedImage.setLongitude(cursor.getDouble(longitudeIndex));
-					loadedImage.setLatitude(39.90923 + (float)i/1000);
-					loadedImage.setLongitude(116.357428);
+					loadedImage.setLatitude(cursor.getDouble(latitudeIndex));
+					loadedImage.setLongitude(cursor.getDouble(longitudeIndex));
+//					loadedImage.setLatitude(39.90923 + (float)i/1000);
+//					loadedImage.setLongitude(116.357428);
 					loadedImage.setTitle("我的工作证");
 					loadedImage.setTime(System.currentTimeMillis());
 					loadedImage.setPath(cursor.getString(dataIndex));
