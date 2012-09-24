@@ -34,11 +34,10 @@ public class PMapActivity extends MapActivity implements View.OnClickListener {
 	private Button backToOneButton;
 	private Button backButton;
 
-	private boolean isDelete = false;
 	private SharePopupWindow sharePopup;
 	private OverItemT overitem;
 
-	public static int currentStatus = 0;// 0代表新建 1 代表删除
+	public static int currentStatus = 2;// 0代表新建 1 代表删除
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -89,7 +88,7 @@ public class PMapActivity extends MapActivity implements View.OnClickListener {
 
 		overitem = new OverItemT(marker, this, PicApp.list);
 		mMapView.getOverlays().add(overitem); // 添加ItemizedOverlay实例到mMapView
-
+		
 		// 创建点击mark时的弹出泡泡
 		mPopView = super.getLayoutInflater().inflate(R.layout.popview, null);
 		mMapView.addView(mPopView, new MapView.LayoutParams(
@@ -107,10 +106,12 @@ public class PMapActivity extends MapActivity implements View.OnClickListener {
 	}
 
 	private void updateUI() {
-		if(currentStatus==STATE_CREATE) {
+		if (currentStatus == STATE_CREATE) {
 			deleteButton.setText(getResources().getString(R.string.create));
-		}else {
+		} else if(currentStatus == STATE_DEL){
 			deleteButton.setText(getResources().getString(R.string.delete));
+		}else{
+			deleteButton.setText(getResources().getString(R.string.nomal));
 		}
 	}
 
@@ -185,23 +186,11 @@ public class PMapActivity extends MapActivity implements View.OnClickListener {
 			super.onBackPressed();
 			break;
 		case R.id.btn_create_or_delete:
-			isDelete = !isDelete;
-			if (!isDelete) {
-				currentStatus = STATE_CREATE;
-//				deleteButton.setText(getResources().getString(R.string.create));
-			} else {
-				currentStatus = STATE_DEL;
-//				deleteButton.setText(getResources().getString(R.string.delete));
+			if(currentStatus==2) {
+				currentStatus = -1;
 			}
-			
-			
-			
-			if(currentStatus==STATE_CREATE) {
-				deleteButton.setText(getResources().getString(R.string.create));
-			}else {
-				deleteButton.setText(getResources().getString(R.string.delete));
-			}
-			// Toast.makeText(this, "删除", Toast.LENGTH_SHORT).show();
+			currentStatus++;
+			updateUI();
 			break;
 		case R.id.btn_goback:
 			// Toast.makeText(this, "回到一级", Toast.LENGTH_SHORT).show();
