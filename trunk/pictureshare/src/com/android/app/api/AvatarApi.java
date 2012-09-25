@@ -1,11 +1,5 @@
 package com.android.app.api;
 
-import java.io.DataOutputStream;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.InetSocketAddress;
-import java.net.Proxy;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,14 +8,11 @@ import org.apache.http.message.BasicNameValuePair;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import android.util.Log;
 
 import com.android.app.config.Config;
 import com.android.app.entity.Avatar;
 import com.android.app.net.HttpResultJson;
 import com.android.app.net.NetService;
-import com.android.app.utils.Utils;
-import com.android.app.utils.Utils.APNData;
 
 /**
  * 图片相关api
