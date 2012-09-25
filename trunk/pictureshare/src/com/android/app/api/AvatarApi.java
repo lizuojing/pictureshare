@@ -1,15 +1,16 @@
 package com.android.app.api;
 
 import java.io.DataOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
 
 import android.content.Context;
 import android.os.AsyncTask;
@@ -17,6 +18,8 @@ import android.util.Log;
 
 import com.android.app.config.Config;
 import com.android.app.entity.Avatar;
+import com.android.app.net.HttpResultJson;
+import com.android.app.net.NetService;
 import com.android.app.utils.Utils;
 import com.android.app.utils.Utils.APNData;
 
@@ -71,18 +74,14 @@ public class AvatarApi extends BaseApi {
 				String filepath = parameters[0];
 				ApiResult<String> apiResult = new ApiResult<String>();
 				apiResult.setResultCode(ApiResult.RESULT_FAIL);
-				File f = new File(filepath);
-				FileInputStream fileInputStream = null;
-				try 
-				{
-					fileInputStream = new FileInputStream(f);
-				} 
-				catch (FileNotFoundException e)
-				{
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				postImage(context, fileInputStream);
+				List<NameValuePair> params = new ArrayList<NameValuePair>();
+				params.add(new BasicNameValuePair("photo", "filepath"));
+				params.add(new BasicNameValuePair("email", "leiyry"));
+				
+				NameValuePair fileNVPair = new BasicNameValuePair("photo", filepath);
+				HttpResultJson result = NetService.updateFile(context,
+						Config.Server_URL + AVATAR_UPLOAD_URL, params, fileNVPair);
+				
 				return apiResult;
 			}
 
@@ -97,99 +96,9 @@ public class AvatarApi extends BaseApi {
 					returnResultListener.onReturnFailResult(requestCode,apiResult);
 				}
 			}
-		}.execute("");
+		}.execute(filepath);
 	}
 	
-	public static String postImage(Context context, InputStream inputSteam)
-	{
-		String result = null;
-		
-		if (inputSteam == null)
-		{
-			return null;
-		}
-		
-		String BOUNDARY = "---------------------------dakslfdafdfafdafdaf";
-		
-		StringBuffer sb = new StringBuffer();
-		sb = sb.append("--");
-		sb = sb.append(BOUNDARY);
-		sb = sb.append("\r\n");
-		sb = sb.append("Content-Disposition: form-data; name=\""+"upload"+"\"; filename=\""+"avatar.jpg"+"\"\r\n");
-		sb = sb.append("Content-Type: Content-Type: image/jpeg\r\n\r\n");
-		byte[] data = sb.toString().getBytes();
-		byte[] end_data = ("\r\n--" + BOUNDARY + "--\r\n").getBytes();
-		
-		try
-		{			
-			byte[] file=new byte[inputSteam.available()];
-			inputSteam.read(file);
-	        
-			URL url = new URL(Config.Server_URL + AVATAR_UPLOAD_URL);
-			
-			HttpURLConnection connection = null;
-			
-			APNData apn = Utils.getPreferAPNData(context);
-        	
-        	if (apn != null && apn.hasProxy())
-            {
-                try
-                {
-                     Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(apn.proxy, apn.port));
-                     connection = (HttpURLConnection) url.openConnection(proxy);
-                }
-                catch (Exception e) 
-                {
-                    e.printStackTrace();
-                }
-            } 
-        	else
-        	{
-        		connection = (HttpURLConnection)url.openConnection();
-            }
-			
-			connection.setDoOutput(true);
-			connection.setDoInput(true);   
-			connection.setRequestMethod("POST");   
-			connection.setRequestProperty("Content-Type", "multipart/form-data; boundary="+BOUNDARY);   
-			connection.setRequestProperty("Content-Length", String.valueOf(data.length + file.length + end_data.length));   
-	        connection.setUseCaches(false);   
-	        connection.connect();   
-	   
-	        DataOutputStream out = new DataOutputStream(connection.getOutputStream());   
-	        out.write(data);   
-	        out.write(file);   
-	        out.write(end_data);   
-	   
-	        out.flush();   
-	        out.close();
-	        
-	        if (connection.getResponseCode() == 200) 
-	        {
-		        InputStream inStream = connection.getInputStream();
-		        result = Utils.inputStream2String(inStream);
-		        
-		        Log.i(TAG, "uploaded image ---- " + result);
-		        
-		        if (result != null && (result.equalsIgnoreCase("3001") || result.equalsIgnoreCase("3002")))
-		        {
-		        	result = null;
-		        }
-	        }
-	        else
-	        {
-	        	 Log.i(TAG, "connection.getResponseCode()=" + connection.getResponseCode());
-	        }
-		}
-		catch (Exception e) 
-		{
-			e.printStackTrace();
-			
-//			DatoutieApp.showError(R.string.add_avatar_failed);
-		}
-		
-		return result;
-	}
 
 	/**
 	 * 发送图片信息

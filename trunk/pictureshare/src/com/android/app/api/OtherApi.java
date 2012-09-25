@@ -1,6 +1,7 @@
 package com.android.app.api;
 
 import java.io.IOException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,6 +12,7 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.android.app.config.Config;
 import com.android.app.entity.VersionInfo;

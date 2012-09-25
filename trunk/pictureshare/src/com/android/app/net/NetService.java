@@ -169,6 +169,8 @@ public class NetService {
 		HttpResponse response;
 		try {
 			response = executeHttpPost(client, post);
+			StatusLine status = response.getStatusLine();
+			Log.i("MainActivity", "status is " + status);
 		} catch (Exception e) {
 			int failCode = HttpFailCode.UNDEFINED;
 			if (e instanceof ConnectTimeoutException) {
