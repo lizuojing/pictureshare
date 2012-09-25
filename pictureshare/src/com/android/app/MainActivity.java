@@ -15,6 +15,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.provider.MediaStore.Images.Media;
 import android.util.Log;
@@ -371,7 +372,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 					if(file!=null&&file.exists()&&isImagePath(loadedImage.getPath())){
 						list.add(loadedImage);
 					}
-					Log.i(TAG, "Latitude is " + cursor.getLong(latitudeIndex) + " longitude is " + cursor.getLong(longitudeIndex));
+//					Log.i(TAG, "Latitude is " + cursor.getLong(latitudeIndex) + " longitude is " + cursor.getLong(longitudeIndex));
 				}
 				PicApp.list = list;
 			}
@@ -426,8 +427,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.imageView2:
-			Intent mapIntent = new Intent(this, PMapActivity.class);
-			startActivity(mapIntent);
+//			Intent mapIntent = new Intent(this, PMapActivity.class);
+//			startActivity(mapIntent);
+//			checkAppUpdate();
+			File exFile = Environment.getExternalStorageDirectory();
+			String path = exFile.getAbsolutePath()+"/Camera/691kb.jpg";
+			Log.i(TAG, "path is " + path);
+			uploadpicture(path);
 			break;
 		case R.id.imageView3:
 			showSharePopup();
