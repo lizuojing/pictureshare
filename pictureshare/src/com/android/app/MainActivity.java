@@ -429,11 +429,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 		case R.id.imageView2:
 //			Intent mapIntent = new Intent(this, PMapActivity.class);
 //			startActivity(mapIntent);
-//			checkAppUpdate();
-			File exFile = Environment.getExternalStorageDirectory();
-			String path = exFile.getAbsolutePath()+"/Camera/691kb.jpg";
-			Log.i(TAG, "path is " + path);
-			uploadpicture(path);
+			checkAppUpdate();
+//			File exFile = Environment.getExternalStorageDirectory();
+//			String path = exFile.getAbsolutePath()+"/Camera/691kb.jpg";
+//			Log.i(TAG, "path is " + path);
+//			uploadpicture(path);
 			break;
 		case R.id.imageView3:
 			showSharePopup();
