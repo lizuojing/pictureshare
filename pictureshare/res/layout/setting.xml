@@ -70,38 +70,6 @@
                 android:paddingRight="0dip"
                 android:paddingTop="10dip" >
 
-                <RelativeLayout
-                    android:id="@+id/svr_setting"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="15dip"
-                    android:paddingRight="15dip" >
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
-                        android:layout_centerVertical="true"
-                        android:maxHeight="31dip"
-                        android:text="@string/setting_svr_setting"
-                        android:textColor="#000000"
-                        android:textSize="18sp" />
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true"
-                        android:maxHeight="31dip"
-                        android:src="@drawable/accessory_disclosure" />
-                </RelativeLayout>
-
-                <ImageView
-                    android:layout_width="fill_parent"
-                    android:layout_height="1dip"
-                    android:layout_marginBottom="12.5dip"
-                    android:layout_marginTop="9dip"
-                    android:background="#FFdedede" />
 
                 <RelativeLayout
                     android:id="@+id/personal_setting"
@@ -136,38 +104,6 @@
                     android:layout_marginTop="9dip"
                     android:background="#FFdedede" />
 
-                <RelativeLayout
-                    android:id="@+id/pic_setting"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="15dip"
-                    android:paddingRight="15dip" >
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
-                        android:layout_centerVertical="true"
-                        android:maxHeight="31dip"
-                        android:text="@string/setting_pic_setting"
-                        android:textColor="#000000"
-                        android:textSize="18sp" />
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true"
-                        android:maxHeight="31dip"
-                        android:src="@drawable/accessory_disclosure" />
-                </RelativeLayout>
-
-                <ImageView
-                    android:layout_width="fill_parent"
-                    android:layout_height="1dip"
-                    android:layout_marginBottom="12.5dip"
-                    android:layout_marginTop="9dip"
-                    android:background="#FFdedede" />
 
                 <RelativeLayout
                     android:id="@+id/valuation_setting"
@@ -195,38 +131,6 @@
                         android:src="@drawable/accessory_disclosure" />
                 </RelativeLayout>
 
-                <ImageView
-                    android:layout_width="fill_parent"
-                    android:layout_height="1dip"
-                    android:layout_marginBottom="12.5dip"
-                    android:layout_marginTop="9dip"
-                    android:background="#FFdedede" />
-
-                <RelativeLayout
-                    android:id="@+id/common_setting"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="15dip"
-                    android:paddingRight="15dip" >
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
-                        android:layout_centerVertical="true"
-                        android:maxHeight="31dip"
-                        android:text="@string/setting_common"
-                        android:textColor="#000000"
-                        android:textSize="18sp" />
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true"
-                        android:maxHeight="31dip"
-                        android:src="@drawable/accessory_disclosure" />
-                </RelativeLayout>
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
