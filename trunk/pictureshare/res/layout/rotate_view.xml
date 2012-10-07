@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <com.android.app.view.FanShapedView
+        android:layout_width="200dip"
+        android:layout_height="200dip" >
+    </com.android.app.view.FanShapedView>
+
+    <Button
+        android:id="@+id/button1"
+        android:layout_width="40dip"
+        android:layout_height="40dip"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="62dp"
+        android:layout_marginTop="62dp"
+        android:background="@drawable/turntable_icon_one" />
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="40dip"
+        android:layout_height="40dip"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="50dp"
+        android:layout_marginTop="20dp"
+        android:layout_toRightOf="@+id/button1"
+        android:background="@drawable/turntable_icon_three" />
+    <Button
+        android:id="@+id/button3"
+        android:layout_width="40dip"
+        android:layout_height="40dip"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/button1"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="50dp"
+        android:background="@drawable/turntable_icon_two" />
+    <Button
+        android:id="@+id/button4"
+        android:layout_width="40dip"
+        android:layout_height="40dip"
+        android:layout_alignBottom="@+id/button3"
+        android:layout_alignRight="@+id/button2"
+        android:background="@drawable/center_button" />
+
+</RelativeLayout>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:background="#cecece"
@@ -16,7 +16,8 @@
     <FrameLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|right" >
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true" >
 
         
         <com.android.app.view.FanShapedView
@@ -24,7 +25,23 @@
             android:layout_width="200dip"
             android:layout_height="200dip" >
         </com.android.app.view.FanShapedView>
-       
+
+
+        <com.android.app.view.RotateView
+            android:id="@+id/rotateView"
+            android:layout_width="200dip"
+            android:layout_height="200dip" >
+        </com.android.app.view.RotateView>
+
+        <Button
+            android:id="@+id/button4"
+            android:layout_width="40dip"
+            android:layout_height="40dip"
+            android:layout_marginBottom="17dp"
+            android:layout_marginRight="17dp"
+            android:layout_gravity="bottom|right"
+            android:background="@drawable/center_button" />
+
     </FrameLayout>
 
-</FrameLayout>
+</RelativeLayout>

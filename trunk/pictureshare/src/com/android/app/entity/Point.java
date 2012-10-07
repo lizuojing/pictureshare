@@ -7,6 +7,11 @@ public class Point {
 	public Point() {
 	}
 
+	@Override
+	public String toString() {
+		return x + "," + y;
+	}
+
 	public Point(float x, float y) {
 		this.x = x;
 		this.y = y;
