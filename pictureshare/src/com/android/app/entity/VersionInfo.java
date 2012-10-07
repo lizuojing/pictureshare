@@ -1,5 +1,7 @@
 package com.android.app.entity;
 
+import org.json.JSONObject;
+
 /**
  * 版本信息,客户端升级时使用
  */
@@ -109,5 +111,7 @@ public class VersionInfo {
 	public void setCreateTime(long createTime) {
 		this.createTime = createTime;
 	}
+
+
 
 }

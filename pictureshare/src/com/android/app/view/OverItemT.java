@@ -53,7 +53,7 @@ public class OverItemT extends ItemizedOverlay<OverlayItem> {
 				Avatar avatar = list.get(i);
 				double lat = avatar.getLatitude();
 				double lon = avatar.getLongitude();
-//				Log.i(TAG, "Latitude is " + lat + " longitude is " + lon);
+				// Log.i(TAG, "Latitude is " + lat + " longitude is " + lon);
 
 				if (lat != 0 && lon != 0) {
 					// 用给定的经纬度构造GeoPoint，单位是微度 (度 * 1E6)
@@ -70,7 +70,6 @@ public class OverItemT extends ItemizedOverlay<OverlayItem> {
 	public void updateOverlay() {
 		populate();
 	}
-
 
 	@Override
 	protected OverlayItem createItem(int i) {
@@ -130,7 +129,7 @@ public class OverItemT extends ItemizedOverlay<OverlayItem> {
 	}
 
 	public void setType() {
-		
+
 	}
 
 	@Override
@@ -139,7 +138,6 @@ public class OverItemT extends ItemizedOverlay<OverlayItem> {
 		Log.i(TAG, "onTap is running ----------" + PMapActivity.currentStatus);
 		// 消去弹出的气泡
 		PMapActivity.mPopView.setVisibility(View.GONE);
-
 
 		if (PMapActivity.currentStatus == PMapActivity.STATE_CREATE) {
 			mapView.getOverlays().clear();
@@ -156,14 +154,17 @@ public class OverItemT extends ItemizedOverlay<OverlayItem> {
 			Log.i(TAG, "lat is " + fromPixels.getLatitudeE6() / 1E6
 					+ " long is " + fromPixels.getLongitudeE6() / 1E6);
 
-//			OverItemT overItem = new OverItemT(mContext.getResources().getDrawable(R.drawable.annotation), mContext, list);
+			// OverItemT overItem = new
+			// OverItemT(mContext.getResources().getDrawable(R.drawable.annotation),
+			// mContext, list);
 			OverItemT overItem = new OverItemT(marker, mContext, list);
 			mapView.getOverlays().add(overItem);
 			mapView.invalidate();
 		}
 
-		Log.i(TAG, "lat i " + arg0.getLatitudeE6() + " lon is "
-				+ arg0.getLongitudeE6());
+		Log.i(TAG,
+				"lat i " + arg0.getLatitudeE6() + " lon is "
+						+ arg0.getLongitudeE6());
 		return super.onTap(arg0, mapView);
 	}
 

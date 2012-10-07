@@ -19,12 +19,13 @@ import com.android.app.api.ApiResult;
 import com.android.app.api.ApiReturnResultListener;
 import com.android.app.api.OwnerRequestParam;
 import com.android.app.api.UserApi;
+import com.android.app.entity.User;
 import com.android.app.utils.Utils;
 import com.android.app.view.PicDialogProgress;
 import com.android.app.view.TabContent;
 
-public class RegAndLoginActivity extends BaseActivity implements OnFocusChangeListener, OnClickListener,
-		OnEditorActionListener {
+public class RegAndLoginActivity extends BaseActivity implements
+		OnFocusChangeListener, OnClickListener, OnEditorActionListener {
 
 	private static final int ID_DIALOG_PROGRESS = 1;
 	private static final int REQ_CODE_REG = 1;
@@ -35,12 +36,6 @@ public class RegAndLoginActivity extends BaseActivity implements OnFocusChangeLi
 
 	private TextView ivTitle;
 	private TabContent tabContent;
-
-//	private LinearLayout bgEditLoginUserName;
-//	private LinearLayout bgEditLoginPassword;
-//	private LinearLayout bgEditRegUserName;
-//	private LinearLayout bgEditRegPassword;
-//	private LinearLayout bgEditRegEmail;
 
 	private EditText editLoginUserName;
 	private EditText editLoginPassword;
@@ -70,14 +65,14 @@ public class RegAndLoginActivity extends BaseActivity implements OnFocusChangeLi
 		userApi = new UserApi(this);
 		userApi.setReturnResultListener(apiReturnResultListener);
 		intentToPage = getIntent().getStringExtra(INTENT_TO_PAGE);
-		firstIntoActivity=true;
+		firstIntoActivity = true;
 	}
 
 	@Override
 	public void onWindowFocusChanged(boolean hasFocus) {
 		super.onWindowFocusChanged(hasFocus);
 		if (firstIntoActivity) {
-			firstIntoActivity=false;
+			firstIntoActivity = false;
 			if (INTENT_PAGE_REG.equalsIgnoreCase(intentToPage)) {
 				goToRegPage();
 			} else {
@@ -99,17 +94,10 @@ public class RegAndLoginActivity extends BaseActivity implements OnFocusChangeLi
 		}, 100);
 	}
 
-
 	private void initLayout() {
 		ivTitle = (TextView) findViewById(R.id.reg_login_title);
 		tabContent = (TabContent) findViewById(R.id.content);
 		tabContent.setSlideEnabled(false);
-
-//		bgEditLoginUserName = (LinearLayout) findViewById(R.id.bg_login_edit_username);
-//		bgEditLoginPassword = (LinearLayout) findViewById(R.id.bg_login_edit_password);
-//		bgEditRegUserName = (LinearLayout) findViewById(R.id.bg_reg_edit_username);
-//		bgEditRegPassword = (LinearLayout) findViewById(R.id.bg_reg_edit_password);
-//		bgEditRegEmail = (LinearLayout) findViewById(R.id.bg_reg_edit_email);
 
 		editLoginUserName = (EditText) findViewById(R.id.edit_login_username);
 		editLoginPassword = (EditText) findViewById(R.id.edit_login_password);
@@ -137,12 +125,12 @@ public class RegAndLoginActivity extends BaseActivity implements OnFocusChangeLi
 		btnLogin.setOnClickListener(this);
 
 	}
-	
+
 	@Override
 	protected Dialog onCreateDialog(int id) {
 		switch (id) {
 		case ID_DIALOG_PROGRESS:
-			//进度条
+			// 进度条
 			progressDialog = new PicDialogProgress(this);
 			return progressDialog;
 		}
@@ -153,38 +141,44 @@ public class RegAndLoginActivity extends BaseActivity implements OnFocusChangeLi
 	@Override
 	public void onFocusChange(View v, boolean hasFocus) {
 	}
-	
-	
+
 	ApiReturnResultListener apiReturnResultListener = new ApiReturnResultListener() {
 
 		@Override
-		public <T> void onReturnSucceedResult(int requestCode, ApiResult<T> apiResult) {
+		public <T> void onReturnSucceedResult(int requestCode,
+				ApiResult<T> apiResult) {
 			if (progressDialog != null) {
 				progressDialog.cancel();
 			}
 			if (requestCode == REQ_CODE_LOGIN) {
-				PicApp.getApp(RegAndLoginActivity.this).getService().registerHeartBeatCheckAlarm();
-				Toast.makeText(RegAndLoginActivity.this, "登录成功",Toast.LENGTH_SHORT).show();
+				PicApp.getApp(RegAndLoginActivity.this).getService()
+						.registerHeartBeatCheckAlarm();
+				Toast.makeText(RegAndLoginActivity.this, "登录成功",
+						Toast.LENGTH_SHORT).show();
 				finish();
 			} else if (requestCode == REQ_CODE_REG) {
-				Toast.makeText(RegAndLoginActivity.this, "注册成功",Toast.LENGTH_SHORT).show();
+				Toast.makeText(RegAndLoginActivity.this, "注册成功",
+						Toast.LENGTH_SHORT).show();
 				OwnerRequestParam params = new OwnerRequestParam();
 				params.setUsername(regUsername.toLowerCase());
 				params.setPassword(regPassword);
-				userApi.login(REQ_CODE_LOGIN , params);
+				userApi.login(REQ_CODE_LOGIN, getUser());
 				showDialog(ID_DIALOG_PROGRESS);
 			}
 		}
 
 		@Override
-		public <T> void onReturnFailResult(int requestCode, ApiResult<T> apiResult) {
+		public <T> void onReturnFailResult(int requestCode,
+				ApiResult<T> apiResult) {
 			if (progressDialog != null) {
 				progressDialog.cancel();
 			}
 			if (requestCode == REQ_CODE_LOGIN) {
-				Toast.makeText(RegAndLoginActivity.this, "登录失败",Toast.LENGTH_SHORT).show();
+				Toast.makeText(RegAndLoginActivity.this, "登录失败",
+						Toast.LENGTH_SHORT).show();
 			} else if (requestCode == REQ_CODE_REG) {
-				Toast.makeText(RegAndLoginActivity.this, "注册成功",Toast.LENGTH_SHORT).show();
+				Toast.makeText(RegAndLoginActivity.this, "注册失败",
+						Toast.LENGTH_SHORT).show();
 			}
 		}
 	};
@@ -199,29 +193,34 @@ public class RegAndLoginActivity extends BaseActivity implements OnFocusChangeLi
 			regUsername = editRegUserName.getText().toString().trim();
 			regPassword = editRegPassword.getText().toString().trim();
 			String email = editRegEmail.getText().toString().trim();
-			if (validateRegUserName(regUsername) && validatePassword(regPassword) && validateEmail(email)) {
-				OwnerRequestParam params = new OwnerRequestParam();
-				params.setUsername(regUsername.toLowerCase());
-				params.setPassword(regPassword);
-				params.setEmail(email);
-				userApi.register(REQ_CODE_REG,params);
+			if (validateRegUserName(regUsername)
+					&& validatePassword(regPassword) && validateEmail(email)) {
+				User user = new User();
+				userApi.regeditUser(REQ_CODE_REG, user);
 				showDialog(ID_DIALOG_PROGRESS);
 			}
 			break;
 		case R.id.btn_login:
-			String loginUsername = editLoginUserName.getText().toString().trim();
-			String loginPassword = editLoginPassword.getText().toString().trim();
-			if (validateLoginUserName(loginUsername) && validatePassword(loginPassword)) {
-				OwnerRequestParam params = new OwnerRequestParam();
-				params.setUsername(loginUsername.toLowerCase());
-				params.setPassword(loginPassword);
-				userApi.login(REQ_CODE_LOGIN,params);
+			String loginUsername = editLoginUserName.getText().toString()
+					.trim();
+			String loginPassword = editLoginPassword.getText().toString()
+					.trim();
+			if (validateLoginUserName(loginUsername)
+					&& validatePassword(loginPassword)) {		
+				userApi.login(REQ_CODE_LOGIN, getUser());
 				showDialog(ID_DIALOG_PROGRESS);
 			}
 			break;
 		}
 	}
 
+	public User user;
+	
+	public User getUser()
+	{
+		return user;
+	}
+	
 	private boolean validateEmail(String email) {
 		if (Utils.isNullOrEmpty(email)) {
 			Toast.makeText(this, "您还没有输入联系邮箱", Toast.LENGTH_SHORT).show();
@@ -252,19 +251,21 @@ public class RegAndLoginActivity extends BaseActivity implements OnFocusChangeLi
 			return false;
 		}
 		if (!Utils.isRegUserName(username)) {
-			Toast.makeText(this, "用户名为5–20位字母/数字/下划线或组合", Toast.LENGTH_SHORT).show();
+			Toast.makeText(this, "用户名为5–20位字母/数字/下划线或组合", Toast.LENGTH_SHORT)
+					.show();
 			return false;
 		}
 		return true;
 	}
-	
+
 	private boolean validateLoginUserName(String username) {
 		if (Utils.isNullOrEmpty(username)) {
 			Toast.makeText(this, "您还没有输入用户名", Toast.LENGTH_SHORT).show();
 			return false;
 		}
 		if (!Utils.isLoginUserName(username)) {
-			Toast.makeText(this, "用户名为5–20位字母/数字/下划线或组合", Toast.LENGTH_SHORT).show();
+			Toast.makeText(this, "用户名为5–20位字母/数字/下划线或组合", Toast.LENGTH_SHORT)
+					.show();
 			return false;
 		}
 		return true;
@@ -286,7 +287,8 @@ public class RegAndLoginActivity extends BaseActivity implements OnFocusChangeLi
 
 	@Override
 	public void onBackPressed() {
-		if (!INTENT_PAGE_REG.equalsIgnoreCase(intentToPage) && currentPageIndex == 1) {
+		if (!INTENT_PAGE_REG.equalsIgnoreCase(intentToPage)
+				&& currentPageIndex == 1) {
 			goToLoginPage();
 		} else {
 			super.onBackPressed();
@@ -298,10 +300,14 @@ public class RegAndLoginActivity extends BaseActivity implements OnFocusChangeLi
 		switch (v.getId()) {
 		case R.id.edit_login_password:
 			if (actionId == EditorInfo.IME_ACTION_DONE) {
-				String loginUsername = editLoginUserName.getText().toString().trim();
-				String loginPassword = editLoginPassword.getText().toString().trim();
-				if (validateLoginUserName(loginUsername) && validatePassword(loginPassword)) {
-//					userApi.login(REQ_CODE_LOGIN, loginUsername.toLowerCase() + "@gozap.com", loginPassword);
+				String loginUsername = editLoginUserName.getText().toString()
+						.trim();
+				String loginPassword = editLoginPassword.getText().toString()
+						.trim();
+				if (validateLoginUserName(loginUsername)
+						&& validatePassword(loginPassword)) {
+					// userApi.login(REQ_CODE_LOGIN, loginUsername.toLowerCase()
+					// + "@gozap.com", loginPassword);
 					showDialog(ID_DIALOG_PROGRESS);
 				}
 			}
@@ -311,8 +317,11 @@ public class RegAndLoginActivity extends BaseActivity implements OnFocusChangeLi
 				regUsername = editRegUserName.getText().toString().trim();
 				regPassword = editRegPassword.getText().toString().trim();
 				String email = editRegEmail.getText().toString().trim();
-				if (validateRegUserName(regUsername) && validatePassword(regPassword) && validateEmail(email)) {
-//					userApi.register(REQ_CODE_REG, regUsername.toLowerCase() + "@gozap.com", regPassword, email);
+				if (validateRegUserName(regUsername)
+						&& validatePassword(regPassword)
+						&& validateEmail(email)) {
+					// userApi.register(REQ_CODE_REG, regUsername.toLowerCase()
+					// + "@gozap.com", regPassword, email);
 					showDialog(ID_DIALOG_PROGRESS);
 				}
 			}

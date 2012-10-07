@@ -18,7 +18,14 @@ import org.apache.http.message.BasicNameValuePair;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
 
+import com.android.app.config.Config;
+import com.android.app.entity.User;
+import com.android.app.entity.VersionInfo;
+import com.android.app.net.HttpResult;
+import com.android.app.net.HttpResultJson;
+import com.android.app.net.NetService;
 import com.android.app.utils.Base64;
 
 /**
@@ -28,6 +35,58 @@ import com.android.app.utils.Base64;
  * 
  */
 public class UserApi extends BaseApi {
+
+	// 版本服务url
+	private static final String URL_REG = "007/userreg";
+	private static final String URL_LOGIN = "007/userlogin";
+
+	
+	protected static final String TAG = "RegeditApi";
+
+	/**
+	 * 用户注册
+	 * 
+	 * @param returnResultListener
+	 */
+	public void regeditUser(final int requestCode, final User user) {
+		new AsyncTask<Object, Integer, ApiResult<VersionInfo>>() {
+			@Override
+			protected ApiResult<VersionInfo> doInBackground(Object... strs) {
+				ApiResult<VersionInfo> apiResult = new ApiResult<VersionInfo>();
+				apiResult.setResultCode(ApiResult.RESULT_FAIL);
+				List<NameValuePair> params = new ArrayList<NameValuePair>();
+				params.add(new BasicNameValuePair("params", user.ToJsonString()));
+				HttpResultJson result = NetService.httpPostReturnJson(context,
+						Config.Server_URL + URL_REG, params);
+
+				if (result.getResultCode() == HttpResult.RESULT_OK) {
+					apiResult.setResultCode(ApiResult.RESULT_OK);
+					// VersionInfo version = null;
+
+					Log.i(TAG, "result is " + result.getJson().toString());
+
+				} else {
+					apiResult.setFailCode(result.getFailCode());
+					apiResult.setFailMessage(result.getFailMessage());
+				}
+				return apiResult;
+			}
+
+			@Override
+			protected void onPostExecute(ApiResult<VersionInfo> apiResult) {
+				if (returnResultListener == null) {
+					return;
+				}
+				if (apiResult.getResultCode() == ApiResult.RESULT_OK) {
+					returnResultListener.onReturnSucceedResult(requestCode,
+							apiResult);
+				} else {
+					returnResultListener.onReturnFailResult(requestCode,
+							apiResult);
+				}
+			}
+		}.execute("");
+	}
 
 	public UserApi(Context context) {
 		super(context);
@@ -39,7 +98,8 @@ public class UserApi extends BaseApi {
 	 * @param params
 	 * @return
 	 */
-	public void register(final int requestCode, final OwnerRequestParam ownerParms) {
+	public void register(final int requestCode,
+			final OwnerRequestParam ownerParms) {
 
 		new AsyncTask<Object, Integer, ApiResult<Object>>() {
 			@Override
@@ -47,25 +107,33 @@ public class UserApi extends BaseApi {
 				ApiResult<Object> apiResult = new ApiResult<Object>();
 				apiResult.setResultCode(ApiResult.RESULT_FAIL);
 				List<NameValuePair> params = new ArrayList<NameValuePair>();
-//				params.add(new BasicNameValuePair("oauth_consumer_key", ApiConfig.APP_KEY));
-				params.add(new BasicNameValuePair("username", ownerParms.getUsername()));
-				params.add(new BasicNameValuePair("password", ownerParms.getPassword()));
-				params.add(new BasicNameValuePair("email", ownerParms.getEmail()));
+				// params.add(new BasicNameValuePair("oauth_consumer_key",
+				// ApiConfig.APP_KEY));
+				params.add(new BasicNameValuePair("username", ownerParms
+						.getUsername()));
+				params.add(new BasicNameValuePair("password", ownerParms
+						.getPassword()));
+				params.add(new BasicNameValuePair("email", ownerParms
+						.getEmail()));
 
-//				String baseString = ApiConfig.APP_SECRET + "&" + ApiConfig.APP_KEY + "&" + username + "&" + password;
-//				String signature = getSignature(baseString, ApiConfig.APP_SECRET);
+				// String baseString = ApiConfig.APP_SECRET + "&" +
+				// ApiConfig.APP_KEY + "&" + username + "&" + password;
+				// String signature = getSignature(baseString,
+				// ApiConfig.APP_SECRET);
 
-//				params.add(new BasicNameValuePair("oauth_signature", signature));
+				// params.add(new BasicNameValuePair("oauth_signature",
+				// signature));
 
-//				HttpResultXml result = NetService.httpPostReturnXml(context,
-//						context.getString(R.string.config_gozap_api_url) + REGISTER_URL, params);
+				// HttpResultXml result = NetService.httpPostReturnXml(context,
+				// context.getString(R.string.config_gozap_api_url) +
+				// REGISTER_URL, params);
 
-//				if (result.getResultCode() == HttpResult.RESULT_OK) {
-//					apiResult.setResultCode(ApiResult.RESULT_OK);
-//				} else {
-//					apiResult.setFailCode(result.getFailCode());
-//					apiResult.setFailMessage(result.getFailMessage());
-//				}
+				// if (result.getResultCode() == HttpResult.RESULT_OK) {
+				// apiResult.setResultCode(ApiResult.RESULT_OK);
+				// } else {
+				// apiResult.setFailCode(result.getFailCode());
+				// apiResult.setFailMessage(result.getFailMessage());
+				// }
 				return apiResult;
 			}
 
@@ -75,9 +143,11 @@ public class UserApi extends BaseApi {
 					return;
 				}
 				if (apiResult.getResultCode() == ApiResult.RESULT_OK) {
-					returnResultListener.onReturnSucceedResult(requestCode, apiResult);
+					returnResultListener.onReturnSucceedResult(requestCode,
+							apiResult);
 				} else {
-					returnResultListener.onReturnFailResult(requestCode, apiResult);
+					returnResultListener.onReturnFailResult(requestCode,
+							apiResult);
 				}
 			}
 		}.execute("");
@@ -90,77 +160,31 @@ public class UserApi extends BaseApi {
 	 * @param params
 	 * @return
 	 */
-	public void login(final int requestCode, final OwnerRequestParam ownerParms) {
+	public void login(final int requestCode, final User user) {
 		new AsyncTask<Object, Integer, ApiResult<Object>>() {
 			@Override
 			protected ApiResult<Object> doInBackground(Object... strs) {
+
 				ApiResult<Object> apiResult = new ApiResult<Object>();
 				apiResult.setResultCode(ApiResult.RESULT_FAIL);
-
 				List<NameValuePair> params = new ArrayList<NameValuePair>();
-				params.add(new BasicNameValuePair("x_auth_username", ownerParms.getUsername()));
-				params.add(new BasicNameValuePair("x_auth_password", ownerParms.getPassword()));
-				params.add(new BasicNameValuePair("x_auth_model", "client_auth"));
-//				params.add(new BasicNameValuePair("oauth_consumer_key", ApiConfig.APP_KEY));
-				params.add(new BasicNameValuePair("oauth_signature_method", "HMAC-SHA1"));
-				params.add(new BasicNameValuePair("oauth_timestamp", System.currentTimeMillis() / 1000 + ""));
-				params.add(new BasicNameValuePair("oauth_nonce", UUID.randomUUID().toString()));
-				params.add(new BasicNameValuePair("oauth_version", "1.0"));
+				params.add(new BasicNameValuePair("params", user.ToJsonString()));
+				HttpResultJson result = NetService.httpPostReturnJson(context,
+						Config.Server_URL + URL_LOGIN, params);
 
-				String httpMethod = "POST";
-				String urlEncode = null;
-				try {
-					urlEncode = URLEncoder.encode("http://api.gozap.com/xauth/access_token", "utf-8");
-				} catch (UnsupportedEncodingException e) {
-					e.printStackTrace();
+				if (result.getResultCode() == HttpResult.RESULT_OK) {
+					apiResult.setResultCode(ApiResult.RESULT_OK);
+					// VersionInfo version = null;
+
+					Log.i(TAG, "result is " + result.getJson().toString());
+
+				} else {
+					apiResult.setFailCode(result.getFailCode());
+					apiResult.setFailMessage(result.getFailMessage());
 				}
-
-//				String sortParams = sortAndEncodeParams(params);
-
-//				String baseString = httpMethod + "&" + urlEncode + "&" + sortParams;
-//				String signature = getSignature(baseString, ApiConfig.APP_SECRET);
-
-//				params.add(new BasicNameValuePair("oauth_signature", signature));
-//
-//				HttpResultXml result = NetService.httpPostReturnXml(context,
-//						context.getString(R.string.config_gozap_api_url) + LOGIN_URL, params);
-
-//				if (result.getResultCode() == HttpResult.RESULT_OK) {
-//					apiResult.setResultCode(ApiResult.RESULT_OK);
-//
-//					XmlPullParser parser = result.getParser();
-//					try {
-//						int eventType = parser.getEventType();
-//						breakTag: while (eventType != XmlPullParser.END_DOCUMENT) {
-//							switch (eventType) {
-//							case XmlPullParser.START_DOCUMENT:
-//								break;
-//							case XmlPullParser.START_TAG:
-//								if ("access_token".equalsIgnoreCase(parser.getName())) {
-//									String access_token = parser.nextText();
-//									saveAccessToken(access_token);
-//									saveUsername(username);
-//									break breakTag;
-//								}
-//								break;
-//							case XmlPullParser.END_TAG:
-//								break;
-//							case XmlPullParser.END_DOCUMENT:
-//								break;
-//							}
-//							eventType = parser.next();
-//						}
-//					} catch (XmlPullParserException e) {
-//						CTLog.e(TAG, e);
-//					} catch (IOException e) {
-//						CTLog.e(TAG, e);
-//					}
-//
-//				} else {
-//					apiResult.setFailCode(result.getFailCode());
-//					apiResult.setFailMessage(result.getFailMessage());
-//				}
 				return apiResult;
+
+
 			}
 
 			@Override
@@ -169,14 +193,15 @@ public class UserApi extends BaseApi {
 					return;
 				}
 				if (apiResult.getResultCode() == ApiResult.RESULT_OK) {
-					returnResultListener.onReturnSucceedResult(requestCode, apiResult);
+					returnResultListener.onReturnSucceedResult(requestCode,
+							apiResult);
 				} else {
-					returnResultListener.onReturnFailResult(requestCode, apiResult);
+					returnResultListener.onReturnFailResult(requestCode,
+							apiResult);
 				}
 			}
 		}.execute("");
 	}
-
 
 	/**
 	 * 用户信息更新
@@ -185,7 +210,7 @@ public class UserApi extends BaseApi {
 	 * @return
 	 */
 	public void updateUserInfo(OwnerRequestParam params) {
-		
+
 	}
 
 	/**
@@ -195,7 +220,7 @@ public class UserApi extends BaseApi {
 	 * @return
 	 */
 	public void syncUserInfo(OwnerRequestParam params) {
-		
+
 	}
 
 	/**
@@ -205,7 +230,7 @@ public class UserApi extends BaseApi {
 	 * @return
 	 */
 	public void reSetPassWord(OwnerRequestParam params) {
-		
+
 	}
 
 	/**
@@ -215,9 +240,9 @@ public class UserApi extends BaseApi {
 	 * @return
 	 */
 	public void inviteCodeLogin(OwnerRequestParam params) {
-		
+
 	}
-	
+
 	/**
 	 * 分享
 	 * 
@@ -225,9 +250,9 @@ public class UserApi extends BaseApi {
 	 * @return
 	 */
 	public void addShare(OwnerRequestParam params) {
-		
+
 	}
-	
+
 	/**
 	 * 生成签名
 	 * 
@@ -263,13 +288,15 @@ public class UserApi extends BaseApi {
 	 * @throws IllegalStateException
 	 * @throws UnsupportedEncodingException
 	 */
-	private String computeHmac(String baseString, String key) throws NoSuchAlgorithmException, InvalidKeyException,
+	private String computeHmac(String baseString, String key)
+			throws NoSuchAlgorithmException, InvalidKeyException,
 			IllegalStateException, UnsupportedEncodingException {
 		// Mac类提供 消息验证码（Message Authentication Code，MAC）算法的功能。
 		// getInstance返回实现指定 MAC 算法的 Mac对象。
 		Mac mac = Mac.getInstance("HmacSHA1");
 
-		SecretKeySpec secret = new SecretKeySpec(key.getBytes(), mac.getAlgorithm());
+		SecretKeySpec secret = new SecretKeySpec(key.getBytes(),
+				mac.getAlgorithm());
 		mac.init(secret);
 		byte[] digest = mac.doFinal(baseString.getBytes());
 		return getBase64String(digest);
@@ -316,7 +343,8 @@ public class UserApi extends BaseApi {
 			final String value = pair.getValue();
 			String encodedValue = null;
 			try {
-				encodedValue = value != null ? URLEncoder.encode(value, "utf-8") : "";
+				encodedValue = value != null ? URLEncoder
+						.encode(value, "utf-8") : "";
 				encodedValue = URLEncoder.encode(encodedValue, "utf-8");
 			} catch (UnsupportedEncodingException e) {
 				e.printStackTrace();

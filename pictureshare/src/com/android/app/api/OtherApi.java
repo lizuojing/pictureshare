@@ -84,5 +84,10 @@ public class OtherApi extends BaseApi {
 		String result = new String(cs);
 		return result;
 	}
+	
+	public void getDetil()
+	{
+		
+	}
 
 }
