@@ -22,8 +22,11 @@ import com.android.app.net.NetService;
  */
 public class AvatarApi extends BaseApi {
 	
-	private static final String AVATAR_UPLOAD_URL = "007/uploadphoto";
 	private static final String TAG = "AvatarApi";
+	private static final String AVATAR_UPLOAD_URL = "007/uploadphoto";
+	private static final String AVATAR_LIKE_URL = "007/like";
+	protected static final String AVATAR_INFO_URL = "007/uploadphotoinfo";
+	protected static final String AVATAR_SHAEE_URL = "007/photoshare";
 
 	public AvatarApi(Context context) {
 		super(context);
@@ -90,6 +93,44 @@ public class AvatarApi extends BaseApi {
 		}.execute(filepath);
 	}
 	
+	/**
+	 * 图片赞
+	 * 
+	 * @param params
+	 * @return
+	 */
+	public void likeAvatar(final Context context,final int requestCode,final String filepath,String email,final String like) {
+		new AsyncTask<Void, Integer, ApiResult<String>>() {
+			@Override
+			protected ApiResult<String> doInBackground(Void... param) {
+				ApiResult<String> apiResult = new ApiResult<String>();
+				apiResult.setResultCode(ApiResult.RESULT_FAIL);
+				List<NameValuePair> params = new ArrayList<NameValuePair>();
+				params.add(new BasicNameValuePair("photoid", "photoid"));
+				params.add(new BasicNameValuePair("email", "leiyry"));
+				params.add(new BasicNameValuePair("like", like));
+				
+				NameValuePair fileNVPair = new BasicNameValuePair("photo", filepath);
+				HttpResultJson result = NetService.updateFile(context,
+						Config.Server_URL + AVATAR_LIKE_URL, params, fileNVPair);
+				
+				return apiResult;
+			}
+
+			@Override
+			protected void onPostExecute(ApiResult<String> apiResult) {
+				if (returnResultListener == null) {
+					return;
+				}
+				if (apiResult.getResultCode() == ApiResult.RESULT_OK) {
+					returnResultListener.onReturnSucceedResult(requestCode,apiResult);
+				} else {
+					returnResultListener.onReturnFailResult(requestCode,apiResult);
+				}
+			}
+		}.execute();
+	}
+	
 
 	/**
 	 * 发送图片信息
@@ -97,8 +138,31 @@ public class AvatarApi extends BaseApi {
 	 * @param params
 	 * @return
 	 */
-	public void uploadAvatarInfo(AvatarRequestParam params) {
+	public void uploadAvatarInfo(final Context context,final int requestCode,final String filepath,String email,final String like) {
+		new AsyncTask<Void, Integer, ApiResult<String>>() {
+			@Override
+			protected ApiResult<String> doInBackground(Void... param) {
+				ApiResult<String> apiResult = new ApiResult<String>();
+				apiResult.setResultCode(ApiResult.RESULT_FAIL);
+				List<NameValuePair> params = new ArrayList<NameValuePair>();
+				params.add(new BasicNameValuePair("params", "photoid"));
+				NetService.httpPostReturnJson(context, Config.Server_URL + AVATAR_INFO_URL, params);
+				
+				return apiResult;
+			}
 
+			@Override
+			protected void onPostExecute(ApiResult<String> apiResult) {
+				if (returnResultListener == null) {
+					return;
+				}
+				if (apiResult.getResultCode() == ApiResult.RESULT_OK) {
+					returnResultListener.onReturnSucceedResult(requestCode,apiResult);
+				} else {
+					returnResultListener.onReturnFailResult(requestCode,apiResult);
+				}
+			}
+		}.execute();
 	}
 
 	/**
@@ -107,8 +171,31 @@ public class AvatarApi extends BaseApi {
 	 * @param params
 	 * @return
 	 */
-	public void shareAvatar(AvatarRequestParam params) {
+	public void shareAvatar(final Context context,final int requestCode,final String filepath,String email,final String like) {
+		new AsyncTask<Void, Integer, ApiResult<String>>() {
+			@Override
+			protected ApiResult<String> doInBackground(Void... param) {
+				ApiResult<String> apiResult = new ApiResult<String>();
+				apiResult.setResultCode(ApiResult.RESULT_FAIL);
+				List<NameValuePair> params = new ArrayList<NameValuePair>();
+				params.add(new BasicNameValuePair("params", "{email:'email','photoid':'11'}"));
+				HttpResultJson result = NetService.httpPostReturnJson(context, Config.Server_URL + AVATAR_SHAEE_URL, params);
+				
+				return apiResult;
+			}
 
+			@Override
+			protected void onPostExecute(ApiResult<String> apiResult) {
+				if (returnResultListener == null) {
+					return;
+				}
+				if (apiResult.getResultCode() == ApiResult.RESULT_OK) {
+					returnResultListener.onReturnSucceedResult(requestCode,apiResult);
+				} else {
+					returnResultListener.onReturnFailResult(requestCode,apiResult);
+				}
+			}
+		}.execute();
 	}
 	
 	
@@ -151,7 +238,6 @@ public class AvatarApi extends BaseApi {
 						} 
 						catch (FileNotFoundException e)
 						{
-							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
 						String postImage = postImage(context, fileInputStream);
@@ -174,5 +260,7 @@ public class AvatarApi extends BaseApi {
 			}
 		}.execute();*/
 	}
+	
+	
 
 }
