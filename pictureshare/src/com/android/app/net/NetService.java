@@ -477,6 +477,7 @@ public class NetService {
 			content.close();
 			// Return result from buffered stream
 			String jsonStr = new String(content.toByteArray());
+			Log.e("jsonStr is", " 服务器返回字符串： " + jsonStr);
 			JSONObject jsonObject;
 			jsonObject = new JSONObject(jsonStr);
 			if (jsonObject.isNull("code")) {

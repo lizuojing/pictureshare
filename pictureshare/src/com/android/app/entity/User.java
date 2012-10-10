@@ -10,12 +10,12 @@ public class User {
 	public String email;
 	public String username;
 	public String address;
-	public int sex;
+	public String sex;
 	public String tel;
-	public long birthday;
+	public String birthday;
 	public String password;
 
-	public String ToJsonString() {
+	public String ToRegeditString() {
 
 		JSONObject jsonParmas = new JSONObject();
 		try {
@@ -53,6 +53,22 @@ public class User {
 
 	}
 
+	public String toReNameString() {
+
+		JSONObject jsonParmas = new JSONObject();
+		try {
+			JSONObject jsonAll = new JSONObject();
+			jsonAll.put(JsonTitle.EMAIL, email);
+			jsonAll.put(JsonTitle.USERNAME, username);
+			jsonParmas.put(JsonTitle.PARAMS, jsonAll);
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return jsonParmas.toString();
+
+	}
+
 	public String getEmail() {
 		return email;
 	}
@@ -77,11 +93,11 @@ public class User {
 		this.address = address;
 	}
 
-	public int getSex() {
+	public String getSex() {
 		return sex;
 	}
 
-	public void setSex(int sex) {
+	public void setSex(String sex) {
 		this.sex = sex;
 	}
 
@@ -93,11 +109,11 @@ public class User {
 		this.tel = tel;
 	}
 
-	public long getBirthday() {
+	public String getBirthday() {
 		return birthday;
 	}
 
-	public void setBirthday(long birthday) {
+	public void setBirthday(String birthday) {
 		this.birthday = birthday;
 	}
 

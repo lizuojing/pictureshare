@@ -7,8 +7,8 @@ import android.util.Log;
 
 public class Detail extends ResultOPE{
 
-	Point lbPoint;
-	Point ruPoint;
+	public Point lbPoint;
+	public Point ruPoint;
 	public Point getLbPoint() {
 		return lbPoint;
 	}
@@ -29,6 +29,7 @@ public class Detail extends ResultOPE{
 		JSONObject parmsJson=new JSONObject();
 		try {
 			jsonall.put(JsonTitle.LEFT_BUTTON,lbPoint.toString());
+			jsonall.put(JsonTitle.RIGHT_UP,ruPoint.toString());
 			parmsJson.put(JsonTitle.PARAMS, jsonall);
 		} catch (JSONException e) {
 			Log.e("Detail","error");
