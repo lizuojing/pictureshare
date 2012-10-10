@@ -39,8 +39,8 @@ public class UserApi extends BaseApi {
 	// 版本服务url
 	private static final String URL_REG = "007/userreg";
 	private static final String URL_LOGIN = "007/userlogin";
+	private static final String URL_USERMODIFY = "/007/usermodify";
 
-	
 	protected static final String TAG = "RegeditApi";
 
 	/**
@@ -55,15 +55,15 @@ public class UserApi extends BaseApi {
 				ApiResult<VersionInfo> apiResult = new ApiResult<VersionInfo>();
 				apiResult.setResultCode(ApiResult.RESULT_FAIL);
 				List<NameValuePair> params = new ArrayList<NameValuePair>();
-				params.add(new BasicNameValuePair("params", user.ToJsonString()));
+				Log.e("params:", user.ToRegeditString());
+				params.add(new BasicNameValuePair("params", user
+						.ToRegeditString()));
 				HttpResultJson result = NetService.httpPostReturnJson(context,
 						Config.Server_URL + URL_REG, params);
 
 				if (result.getResultCode() == HttpResult.RESULT_OK) {
 					apiResult.setResultCode(ApiResult.RESULT_OK);
 					// VersionInfo version = null;
-
-					Log.i(TAG, "result is " + result.getJson().toString());
 
 				} else {
 					apiResult.setFailCode(result.getFailCode());
@@ -116,24 +116,6 @@ public class UserApi extends BaseApi {
 				params.add(new BasicNameValuePair("email", ownerParms
 						.getEmail()));
 
-				// String baseString = ApiConfig.APP_SECRET + "&" +
-				// ApiConfig.APP_KEY + "&" + username + "&" + password;
-				// String signature = getSignature(baseString,
-				// ApiConfig.APP_SECRET);
-
-				// params.add(new BasicNameValuePair("oauth_signature",
-				// signature));
-
-				// HttpResultXml result = NetService.httpPostReturnXml(context,
-				// context.getString(R.string.config_gozap_api_url) +
-				// REGISTER_URL, params);
-
-				// if (result.getResultCode() == HttpResult.RESULT_OK) {
-				// apiResult.setResultCode(ApiResult.RESULT_OK);
-				// } else {
-				// apiResult.setFailCode(result.getFailCode());
-				// apiResult.setFailMessage(result.getFailMessage());
-				// }
 				return apiResult;
 			}
 
@@ -168,7 +150,9 @@ public class UserApi extends BaseApi {
 				ApiResult<Object> apiResult = new ApiResult<Object>();
 				apiResult.setResultCode(ApiResult.RESULT_FAIL);
 				List<NameValuePair> params = new ArrayList<NameValuePair>();
-				params.add(new BasicNameValuePair("params", user.ToJsonString()));
+				params.add(new BasicNameValuePair("params", user
+						.toLoginString()));
+				Log.e("params", user.toLoginString());
 				HttpResultJson result = NetService.httpPostReturnJson(context,
 						Config.Server_URL + URL_LOGIN, params);
 
@@ -176,15 +160,61 @@ public class UserApi extends BaseApi {
 					apiResult.setResultCode(ApiResult.RESULT_OK);
 					// VersionInfo version = null;
 
-					Log.i(TAG, "result is " + result.getJson().toString());
-
 				} else {
 					apiResult.setFailCode(result.getFailCode());
 					apiResult.setFailMessage(result.getFailMessage());
 				}
 				return apiResult;
 
+			}
 
+			@Override
+			protected void onPostExecute(ApiResult<Object> apiResult) {
+				if (returnResultListener == null) {
+					return;
+				}
+				if (apiResult.getResultCode() == ApiResult.RESULT_OK) {
+					returnResultListener.onReturnSucceedResult(requestCode,
+							apiResult);
+				} else {
+					returnResultListener.onReturnFailResult(requestCode,
+							apiResult);
+				}
+			}
+		}.execute("");
+	}
+
+	/**
+	 * 用户登录
+	 * 
+	 * @param params
+	 * @return
+	 */
+	public void reName(final int requestCode, final User user) {
+		new AsyncTask<Object, Integer, ApiResult<Object>>() {
+			@Override
+			protected ApiResult<Object> doInBackground(Object... strs) {
+
+				ApiResult<Object> apiResult = new ApiResult<Object>();
+				apiResult.setResultCode(ApiResult.RESULT_FAIL);
+				List<NameValuePair> params = new ArrayList<NameValuePair>();
+				params.add(new BasicNameValuePair("params", user
+						.toReNameString()));
+
+				Log.e("params", user.toReNameString());
+
+				HttpResultJson result = NetService.httpPostReturnJson(context,
+						Config.Server_URL + URL_USERMODIFY, params);
+
+				if (result.getResultCode() == HttpResult.RESULT_OK) {
+					apiResult.setResultCode(ApiResult.RESULT_OK);
+					// VersionInfo version = null;
+
+				} else {
+					apiResult.setFailCode(result.getFailCode());
+					apiResult.setFailMessage(result.getFailMessage());
+				}
+				return apiResult;
 			}
 
 			@Override
