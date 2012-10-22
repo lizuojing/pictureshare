@@ -100,7 +100,7 @@ public class SettingActivity extends BaseActivity implements OnClickListener {
 			addtips();
 			break;
 		case R.id.refreshlist:
-			Toast.makeText(this, "添加大头针", Toast.LENGTH_SHORT).show();
+			Toast.makeText(this, "二级列表更新", Toast.LENGTH_SHORT).show();
 			refreshlist();
 			break;
 		default:

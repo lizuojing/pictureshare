@@ -191,8 +191,8 @@ public class OtherApi extends BaseApi {
 				apiResult.setResultCode(ApiResult.RESULT_FAIL);
 				List<NameValuePair> params = new ArrayList<NameValuePair>();
 				params.add(new BasicNameValuePair("params",
-						"{'params':{'tipsid':''111'}}"));
-				Log.e("detail.toJsonString()", "{'params':{'tipsid':''111'}}");
+						"{'params':{'tipsid':'111'}}"));
+				Log.e("detail.toJsonString()", "{'params':{'tipsid':'111'}}");
 				HttpResultJson result = NetService.httpPostReturnJson(context,
 						Config.Server_URL + URL_REFRESHLIST, params);
 

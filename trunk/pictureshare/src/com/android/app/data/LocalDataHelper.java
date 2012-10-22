@@ -32,20 +32,20 @@ public class LocalDataHelper {
 	public static final String KEY_AVATAR_CREATETIME = "createtime";
 	public static final String KEY_AVATAR_LONGITUDE = "longitude";
 	public static final String KEY_AVATAR_LATITUDE = "latitude";
+	
+	// 位置表
+	public static final String DB_LOCATION_TABLE = "table_location";
+	public static final String KEY_LOCATION_ID = "id";
+	public static final String KEY_LOCATION_PICID = "picid";
+	public static final String KEY_LOCATION_LONGITUDE = "longitude";// 服务器地址
+	public static final String KEY_LOCATION_LATITUDE = "latitude";
+	public static final String KEY_LOCATION_STATUS = "status";
+	public static final String KEY_LOCATION_TYPE = "type";
 
-	// table for comment
-	private static final String DB_COMMENT_TABLE = "table_comment";
-	public static final String KEY_COMMNET_ID = "id";
-	public static final String KEY_COMMENT_COMMENTID = "commentid";
-	public static final String KEY_COMMENT_AVATARID = "avatarid";// 隶属的feed
-	// 回复的父评论Id 注：如果该评论是一条评论，该parentId为0，如果该评论是一条回复，那么parentId为回复的那一条评论commentId
-	public static final String KEY_COMMENT_PARENTID = "parentid";
-	public static final String KEY_COMMENT_NAME = "name";
-	public static final String KEY_COMMENT_PHONE_S = "pnum_s";
-	public static final String KEY_COMMENT_NAME_S = "name_s";
-	public static final String KEY_COMMENT_AVATAR = "avatar";
-	public static final String KEY_COMMENT_CONTENT = "content";
-	public static final String KEY_COMMENT_CREATETIME = "createtime";
+	// 二级缓存表
+	public static final String DB_PICCACHE_TABLE = "table_piccache";
+	public static final String KEY_PICCACHE_ID = "picid";
+	public static final String KEY_PICCACHE_PARENTID = "parentid";
 	
 	//sql for create user table
 	private static final String CREATE_LOCAL_USER_TABLE = "CREATE TABLE " + DB_Local_USER_Table + 
@@ -66,19 +66,20 @@ public class LocalDataHelper {
 													KEY_AVATAR_LATITUDE + " LONG," +
 													KEY_AVATAR_CREATETIME + " TEXT)";
 	
+	//sql for create location table
+	private static final String CREATE_LOCATION_TABLE = "CREATE TABLE " + DB_LOCATION_TABLE + 
+													" (" + KEY_LOCATION_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + 
+													KEY_LOCATION_PICID + " INTEGER," + 
+													KEY_LOCATION_LONGITUDE + " TEXT," +
+													KEY_LOCATION_LATITUDE + " TEXT," +
+													KEY_LOCATION_STATUS + " LONG," +
+													KEY_LOCATION_TYPE + " INTEGER )";
+
+	//sql for create picture cache table
+	private static final String CREATE_PICCACHE_TABLE = "CREATE TABLE " + DB_PICCACHE_TABLE + 
+													" (" + KEY_PICCACHE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + 
+													KEY_PICCACHE_PARENTID + " INTEGER )";
 	
-	//sql for create comment table 
-	private static final String CREATE_COMMENT_TABLE = "CREATE TABLE " + DB_COMMENT_TABLE + 
-	                                               " (" + KEY_COMMNET_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
-	                                               KEY_COMMENT_COMMENTID + " INTEGER," +
-	                                               KEY_COMMENT_AVATARID + " INTEGER," +
-	                                               KEY_COMMENT_PARENTID + " INTEGER," +
-	                                               KEY_COMMENT_PHONE_S + " TEXT," +
-	                                               KEY_COMMENT_NAME + " TEXT," +
-	                                               KEY_COMMENT_NAME_S + " TEXT," +
-	                                               KEY_COMMENT_AVATAR + " TEXT," +
-	                                               KEY_COMMENT_CONTENT + " TEXT," +
-	                                               KEY_COMMENT_CREATETIME + " TEXT)" ;
 
 	private static class DatabaseHelper extends SQLiteOpenHelper {
 
@@ -90,7 +91,8 @@ public class LocalDataHelper {
 		public void onCreate(SQLiteDatabase db) {
 			 db.execSQL(CREATE_LOCAL_USER_TABLE);
 	         db.execSQL(CREATE_AVATAR_TABLE);
-	         db.execSQL(CREATE_COMMENT_TABLE);
+	         db.execSQL(CREATE_LOCATION_TABLE);
+	         db.execSQL(CREATE_PICCACHE_TABLE);
 		}
 
 		@Override
