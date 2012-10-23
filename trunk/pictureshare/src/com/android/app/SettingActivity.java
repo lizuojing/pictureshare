@@ -2,15 +2,6 @@ package com.android.app;
 
 import java.util.ArrayList;
 
-import com.android.app.api.ApiResult;
-import com.android.app.api.ApiReturnResultListener;
-import com.android.app.api.OtherApi;
-import com.android.app.api.UserApi;
-import com.android.app.entity.Detail;
-import com.android.app.entity.Point;
-import com.android.app.entity.User;
-import com.android.app.entity.VersionInfo;
-
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -18,6 +9,17 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
+
+import com.android.app.api.ApiResult;
+import com.android.app.api.ApiReturnResultListener;
+import com.android.app.api.AvatarApi;
+import com.android.app.api.AvatarRequestParam;
+import com.android.app.api.OtherApi;
+import com.android.app.api.UserApi;
+import com.android.app.entity.Detail;
+import com.android.app.entity.Location;
+import com.android.app.entity.Point;
+import com.android.app.entity.User;
 
 /**
  * 设置页面
@@ -35,6 +37,7 @@ public class SettingActivity extends BaseActivity implements OnClickListener {
 	private RelativeLayout addtips;
 	private RelativeLayout refreshlist;
 	private Button backButton;
+	private RelativeLayout sendpicLayout;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +53,7 @@ public class SettingActivity extends BaseActivity implements OnClickListener {
 		backButton = (Button) findViewById(R.id.button1);
 		personalSetting = (RelativeLayout) findViewById(R.id.personal_setting);
 		valuationSetting = (RelativeLayout) findViewById(R.id.valuation_setting);
+		sendpicLayout = (RelativeLayout) findViewById(R.id.sendpic);
 		yonghuzhuceLayout = (RelativeLayout) findViewById(R.id.yonghuzhuce);
 		yonghudenglu = (RelativeLayout) findViewById(R.id.yonghudenglu);
 		yonghurename = (RelativeLayout) findViewById(R.id.yonghurename);
@@ -65,6 +69,7 @@ public class SettingActivity extends BaseActivity implements OnClickListener {
 		DetailMap.setOnClickListener(this);
 		addtips.setOnClickListener(this);
 		refreshlist.setOnClickListener(this);
+		sendpicLayout.setOnClickListener(this);
 	}
 
 	@Override
@@ -82,6 +87,10 @@ public class SettingActivity extends BaseActivity implements OnClickListener {
 		case R.id.yonghuzhuce:
 			Toast.makeText(this, "用户注册", Toast.LENGTH_SHORT).show();
 			uerRegedit();
+			break;
+		case R.id.sendpic:
+			Toast.makeText(this, "发送图片信息", Toast.LENGTH_SHORT).show();
+			sendPicMessage();
 			break;
 		case R.id.yonghudenglu:
 			Toast.makeText(this, "用户登录", Toast.LENGTH_SHORT).show();
@@ -107,6 +116,39 @@ public class SettingActivity extends BaseActivity implements OnClickListener {
 			break;
 		}
 
+	}
+
+	private void sendPicMessage() {
+		AvatarApi api = new AvatarApi(this);
+		api.setReturnResultListener(new ApiReturnResultListener() {
+			
+			@Override
+			public <T> void onReturnSucceedResult(int requestCode,
+					ApiResult<T> apiResult) {
+			}
+			
+			@Override
+			public <T> void onReturnFailResult(int requestCode, ApiResult<T> apiResult) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+		int[] a = new int[]{50,50};
+		AvatarRequestParam params = new AvatarRequestParam();
+		Location location = new Location("39.90923","116.357428");
+		params.setLocation(location);
+		ArrayList<Point> list = new ArrayList<Point>();
+		for(int i=0;i<4;i++) {
+			Point point = new Point(50,50);
+			list.add(point);
+		}
+		params.setPoints(list);
+		params.setLabel("杭州西湖");
+		params.setEmail("aaa@163.com");
+		params.setPhotoid("12345256");
+		params.setTipsid("23453576");
+		api.sendAvatarInfo(1, params, 1, "25");
+		
 	}
 
 	private void uerRegedit() {
