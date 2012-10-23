@@ -8,9 +8,11 @@ import org.apache.http.message.BasicNameValuePair;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.android.app.config.Config;
 import com.android.app.entity.Avatar;
+import com.android.app.entity.Point;
 import com.android.app.net.HttpResultJson;
 import com.android.app.net.NetService;
 
@@ -25,7 +27,7 @@ public class AvatarApi extends BaseApi {
 	private static final String TAG = "AvatarApi";
 	private static final String AVATAR_UPLOAD_URL = "007/uploadphoto";
 	private static final String AVATAR_LIKE_URL = "007/like";
-	protected static final String AVATAR_INFO_URL = "007/uploadphotoinfo";
+	protected static final String AVATAR_INFO_URL = "/007/uploadphotoinfo";
 	protected static final String AVATAR_SHAEE_URL = "007/photoshare";
 
 	public AvatarApi(Context context) {
@@ -138,14 +140,37 @@ public class AvatarApi extends BaseApi {
 	 * @param params
 	 * @return
 	 */
-	public void uploadAvatarInfo(final Context context,final int requestCode,final String filepath,String email,final String like) {
+	public void sendAvatarInfo(final int requestCode,final AvatarRequestParam avatarparams,final int page,final String pages) {
 		new AsyncTask<Void, Integer, ApiResult<String>>() {
 			@Override
 			protected ApiResult<String> doInBackground(Void... param) {
 				ApiResult<String> apiResult = new ApiResult<String>();
 				apiResult.setResultCode(ApiResult.RESULT_FAIL);
+				String pointsParam = "[";
+				if(avatarparams.getPoints()!=null) {
+					for(Point point :avatarparams.getPoints()) {
+						pointsParam += "\"" + point.getX() + "," + point.getY() + "\",";
+					}
+				}
+				pointsParam+="]";
+				Log.i(TAG, pointsParam);	
+				
+				String locationParam = "";
+				if(avatarparams.getLocation()!=null) {
+					locationParam+=avatarparams.getLocation().getLatitude()+","+avatarparams.getLocation().getLongitude();
+				}
+				Log.i(TAG, locationParam);	
+				
 				List<NameValuePair> params = new ArrayList<NameValuePair>();
-				params.add(new BasicNameValuePair("params", "photoid"));
+				params.add(new BasicNameValuePair("photoid", avatarparams.getPhotoid()));
+				params.add(new BasicNameValuePair("tipsid", avatarparams.getTipsid()));
+				params.add(new BasicNameValuePair("username", avatarparams.getUsername()));
+				params.add(new BasicNameValuePair("email", avatarparams.getEmail()));
+				params.add(new BasicNameValuePair("tag", avatarparams.getLabel()));
+				params.add(new BasicNameValuePair("location",locationParam));
+				params.add(new BasicNameValuePair("points",pointsParam ));
+				params.add(new BasicNameValuePair("page", page+""));
+				params.add(new BasicNameValuePair("pagesize", pages));
 				NetService.httpPostReturnJson(context, Config.Server_URL + AVATAR_INFO_URL, params);
 				
 				return apiResult;
@@ -260,7 +285,5 @@ public class AvatarApi extends BaseApi {
 			}
 		}.execute();*/
 	}
-	
-	
 
 }
