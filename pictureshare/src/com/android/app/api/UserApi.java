@@ -15,6 +15,8 @@ import javax.crypto.spec.SecretKeySpec;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.content.Context;
 import android.os.AsyncTask;
@@ -155,10 +157,20 @@ public class UserApi extends BaseApi {
 				Log.e("params", user.toLoginString());
 				HttpResultJson result = NetService.httpPostReturnJson(context,
 						Config.Server_URL + URL_LOGIN, params);
-
 				if (result.getResultCode() == HttpResult.RESULT_OK) {
 					apiResult.setResultCode(ApiResult.RESULT_OK);
-					// VersionInfo version = null;
+					JSONObject jsonObject = result.getJson();
+					String opeResult = "opeResult";
+					try {
+						String opeResults = jsonObject.getString(opeResult);
+						if (opeResults.equals("0")) {
+							Log.e("", "登录失败");
+						} else {
+							Log.e("", "登录成功");
+						}
+					} catch (JSONException e) {
+						e.printStackTrace();
+					}
 
 				} else {
 					apiResult.setFailCode(result.getFailCode());
