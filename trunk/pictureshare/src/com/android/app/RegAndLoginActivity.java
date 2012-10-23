@@ -56,6 +56,7 @@ public class RegAndLoginActivity extends BaseActivity implements
 	private String intentToPage;
 	private boolean firstIntoActivity;
 	private PicDialogProgress progressDialog;
+	public User user;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -205,8 +206,14 @@ public class RegAndLoginActivity extends BaseActivity implements
 					.trim();
 			String loginPassword = editLoginPassword.getText().toString()
 					.trim();
+
+			if (user == null) {
+				user = new User();
+			}
+			user.setEmail(loginUsername);
+			user.setPassword(loginPassword);
 			if (validateLoginUserName(loginUsername)
-					&& validatePassword(loginPassword)) {		
+					&& validatePassword(loginPassword)) {
 				userApi.login(REQ_CODE_LOGIN, getUser());
 				showDialog(ID_DIALOG_PROGRESS);
 			}
@@ -214,13 +221,11 @@ public class RegAndLoginActivity extends BaseActivity implements
 		}
 	}
 
-	public User user;
-	
-	public User getUser()
-	{
+	public User getUser() {
+
 		return user;
 	}
-	
+
 	private boolean validateEmail(String email) {
 		if (Utils.isNullOrEmpty(email)) {
 			Toast.makeText(this, "您还没有输入联系邮箱", Toast.LENGTH_SHORT).show();
