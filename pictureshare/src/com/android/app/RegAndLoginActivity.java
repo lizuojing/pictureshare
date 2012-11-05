@@ -197,6 +197,9 @@ public class RegAndLoginActivity extends BaseActivity implements
 			if (validateRegUserName(regUsername)
 					&& validatePassword(regPassword) && validateEmail(email)) {
 				User user = new User();
+				user.setEmail(email);
+				user.setUsername(regUsername);
+				user.setPassword(regPassword);
 				userApi.regeditUser(REQ_CODE_REG, user);
 				showDialog(ID_DIALOG_PROGRESS);
 			}

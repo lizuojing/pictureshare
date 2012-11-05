@@ -29,9 +29,12 @@
     <string name="setting_common">通用</string>
     <string name="reg_title">注册</string>
     <string name="login_title">登录</string>
-    <string name="reg_username">用户名:</string>
+    <string name="reg_username">昵称:</string>
     <string name="reg_password">密 码:</string>
-    <string name="reg_email">联系邮箱:</string>
+    <string name="reg_email">邮箱:</string>
+    <string name="reg_sex">性别:</string>
+    <string name="reg_tel">手机:</string>
+    <string name="reg_addr">地址:</string>
     <string name="reg_go_reg">去注册</string>
     <string name="reg_reg">完成注册</string>
     <string name="reg_login">登 录</string>
@@ -50,4 +53,5 @@
     <string name="share_popup_input_limit">还可以输入 %d 个字</string>
     <string name="toast_share_type_list_null">请至少选择一个分享平台</string>
     <string name="toast_share_content_null">分享的内容不能为空</string>
+
 </resources>

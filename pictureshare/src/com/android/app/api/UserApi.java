@@ -8,8 +8,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.UUID;
-
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
@@ -66,7 +64,20 @@ public class UserApi extends BaseApi {
 				if (result.getResultCode() == HttpResult.RESULT_OK) {
 					apiResult.setResultCode(ApiResult.RESULT_OK);
 					// VersionInfo version = null;
-
+					apiResult.setResultCode(ApiResult.RESULT_OK);
+					JSONObject jsonObject = result.getJson();
+					Log.e("注册用户返回值", jsonObject.toString());
+					String opeResult = "opeResult";
+					try {
+						String opeResults = jsonObject.getString(opeResult);
+						if (opeResults.equals("0")) {
+							Log.e("注册用户返回值", "注册失败");
+						} else {
+							Log.e("注册用户返回值", "注册成功");
+						}
+					} catch (JSONException e) {
+						e.printStackTrace();
+					}
 				} else {
 					apiResult.setFailCode(result.getFailCode());
 					apiResult.setFailMessage(result.getFailMessage());
@@ -95,50 +106,6 @@ public class UserApi extends BaseApi {
 	}
 
 	/**
-	 * 用户注册
-	 * 
-	 * @param params
-	 * @return
-	 */
-	public void register(final int requestCode,
-			final OwnerRequestParam ownerParms) {
-
-		new AsyncTask<Object, Integer, ApiResult<Object>>() {
-			@Override
-			protected ApiResult<Object> doInBackground(Object... strs) {
-				ApiResult<Object> apiResult = new ApiResult<Object>();
-				apiResult.setResultCode(ApiResult.RESULT_FAIL);
-				List<NameValuePair> params = new ArrayList<NameValuePair>();
-				// params.add(new BasicNameValuePair("oauth_consumer_key",
-				// ApiConfig.APP_KEY));
-				params.add(new BasicNameValuePair("username", ownerParms
-						.getUsername()));
-				params.add(new BasicNameValuePair("password", ownerParms
-						.getPassword()));
-				params.add(new BasicNameValuePair("email", ownerParms
-						.getEmail()));
-
-				return apiResult;
-			}
-
-			@Override
-			protected void onPostExecute(ApiResult<Object> apiResult) {
-				if (returnResultListener == null) {
-					return;
-				}
-				if (apiResult.getResultCode() == ApiResult.RESULT_OK) {
-					returnResultListener.onReturnSucceedResult(requestCode,
-							apiResult);
-				} else {
-					returnResultListener.onReturnFailResult(requestCode,
-							apiResult);
-				}
-			}
-		}.execute("");
-
-	}
-
-	/**
 	 * 用户登录
 	 * 
 	 * @param params
@@ -164,9 +131,9 @@ public class UserApi extends BaseApi {
 					try {
 						String opeResults = jsonObject.getString(opeResult);
 						if (opeResults.equals("0")) {
-							Log.e("", "登录失败");
+							Log.e("登录", "登录失败");
 						} else {
-							Log.e("", "登录成功");
+							Log.e("登录", "登录成功");
 						}
 					} catch (JSONException e) {
 						e.printStackTrace();
@@ -337,8 +304,8 @@ public class UserApi extends BaseApi {
 		// getInstance返回实现指定 MAC 算法的 Mac对象。
 		Mac mac = Mac.getInstance("HmacSHA1");
 
-		SecretKeySpec secret = new SecretKeySpec(key.getBytes(),
-				mac.getAlgorithm());
+		SecretKeySpec secret = new SecretKeySpec(key.getBytes(), mac
+				.getAlgorithm());
 		mac.init(secret);
 		byte[] digest = mac.doFinal(baseString.getBytes());
 		return getBase64String(digest);
