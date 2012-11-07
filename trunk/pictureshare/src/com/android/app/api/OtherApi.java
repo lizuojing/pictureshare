@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.content.Context;
 import android.os.AsyncTask;
@@ -40,16 +42,29 @@ public class OtherApi extends BaseApi {
 	 * 
 	 * @param returnResultListener
 	 */
-	public void getLatestAppVersion(final int requestCode) {
+	public void getLatestAppVersion(final int requestCode,final String version) {
 		new AsyncTask<Object, Integer, ApiResult<VersionInfo>>() {
 			@Override
 			protected ApiResult<VersionInfo> doInBackground(Object... strs) {
 				ApiResult<VersionInfo> apiResult = new ApiResult<VersionInfo>();
 				apiResult.setResultCode(ApiResult.RESULT_FAIL);
+				JSONObject json = null;
+				JSONObject jsonparam = null;
+				try {
+					json = new JSONObject();
+					jsonparam = new JSONObject();
+					json.put("version", version);
+					jsonparam.put("params", json.toString());
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
 				List<NameValuePair> params = new ArrayList<NameValuePair>();
-				params.add(new BasicNameValuePair("params",
-						"{'params':{'version':'1.0'}}"));
-				Log.e("params", "{'params':{'version':'1.0'}}");
+				params.add(new BasicNameValuePair("params", jsonparam.toString()));
+				Log.e(TAG, "getLatestAppVersion params is " + jsonparam.toString());
+				
+				
 				HttpResultJson result = NetService.httpPostReturnJson(context,
 						Config.Server_URL + VERSION_SERVICE_URL, params);
 

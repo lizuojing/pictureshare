@@ -1,8 +1,10 @@
 package com.android.app;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -20,6 +22,7 @@ import com.android.app.entity.Detail;
 import com.android.app.entity.Location;
 import com.android.app.entity.Point;
 import com.android.app.entity.User;
+import com.android.app.entity.VersionInfo;
 
 /**
  * 设置页面
@@ -28,6 +31,7 @@ import com.android.app.entity.User;
  * 
  */
 public class SettingActivity extends BaseActivity implements OnClickListener {
+	protected static final String TAG = "SettingActivity";
 	private RelativeLayout personalSetting;
 	private RelativeLayout valuationSetting;
 	private RelativeLayout yonghuzhuceLayout;
@@ -38,6 +42,11 @@ public class SettingActivity extends BaseActivity implements OnClickListener {
 	private RelativeLayout refreshlist;
 	private Button backButton;
 	private RelativeLayout sendpicLayout;
+	private RelativeLayout sendpicinfoLayout;
+	private RelativeLayout supportLayout;
+	private RelativeLayout picshareLayout;
+	private RelativeLayout latestversionLayout;
+	private RelativeLayout qrcodeLayout;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -53,13 +62,13 @@ public class SettingActivity extends BaseActivity implements OnClickListener {
 		backButton = (Button) findViewById(R.id.button1);
 		personalSetting = (RelativeLayout) findViewById(R.id.personal_setting);
 		valuationSetting = (RelativeLayout) findViewById(R.id.valuation_setting);
-		sendpicLayout = (RelativeLayout) findViewById(R.id.sendpic);
 		yonghuzhuceLayout = (RelativeLayout) findViewById(R.id.yonghuzhuce);
 		yonghudenglu = (RelativeLayout) findViewById(R.id.yonghudenglu);
 		yonghurename = (RelativeLayout) findViewById(R.id.yonghurename);
 		DetailMap = (RelativeLayout) findViewById(R.id.DetailMap);
 		addtips = (RelativeLayout) findViewById(R.id.addtips);
 		refreshlist = (RelativeLayout) findViewById(R.id.refreshlist);
+	
 		backButton.setOnClickListener(this);
 		personalSetting.setOnClickListener(this);
 		valuationSetting.setOnClickListener(this);
@@ -69,7 +78,21 @@ public class SettingActivity extends BaseActivity implements OnClickListener {
 		DetailMap.setOnClickListener(this);
 		addtips.setOnClickListener(this);
 		refreshlist.setOnClickListener(this);
+		
+		//协议测试
+		sendpicinfoLayout = (RelativeLayout) findViewById(R.id.sendpicinfo);
+		supportLayout = (RelativeLayout) findViewById(R.id.support);
+		picshareLayout = (RelativeLayout) findViewById(R.id.picshare);
+		latestversionLayout = (RelativeLayout) findViewById(R.id.latestversion);
+		sendpicLayout = (RelativeLayout) findViewById(R.id.sendpic);
+		qrcodeLayout = (RelativeLayout) findViewById(R.id.qrcode);
+		
+		sendpicinfoLayout.setOnClickListener(this);
+		supportLayout.setOnClickListener(this);
+		picshareLayout.setOnClickListener(this);
+		latestversionLayout.setOnClickListener(this);
 		sendpicLayout.setOnClickListener(this);
+		qrcodeLayout.setOnClickListener(this);
 	}
 
 	@Override
@@ -87,10 +110,6 @@ public class SettingActivity extends BaseActivity implements OnClickListener {
 		case R.id.yonghuzhuce:
 			Toast.makeText(this, "用户注册", Toast.LENGTH_SHORT).show();
 			uerRegedit();
-			break;
-		case R.id.sendpic:
-			Toast.makeText(this, "发送图片信息", Toast.LENGTH_SHORT).show();
-			sendPicMessage();
 			break;
 		case R.id.yonghudenglu:
 			Toast.makeText(this, "用户登录", Toast.LENGTH_SHORT).show();
@@ -112,12 +131,155 @@ public class SettingActivity extends BaseActivity implements OnClickListener {
 			Toast.makeText(this, "二级列表更新", Toast.LENGTH_SHORT).show();
 			refreshlist();
 			break;
+		case R.id.sendpicinfo:
+			Toast.makeText(this, "发送图片信息", Toast.LENGTH_SHORT).show();
+			sendPicMessage();
+			break;
+		case R.id.support:
+			Toast.makeText(this, "赞", Toast.LENGTH_SHORT).show();
+			File exFile = Environment.getExternalStorageDirectory();
+			String path = exFile.getAbsolutePath()+"/Camera/691kb.jpg";
+			Log.i(TAG, "path is " + path);
+			supportPic(path,"111@163.com","+1");
+			break;
+		case R.id.picshare:
+			Toast.makeText(this, "分享", Toast.LENGTH_SHORT).show();
+			String filepath = Environment.getExternalStorageDirectory().getAbsolutePath()+"/Camera/691kb.jpg";
+			Log.i(TAG, "path is " + filepath);
+			sharePic(filepath,"443@163.com");
+			break;
+		case R.id.latestversion:
+			Toast.makeText(this, "最新版本", Toast.LENGTH_SHORT).show();
+			checkAppUpdate();
+			break;
+		case R.id.sendpic:
+			Toast.makeText(this, "发送图片", Toast.LENGTH_SHORT).show();
+			String picpath =  Environment.getExternalStorageDirectory().getAbsolutePath()+"/Camera/691kb.jpg";
+			Log.i(TAG, "path is " + picpath);
+			uploadpicture(picpath);
+			break;
+		case R.id.qrcode:
+			Toast.makeText(this, "二维码", Toast.LENGTH_SHORT).show();
+			scanqrcode("alksjdljjasdg","1233@163.com");
+			break;
 		default:
 			break;
 		}
 
 	}
 
+
+	private void scanqrcode(String photoid,String email) {
+		AvatarApi avatarApi = new AvatarApi(this);
+		avatarApi.setReturnResultListener(new ApiReturnResultListener() {
+			@Override
+			public <T> void onReturnSucceedResult(int requestCode,
+					ApiResult<T> apiResult) {
+				Log.i(TAG, "apiResult is " + apiResult.getResultCode());
+			
+			}
+
+			@Override
+			public <T> void onReturnFailResult(int requestCode,
+					ApiResult<T> apiResult) {
+				int failCode = apiResult.getFailCode();
+
+			}
+		});
+		avatarApi.qrcodeAuth(this,1,photoid,email);
+	}
+
+	private void sharePic(String filepath,String email) {
+		AvatarApi avatarApi = new AvatarApi(this);
+		avatarApi.setReturnResultListener(new ApiReturnResultListener() {
+			@Override
+			public <T> void onReturnSucceedResult(int requestCode,
+					ApiResult<T> apiResult) {
+				Log.i(TAG, "apiResult is " + apiResult.getResultCode());
+			
+			}
+
+			@Override
+			public <T> void onReturnFailResult(int requestCode,
+					ApiResult<T> apiResult) {
+				int failCode = apiResult.getFailCode();
+
+			}
+		});
+		avatarApi.shareAvatar(this, 1, filepath, email);
+	}
+
+	private void supportPic(String path,String email,String support) {
+		AvatarApi avatarApi = new AvatarApi(this);
+		avatarApi.setReturnResultListener(new ApiReturnResultListener() {
+			@Override
+			public <T> void onReturnSucceedResult(int requestCode,
+					ApiResult<T> apiResult) {
+				Log.i(TAG, "apiResult is " + apiResult.getResultCode());
+			
+			}
+
+			@Override
+			public <T> void onReturnFailResult(int requestCode,
+					ApiResult<T> apiResult) {
+				int failCode = apiResult.getFailCode();
+
+			}
+		});
+		avatarApi.likeAvatar(this, 1, path, email, support);
+	}
+
+	private void uploadpicture(String filepath) {
+		AvatarApi avatarApi = new AvatarApi(this);
+		avatarApi.setReturnResultListener(new ApiReturnResultListener() {
+			@Override
+			public <T> void onReturnSucceedResult(int requestCode,
+					ApiResult<T> apiResult) {
+				Log.i(TAG, "apiResult is " + apiResult.getResultCode());
+			
+			}
+
+			@Override
+			public <T> void onReturnFailResult(int requestCode,
+					ApiResult<T> apiResult) {
+				int failCode = apiResult.getFailCode();
+
+			}
+		});
+		avatarApi.uploadAvatar(SettingActivity.this,0,filepath,"adsfa@163.com");
+	}
+	
+	private void checkAppUpdate() {
+		OtherApi otherApi = new OtherApi(this);
+		otherApi.setReturnResultListener(new ApiReturnResultListener() {
+			@SuppressWarnings("unchecked")
+			@Override
+			public <T> void onReturnSucceedResult(int requestCode,
+					ApiResult<T> apiResult) {
+				Log.i(TAG, "apiResult is " + apiResult.getResultCode());
+				ArrayList<VersionInfo> infos = (ArrayList<VersionInfo>) apiResult
+						.getEntities();
+				if (infos == null || infos.size() <= 0) {
+					return;
+				}
+				VersionInfo newVersionInfo = infos.get(0);
+				if (newVersionInfo.getUpdateType() != VersionInfo.UpdateType.NO_UPDATE) {
+
+				} else {
+
+				}
+			}
+
+			@Override
+			public <T> void onReturnFailResult(int requestCode,
+					ApiResult<T> apiResult) {
+				int failCode = apiResult.getFailCode();
+
+			}
+		});
+		otherApi.getLatestAppVersion(0,"1.0");
+	}
+	
 	private void sendPicMessage() {
 		AvatarApi api = new AvatarApi(this);
 		api.setReturnResultListener(new ApiReturnResultListener() {

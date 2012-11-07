@@ -5,11 +5,14 @@ import java.util.List;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.android.app.SettingActivity;
 import com.android.app.config.Config;
 import com.android.app.entity.Avatar;
 import com.android.app.entity.Point;
@@ -63,7 +66,7 @@ public class AvatarApi extends BaseApi {
 	 * @param params
 	 * @return
 	 */
-	public void uploadAvatar(final Context context,final int requestCode,String filepath) {
+	public void uploadAvatar(final Context context,final int requestCode,String filepath,final String email) {
 		new AsyncTask<String, Integer, ApiResult<String>>() {
 			@Override
 			protected ApiResult<String> doInBackground(String... parameters) {
@@ -71,8 +74,22 @@ public class AvatarApi extends BaseApi {
 				ApiResult<String> apiResult = new ApiResult<String>();
 				apiResult.setResultCode(ApiResult.RESULT_FAIL);
 				List<NameValuePair> params = new ArrayList<NameValuePair>();
-				params.add(new BasicNameValuePair("photo", "filepath"));
-				params.add(new BasicNameValuePair("email", "leiyry"));
+				
+				JSONObject json = null;
+				JSONObject jsonparam = null;
+				try {
+					json = new JSONObject();
+					jsonparam = new JSONObject();
+					json.put("photo", filepath);
+					json.put("email", email);
+					jsonparam.put("params", json.toString());
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+				params.add(new BasicNameValuePair("params", jsonparam.toString()));
+				Log.e(TAG, "uploadAvatar params is " + jsonparam.toString());
 				
 				NameValuePair fileNVPair = new BasicNameValuePair("photo", filepath);
 				HttpResultJson result = NetService.updateFile(context,
@@ -101,20 +118,31 @@ public class AvatarApi extends BaseApi {
 	 * @param params
 	 * @return
 	 */
-	public void likeAvatar(final Context context,final int requestCode,final String filepath,String email,final String like) {
+	public void likeAvatar(final Context context,final int requestCode,final String photoid,final String email,final String like) {
 		new AsyncTask<Void, Integer, ApiResult<String>>() {
 			@Override
 			protected ApiResult<String> doInBackground(Void... param) {
 				ApiResult<String> apiResult = new ApiResult<String>();
 				apiResult.setResultCode(ApiResult.RESULT_FAIL);
-				List<NameValuePair> params = new ArrayList<NameValuePair>();
-				params.add(new BasicNameValuePair("photoid", "photoid"));
-				params.add(new BasicNameValuePair("email", "leiyry"));
-				params.add(new BasicNameValuePair("like", like));
 				
-				NameValuePair fileNVPair = new BasicNameValuePair("photo", filepath);
-				HttpResultJson result = NetService.updateFile(context,
-						Config.Server_URL + AVATAR_LIKE_URL, params, fileNVPair);
+				JSONObject json = null;
+				JSONObject jsonparam = null;
+				try {
+					json = new JSONObject();
+					jsonparam = new JSONObject();
+					json.put("email", email);
+					json.put("photoid", photoid);
+					json.put("like", like);
+					jsonparam.put("params", json.toString());
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+				List<NameValuePair> params = new ArrayList<NameValuePair>();
+				params.add(new BasicNameValuePair("params", jsonparam.toString()));
+				Log.e(TAG, "like params is " + jsonparam.toString());
+				HttpResultJson result = NetService.httpPostReturnJson(context, Config.Server_URL + AVATAR_LIKE_URL, params);
 				
 				return apiResult;
 			}
@@ -146,31 +174,11 @@ public class AvatarApi extends BaseApi {
 			protected ApiResult<String> doInBackground(Void... param) {
 				ApiResult<String> apiResult = new ApiResult<String>();
 				apiResult.setResultCode(ApiResult.RESULT_FAIL);
-				String pointsParam = "[";
-				if(avatarparams.getPoints()!=null) {
-					for(Point point :avatarparams.getPoints()) {
-						pointsParam += "\"" + point.getX() + "," + point.getY() + "\",";
-					}
-				}
-				pointsParam+="]";
-				Log.i(TAG, pointsParam);	
-				
-				String locationParam = "";
-				if(avatarparams.getLocation()!=null) {
-					locationParam+=avatarparams.getLocation().getLatitude()+","+avatarparams.getLocation().getLongitude();
-				}
-				Log.i(TAG, locationParam);	
 				
 				List<NameValuePair> params = new ArrayList<NameValuePair>();
-				params.add(new BasicNameValuePair("photoid", avatarparams.getPhotoid()));
-				params.add(new BasicNameValuePair("tipsid", avatarparams.getTipsid()));
-				params.add(new BasicNameValuePair("username", avatarparams.getUsername()));
-				params.add(new BasicNameValuePair("email", avatarparams.getEmail()));
-				params.add(new BasicNameValuePair("tag", avatarparams.getLabel()));
-				params.add(new BasicNameValuePair("location",locationParam));
-				params.add(new BasicNameValuePair("points",pointsParam ));
-				params.add(new BasicNameValuePair("page", page+""));
-				params.add(new BasicNameValuePair("pagesize", pages));
+				params.add(new BasicNameValuePair("params", avatarparams.toJsonString(page+"",pages)));
+				
+				Log.e(TAG, "sendpicinfo params is " + avatarparams.toJsonString(page+"",pages));
 				NetService.httpPostReturnJson(context, Config.Server_URL + AVATAR_INFO_URL, params);
 				
 				return apiResult;
@@ -196,14 +204,28 @@ public class AvatarApi extends BaseApi {
 	 * @param params
 	 * @return
 	 */
-	public void shareAvatar(final Context context,final int requestCode,final String filepath,String email,final String like) {
+	public void shareAvatar(final Context context,final int requestCode,final String filepath,String email) {
 		new AsyncTask<Void, Integer, ApiResult<String>>() {
 			@Override
 			protected ApiResult<String> doInBackground(Void... param) {
 				ApiResult<String> apiResult = new ApiResult<String>();
 				apiResult.setResultCode(ApiResult.RESULT_FAIL);
+				JSONObject json = null;
+				JSONObject jsonparam = null;
+				try {
+					json = new JSONObject();
+					jsonparam = new JSONObject();
+					json.put("email", filepath);
+					json.put("photoid", "asdfag");//photoid 由上传完图片获得 
+					jsonparam.put("params", json.toString());
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
 				List<NameValuePair> params = new ArrayList<NameValuePair>();
-				params.add(new BasicNameValuePair("params", "{email:'email','photoid':'11'}"));
+				params.add(new BasicNameValuePair("params", jsonparam.toString()));
+				Log.e(TAG, jsonparam.toString());
 				HttpResultJson result = NetService.httpPostReturnJson(context, Config.Server_URL + AVATAR_SHAEE_URL, params);
 				
 				return apiResult;
@@ -223,6 +245,47 @@ public class AvatarApi extends BaseApi {
 		}.execute();
 	}
 	
+	
+	public void qrcodeAuth(SettingActivity settingActivity, final int requestCode,
+			final String photoid, final String email) {
+		new AsyncTask<Void, Integer, ApiResult<String>>() {
+			@Override
+			protected ApiResult<String> doInBackground(Void... param) {
+				ApiResult<String> apiResult = new ApiResult<String>();
+				apiResult.setResultCode(ApiResult.RESULT_FAIL);
+				List<NameValuePair> params = new ArrayList<NameValuePair>();
+				JSONObject json = null;
+				JSONObject jsonparm = null;
+				try {
+					jsonparm = new JSONObject();
+					json = new JSONObject();
+					json.put("email", email);
+					json.put("photoid", photoid);
+					jsonparm.put("params", json.toString());
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				params.add(new BasicNameValuePair("params", jsonparm.toString()));
+				Log.e(TAG, "qrcode params is " + jsonparm.toString());
+				HttpResultJson result = NetService.httpPostReturnJson(context, Config.Server_URL + AVATAR_SHAEE_URL, params);
+				
+				return apiResult;
+			}
+
+			@Override
+			protected void onPostExecute(ApiResult<String> apiResult) {
+				if (returnResultListener == null) {
+					return;
+				}
+				if (apiResult.getResultCode() == ApiResult.RESULT_OK) {
+					returnResultListener.onReturnSucceedResult(requestCode,apiResult);
+				} else {
+					returnResultListener.onReturnFailResult(requestCode,apiResult);
+				}
+			}
+		}.execute();
+	}
 	
 	/**
 	 *地图详细图片api
@@ -285,5 +348,7 @@ public class AvatarApi extends BaseApi {
 			}
 		}.execute();*/
 	}
+
+
 
 }
