@@ -137,39 +137,6 @@
                     android:background="#FFdedede" />
 
                 <RelativeLayout
-                    android:id="@+id/sendpic"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="15dip"
-                    android:paddingRight="15dip" >
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
-                        android:layout_centerVertical="true"
-                        android:maxHeight="31dip"
-                        android:text="发送图片信息"
-                        android:textColor="#000000"
-                        android:textSize="18sp" />
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true"
-                        android:maxHeight="31dip"
-                        android:src="@drawable/accessory_disclosure" />
-                </RelativeLayout>
-
-                <ImageView
-                    android:layout_width="fill_parent"
-                    android:layout_height="1dip"
-                    android:layout_marginBottom="12.5dip"
-                    android:layout_marginTop="9dip"
-                    android:background="#FFdedede" />
-
-                <RelativeLayout
                     android:id="@+id/yonghuzhuce"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
@@ -348,6 +315,206 @@
                         android:layout_centerVertical="true"
                         android:maxHeight="31dip"
                         android:text="二级列表更新"
+                        android:textColor="#000000"
+                        android:textSize="18sp" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:maxHeight="31dip"
+                        android:src="@drawable/accessory_disclosure" />
+                </RelativeLayout>
+
+                <ImageView
+                    android:layout_width="fill_parent"
+                    android:layout_height="1dip"
+                    android:layout_marginBottom="12.5dip"
+                    android:layout_marginTop="9dip"
+                    android:background="#FFdedede" />
+
+                <!-- 分水岭 -->
+                <RelativeLayout
+                    android:id="@+id/sendpicinfo"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="15dip"
+                    android:paddingRight="15dip" >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_centerVertical="true"
+                        android:maxHeight="31dip"
+                        android:text="发送图片信息"
+                        android:textColor="#000000"
+                        android:textSize="18sp" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:maxHeight="31dip"
+                        android:src="@drawable/accessory_disclosure" />
+                </RelativeLayout>
+
+                <ImageView
+                    android:layout_width="fill_parent"
+                    android:layout_height="1dip"
+                    android:layout_marginBottom="12.5dip"
+                    android:layout_marginTop="9dip"
+                    android:background="#FFdedede" />
+
+                <RelativeLayout
+                    android:id="@+id/support"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="15dip"
+                    android:paddingRight="15dip" >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_centerVertical="true"
+                        android:maxHeight="31dip"
+                        android:text="赞"
+                        android:textColor="#000000"
+                        android:textSize="18sp" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:maxHeight="31dip"
+                        android:src="@drawable/accessory_disclosure" />
+                </RelativeLayout>
+
+                <ImageView
+                    android:layout_width="fill_parent"
+                    android:layout_height="1dip"
+                    android:layout_marginBottom="12.5dip"
+                    android:layout_marginTop="9dip"
+                    android:background="#FFdedede" />
+
+             
+                <RelativeLayout
+                    android:id="@+id/picshare"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="15dip"
+                    android:paddingRight="15dip" >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_centerVertical="true"
+                        android:maxHeight="31dip"
+                        android:text="图片分享"
+                        android:textColor="#000000"
+                        android:textSize="18sp" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:maxHeight="31dip"
+                        android:src="@drawable/accessory_disclosure" />
+                </RelativeLayout>
+
+                <ImageView
+                    android:layout_width="fill_parent"
+                    android:layout_height="1dip"
+                    android:layout_marginBottom="12.5dip"
+                    android:layout_marginTop="9dip"
+                    android:background="#FFdedede" />
+
+                <RelativeLayout
+                    android:id="@+id/latestversion"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="15dip"
+                    android:paddingRight="15dip" >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_centerVertical="true"
+                        android:maxHeight="31dip"
+                        android:text="最新版本"
+                        android:textColor="#000000"
+                        android:textSize="18sp" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:maxHeight="31dip"
+                        android:src="@drawable/accessory_disclosure" />
+                </RelativeLayout>
+
+                <ImageView
+                    android:layout_width="fill_parent"
+                    android:layout_height="1dip"
+                    android:layout_marginBottom="12.5dip"
+                    android:layout_marginTop="9dip"
+                    android:background="#FFdedede" />
+
+                <RelativeLayout
+                    android:id="@+id/sendpic"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="15dip"
+                    android:paddingRight="15dip" >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_centerVertical="true"
+                        android:maxHeight="31dip"
+                        android:text="发送图片"
+                        android:textColor="#000000"
+                        android:textSize="18sp" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:maxHeight="31dip"
+                        android:src="@drawable/accessory_disclosure" />
+                </RelativeLayout>
+
+                <ImageView
+                    android:layout_width="fill_parent"
+                    android:layout_height="1dip"
+                    android:layout_marginBottom="12.5dip"
+                    android:layout_marginTop="9dip"
+                    android:background="#FFdedede" />
+
+                <RelativeLayout
+                    android:id="@+id/qrcode"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="15dip"
+                    android:paddingRight="15dip" >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_centerVertical="true"
+                        android:maxHeight="31dip"
+                        android:text="二维码"
                         android:textColor="#000000"
                         android:textSize="18sp" />
 

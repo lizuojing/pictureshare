@@ -2,6 +2,11 @@ package com.android.app.api;
 
 import java.util.ArrayList;
 
+import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import com.android.app.entity.JsonTitle;
 import com.android.app.entity.Location;
 import com.android.app.entity.Point;
 
@@ -75,5 +80,40 @@ public class AvatarRequestParam extends BaseRequestParam {
 
 	public void setPhotoid(String photoid) {
 		this.photoid = photoid;
+	}
+
+	public String toJsonString(String page, String pages) {
+		JSONObject jsonParmas = new JSONObject();
+		try {
+			
+			String pointsParam = "[";
+			if(getPoints()!=null) {
+				for(Point point :getPoints()) {
+					pointsParam += "\"" + point.getX() + "," + point.getY() + "\",";
+				}
+			}
+			pointsParam+="]";
+			
+			String locationParam = "";
+			if(getLocation()!=null) {
+				locationParam+=getLocation().getLatitude()+","+getLocation().getLongitude();
+			}
+			
+			JSONObject jsonAll = new JSONObject();
+			jsonAll.put("photoid", getPhotoid());
+			jsonAll.put("tipsid", getTipsid());
+			jsonAll.put("username", getUsername());
+			jsonAll.put("email", getEmail());
+			jsonAll.put("tag", getLabel());
+			jsonAll.put("location", locationParam);
+			jsonAll.put("points", pointsParam);
+			jsonAll.put("page", page);
+			jsonAll.put("pagesize", pages);
+			jsonParmas.put("params", jsonAll.toString());
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return jsonParmas.toString();
 	}
 }

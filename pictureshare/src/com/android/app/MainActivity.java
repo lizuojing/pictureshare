@@ -448,56 +448,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
 	}
 
-	private void uploadpicture(String filepath) {
-		AvatarApi avatarApi = new AvatarApi(this);
-		avatarApi.setReturnResultListener(new ApiReturnResultListener() {
-			@Override
-			public <T> void onReturnSucceedResult(int requestCode,
-					ApiResult<T> apiResult) {
-				Log.i(TAG, "apiResult is " + apiResult.getResultCode());
-			
-			}
-
-			@Override
-			public <T> void onReturnFailResult(int requestCode,
-					ApiResult<T> apiResult) {
-				int failCode = apiResult.getFailCode();
-
-			}
-		});
-		avatarApi.uploadAvatar(MainActivity.this,0,filepath);
-	}
 	
-	private void checkAppUpdate() {
-		OtherApi otherApi = new OtherApi(this);
-		otherApi.setReturnResultListener(new ApiReturnResultListener() {
-			@SuppressWarnings("unchecked")
-			@Override
-			public <T> void onReturnSucceedResult(int requestCode,
-					ApiResult<T> apiResult) {
-				Log.i(TAG, "apiResult is " + apiResult.getResultCode());
-				ArrayList<VersionInfo> infos = (ArrayList<VersionInfo>) apiResult
-						.getEntities();
-				if (infos == null || infos.size() <= 0) {
-					return;
-				}
-				VersionInfo newVersionInfo = infos.get(0);
-				if (newVersionInfo.getUpdateType() != VersionInfo.UpdateType.NO_UPDATE) {
-
-				} else {
-
-				}
-			}
-
-			@Override
-			public <T> void onReturnFailResult(int requestCode,
-					ApiResult<T> apiResult) {
-				int failCode = apiResult.getFailCode();
-
-			}
-		});
-		otherApi.getLatestAppVersion(0);
-	}
 
 	private void showSharePopup() {
 		if (mediaPopup == null) {
