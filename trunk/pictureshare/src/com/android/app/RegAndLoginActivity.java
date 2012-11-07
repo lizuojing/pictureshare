@@ -4,16 +4,20 @@ import android.app.Dialog;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnFocusChangeListener;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.TextView.OnEditorActionListener;
+import android.widget.Toast;
 
 import com.android.app.api.ApiResult;
 import com.android.app.api.ApiReturnResultListener;
@@ -25,7 +29,8 @@ import com.android.app.view.PicDialogProgress;
 import com.android.app.view.TabContent;
 
 public class RegAndLoginActivity extends BaseActivity implements
-		OnFocusChangeListener, OnClickListener, OnEditorActionListener {
+		OnFocusChangeListener, OnClickListener, OnEditorActionListener,
+		OnCheckedChangeListener {
 
 	private static final int ID_DIALOG_PROGRESS = 1;
 	private static final int REQ_CODE_REG = 1;
@@ -57,6 +62,8 @@ public class RegAndLoginActivity extends BaseActivity implements
 	private boolean firstIntoActivity;
 	private PicDialogProgress progressDialog;
 	public User user;
+	private RadioButton rb_man, rb_woman;
+	private int sexflag;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -100,6 +107,11 @@ public class RegAndLoginActivity extends BaseActivity implements
 		tabContent = (TabContent) findViewById(R.id.content);
 		tabContent.setSlideEnabled(false);
 
+		btnGoReg = (Button) findViewById(R.id.btn_go_reg);
+		btnReg = (Button) findViewById(R.id.btn_reg);
+		btnLogin = (Button) findViewById(R.id.btn_login);
+		rb_man = (RadioButton) findViewById(R.id.edit_sex_man);
+		rb_woman = (RadioButton) findViewById(R.id.edit_sex_woman);
 		editLoginUserName = (EditText) findViewById(R.id.edit_login_username);
 		editLoginPassword = (EditText) findViewById(R.id.edit_login_password);
 		editRegUserName = (EditText) findViewById(R.id.edit_reg_username);
@@ -117,14 +129,11 @@ public class RegAndLoginActivity extends BaseActivity implements
 		editLoginPassword.setOnEditorActionListener(this);
 		editRegEmail.setOnEditorActionListener(this);
 
-		btnGoReg = (Button) findViewById(R.id.btn_go_reg);
-		btnReg = (Button) findViewById(R.id.btn_reg);
-		btnLogin = (Button) findViewById(R.id.btn_login);
-
 		btnGoReg.setOnClickListener(this);
 		btnReg.setOnClickListener(this);
 		btnLogin.setOnClickListener(this);
-
+		rb_man.setOnCheckedChangeListener(this);
+		rb_woman.setOnCheckedChangeListener(this);
 	}
 
 	@Override
@@ -336,6 +345,18 @@ public class RegAndLoginActivity extends BaseActivity implements
 			break;
 		}
 		return false;
+	}
+
+	@Override
+	public void onCheckedChanged(CompoundButton arg0, boolean arg1) {
+		if (arg0.equals(rb_man) && arg1) {
+			sexflag = 1;
+			Log.e("sex", sexflag + "");
+		} else if (arg0.equals(rb_woman) && arg1) {
+			sexflag = 0;
+			Log.e("sex", sexflag + "");
+		}
+
 	}
 
 }

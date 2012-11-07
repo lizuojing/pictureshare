@@ -29,7 +29,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
-                android:text="@string/reg_username" />
+                android:text="@string/reg_username"
+                android:textColor="@color/font_color" />
 
             <EditText
                 android:id="@+id/edit_reg_username"
@@ -58,7 +59,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
-                android:text="@string/reg_password" />
+                android:text="@string/reg_password"
+                android:textColor="@color/font_color" />
 
             <EditText
                 android:id="@+id/edit_reg_password"
@@ -89,7 +91,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
-                android:text="@string/reg_email" />
+                android:text="@string/reg_email"
+                android:textColor="@color/font_color" />
 
             <EditText
                 android:id="@+id/edit_reg_email"
@@ -119,17 +122,30 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
-                android:text="@string/reg_sex" />
+                android:text="@string/reg_sex"
+                android:textColor="@color/font_color" />
 
-            <EditText
+            <RadioGroup
                 android:id="@+id/edit_reg_email"
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/reg_email_hint"
-                android:imeOptions="actionDone"
-                android:inputType="textEmailAddress"
-                android:paddingLeft="3dip"
-                android:singleLine="true" />
+                android:orientation="horizontal"
+                android:paddingLeft="3dip" >
+
+                <RadioButton
+                    android:id="@+id/edit_sex_man"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="男"
+                    android:textColor="@color/font_color" />
+
+                <RadioButton
+                    android:id="@+id/edit_sex_woman"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="女"
+                    android:textColor="@color/font_color" />
+            </RadioGroup>
         </LinearLayout>
 
         <LinearLayout
@@ -149,7 +165,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
-                android:text="@string/reg_tel" />
+                android:text="@string/reg_tel"
+                android:textColor="@color/font_color" />
 
             <EditText
                 android:id="@+id/edit_reg_email"
@@ -179,13 +196,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
-                android:text="@string/reg_addr" />
+                android:text="@string/reg_addr"
+                android:textColor="@color/font_color" />
 
             <EditText
-                android:id="@+id/edit_reg_email"
+                android:id="@+id/edit_reg_addr"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/reg_email_hint"
+                android:hint="@string/reg_addr_hint"
                 android:imeOptions="actionDone"
                 android:inputType="textEmailAddress"
                 android:paddingLeft="3dip"
