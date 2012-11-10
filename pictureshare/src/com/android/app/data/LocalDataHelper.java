@@ -32,6 +32,9 @@ public class LocalDataHelper {
 	public static final String KEY_AVATAR_CREATETIME = "createtime";
 	public static final String KEY_AVATAR_LONGITUDE = "longitude";
 	public static final String KEY_AVATAR_LATITUDE = "latitude";
+	public static final String KEY_AVATAR_XCOORD = "x_coord";
+	public static final String KEY_AVATAR_YCOORD = "y_coord";
+	
 
 	// 位置表
 	public static final String DB_LOCATION_TABLE = "table_location";

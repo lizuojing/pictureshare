@@ -37,7 +37,8 @@ public class AvatarApi extends BaseApi {
 	private static final String AVATAR_LIKE_URL = "007/like";
 	protected static final String AVATAR_INFO_URL = "/007/uploadphotoinfo";
 	protected static final String AVATAR_SHAEE_URL = "007/photoshare";
-
+	private static final String URL_ADD = "007/addtips";
+	
 	public AvatarApi(Context context) {
 		super(context);
 		// TODO Auto-generated constructor stub
@@ -307,8 +308,68 @@ public class AvatarApi extends BaseApi {
 	 * @param params
 	 * @return
 	 */
-	public void tacks(AvatarRequestParam params) {
-		
+	public void tacks(final int requestCode,final Tips tip) {
+		new AsyncTask<Object, Integer, ApiResult<Object>>() {
+			@Override
+			protected ApiResult<Object> doInBackground(Object... strs) {
+
+				ApiResult<Object> apiResult = new ApiResult<Object>();
+				apiResult.setResultCode(ApiResult.RESULT_FAIL);
+				List<NameValuePair> params = new ArrayList<NameValuePair>();
+				
+				JSONObject json = new JSONObject();
+				JSONObject jsonparams = new JSONObject();
+				try {
+					if(tip.getPhotoid()!=null) {
+						json.put("photoid", tip.getPhotoid());
+					}
+					json.put("cemail", tip.getCemail());;
+					if(tip.getTemail()!=null) {
+						json.put("temail", tip.getCemail());
+					}
+					json.put("x", tip.getX());
+					json.put("y", tip.getY());
+					if(tip.getTipsid()!=null) {
+						json.put("tipsid", tip.getTipsid());
+					}
+					if(tip.getTipstype()!=-1) {
+						json.put("type", tip.getTipstype());
+					}
+					jsonparams.put("params", json.toString());
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				params.add(new BasicNameValuePair(
+						"params",jsonparams.toString()));
+				HttpResultJson result = NetService.httpPostReturnJson(context,
+						Config.Server_URL + URL_ADD, params);
+
+				if (result.getResultCode() == HttpResult.RESULT_OK) {
+					apiResult.setResultCode(ApiResult.RESULT_OK);
+					// VersionInfo version = null;
+
+				} else {
+					apiResult.setFailCode(result.getFailCode());
+					apiResult.setFailMessage(result.getFailMessage());
+				}
+				return apiResult;
+			}
+
+			@Override
+			protected void onPostExecute(ApiResult<Object> apiResult) {
+				if (returnResultListener == null) {
+					return;
+				}
+				if (apiResult.getResultCode() == ApiResult.RESULT_OK) {
+					returnResultListener.onReturnSucceedResult(requestCode,
+							apiResult);
+				} else {
+					returnResultListener.onReturnFailResult(requestCode,
+							apiResult);
+				}
+			}
+		}.execute("");
 	}
 
 

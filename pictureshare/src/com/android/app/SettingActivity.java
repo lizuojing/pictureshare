@@ -17,7 +17,9 @@ import com.android.app.api.ApiReturnResultListener;
 import com.android.app.api.AvatarApi;
 import com.android.app.api.AvatarRequestParam;
 import com.android.app.api.OtherApi;
+import com.android.app.api.Tips;
 import com.android.app.api.UserApi;
+import com.android.app.data.SettingLoader;
 import com.android.app.entity.Detail;
 import com.android.app.entity.Location;
 import com.android.app.entity.Point;
@@ -432,8 +434,8 @@ public class SettingActivity extends BaseActivity implements OnClickListener {
 	}
 
 	private void addtips() {
-		OtherApi otherapi = new OtherApi(this);
-		otherapi.setReturnResultListener(new ApiReturnResultListener() {
+		AvatarApi api = new AvatarApi(this);
+		api.setReturnResultListener(new ApiReturnResultListener() {
 			@SuppressWarnings("unchecked")
 			@Override
 			public <T> void onReturnSucceedResult(int requestCode,
@@ -453,7 +455,12 @@ public class SettingActivity extends BaseActivity implements OnClickListener {
 
 			}
 		});
-		otherapi.addtips(1, null);
+		Tips tip = new Tips();
+		tip.setCemail(SettingLoader.getRegEmail(this));
+		tip.setTipstype(0);
+		tip.setX("123");
+		tip.setY("232");
+		api.tacks(1, tip);
 	}
 
 	private void refreshlist() {

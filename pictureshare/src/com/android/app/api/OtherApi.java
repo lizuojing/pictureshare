@@ -30,7 +30,6 @@ public class OtherApi extends BaseApi {
 	// 版本服务url
 	private static final String VERSION_SERVICE_URL = "007/getversion";
 	private static final String URL_GETDETIL = "007/detailmap";
-	private static final String URL_ADD = "007/addtips";
 	private static final String URL_REFRESHLIST = "007/refreshlist";
 
 	public OtherApi(Context context) {
@@ -154,48 +153,6 @@ public class OtherApi extends BaseApi {
 		}.execute("");
 	}
 
-	public void addtips(final int requestCode, final Tips tips) {
-		new AsyncTask<Object, Integer, ApiResult<Object>>() {
-			@Override
-			protected ApiResult<Object> doInBackground(Object... strs) {
-
-				ApiResult<Object> apiResult = new ApiResult<Object>();
-				apiResult.setResultCode(ApiResult.RESULT_FAIL);
-				List<NameValuePair> params = new ArrayList<NameValuePair>();
-				params.add(new BasicNameValuePair(
-						"params",
-						"{'params':{'photoid':'123','cemail':'iamwxy@126.com','temai;':'abc@126.com','x':'123.123','y':'23.23','tipsid':'110','type':'1'}}"));
-				Log.e("detail.toJsonString()",
-						"{'params':{'photoid':'123','cemail':'iamwxy@126.com','temai;':'abc@126.com','x':'123.123','y':'23.23','tipsid':'110','type':'1'}}");
-				HttpResultJson result = NetService.httpPostReturnJson(context,
-						Config.Server_URL + URL_ADD, params);
-
-				if (result.getResultCode() == HttpResult.RESULT_OK) {
-					apiResult.setResultCode(ApiResult.RESULT_OK);
-					// VersionInfo version = null;
-
-				} else {
-					apiResult.setFailCode(result.getFailCode());
-					apiResult.setFailMessage(result.getFailMessage());
-				}
-				return apiResult;
-			}
-
-			@Override
-			protected void onPostExecute(ApiResult<Object> apiResult) {
-				if (returnResultListener == null) {
-					return;
-				}
-				if (apiResult.getResultCode() == ApiResult.RESULT_OK) {
-					returnResultListener.onReturnSucceedResult(requestCode,
-							apiResult);
-				} else {
-					returnResultListener.onReturnFailResult(requestCode,
-							apiResult);
-				}
-			}
-		}.execute("");
-	}
 
 	public void refreshlist(final int requestCode, final Tips tips) {
 		new AsyncTask<Object, Integer, ApiResult<Object>>() {

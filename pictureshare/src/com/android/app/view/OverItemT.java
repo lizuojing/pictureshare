@@ -15,6 +15,11 @@ import android.view.ViewGroup.LayoutParams;
 
 import com.android.app.PMapActivity;
 import com.android.app.R;
+import com.android.app.api.ApiResult;
+import com.android.app.api.ApiReturnResultListener;
+import com.android.app.api.AvatarApi;
+import com.android.app.api.Tips;
+import com.android.app.data.SettingLoader;
 import com.android.app.entity.Avatar;
 import com.android.app.view.PicDialog.OnButtonClickListener;
 import com.baidu.mapapi.GeoPoint;
@@ -160,12 +165,39 @@ public class OverItemT extends ItemizedOverlay<OverlayItem> {
 			OverItemT overItem = new OverItemT(marker, mContext, list);
 			mapView.getOverlays().add(overItem);
 			mapView.invalidate();
+			
+			createTack(point.x, point.y);
 		}
 
 		Log.i(TAG,
 				"lat i " + arg0.getLatitudeE6() + " lon is "
 						+ arg0.getLongitudeE6());
 		return super.onTap(arg0, mapView);
+	}
+
+	private void createTack(int x, int y) {
+		AvatarApi api = new AvatarApi(mContext);
+		Tips tip = new Tips();
+		tip.setCemail(SettingLoader.getRegEmail(mContext));
+		tip.setTipstype(0);
+		tip.setX(x+"");
+		tip.setY(y+"");
+		api.setReturnResultListener(new ApiReturnResultListener() {
+			
+			@Override
+			public <T> void onReturnSucceedResult(int requestCode,
+					ApiResult<T> apiResult) {
+				Log.e(TAG, "onReturnSucceedResult is running");
+				
+			}
+			
+			@Override
+			public <T> void onReturnFailResult(int requestCode, ApiResult<T> apiResult) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+		api.tacks(1,tip);
 	}
 
 }
