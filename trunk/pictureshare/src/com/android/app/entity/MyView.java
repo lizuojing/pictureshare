@@ -49,7 +49,6 @@ public class MyView extends SurfaceView implements SurfaceHolder.Callback {
 	private BitmapShader bitmapShader = null;
 	private Bitmap bitmap = null;
 	private ShapeDrawable shapeDrawable = null;
-	
 
 	private int BitmapWidth, BitmapHeight;
 
@@ -79,7 +78,7 @@ public class MyView extends SurfaceView implements SurfaceHolder.Callback {
 				- Utils.dipToPixels(context, 80), 600, touchLen);
 		right_top = new Rect(Utils.getScreenWidth(context)
 				- Utils.dipToPixels(context, 80), 100, touchLen);
-//		dot = BitmapFactory.decodeResource(getResources(), R.drawable.dot);
+		// dot = BitmapFactory.decodeResource(getResources(), R.drawable.dot);
 	}
 
 	public MyView(Context context, AttributeSet attrs) {
@@ -92,30 +91,32 @@ public class MyView extends SurfaceView implements SurfaceHolder.Callback {
 	}
 
 	public void setBitmap(String filePath, Context context) {
-		int width=Utils.getScreenHeight(context)/4;
-		int photoOrientation=0;
+		int width = Utils.getScreenHeight(context) / 4;
+		int photoOrientation = 0;
 		try {
-			ExifInterface exifInterface=new ExifInterface(filePath);
-			photoOrientation=exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION, 0);
+			ExifInterface exifInterface = new ExifInterface(filePath);
+			photoOrientation = exifInterface.getAttributeInt(
+					ExifInterface.TAG_ORIENTATION, 0);
 			switch (photoOrientation) {
 			case ExifInterface.ORIENTATION_ROTATE_180:
-				photoOrientation=180;
+				photoOrientation = 180;
 				break;
 			case ExifInterface.ORIENTATION_ROTATE_270:
-				photoOrientation=270;
+				photoOrientation = 270;
 				break;
 			case ExifInterface.ORIENTATION_ROTATE_90:
-				photoOrientation=90;
+				photoOrientation = 90;
 				break;
 			default:
-				photoOrientation=0;
+				photoOrientation = 0;
 				break;
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		try {
-			Bitmap bitmap=ImageUtil.getThumbnail(filePath,width, width,photoOrientation);
+			Bitmap bitmap = ImageUtil.getThumbnail(filePath, width, width,
+					photoOrientation);
 			this.bitmap = bitmap;
 			initBitmap();
 		} catch (OutOfMemoryError e1) {
@@ -245,7 +246,7 @@ public class MyView extends SurfaceView implements SurfaceHolder.Callback {
 					Canvas canvas = null;
 
 					canvas = holder.lockCanvas(null);// 获取画布
-					if(canvas!=null) {
+					if (canvas != null) {
 						mPaint.setColor(Color.CYAN);
 						mPaint.setAntiAlias(true);
 						canvas.save();
@@ -274,10 +275,12 @@ public class MyView extends SurfaceView implements SurfaceHolder.Callback {
 						// 得到画笔并设置渲染器
 						shapeDrawable.getPaint().setShader(bitmapShader);
 						// 设置显示区域
-						shapeDrawable.setBounds(0, 0, BitmapWidth, BitmapHeight);
+						shapeDrawable
+								.setBounds(0, 0, BitmapWidth, BitmapHeight);
 						// 绘制shapeDrawable
 						shapeDrawable.draw(canvas);
-						mPaint.setColor(getResources().getColor(R.color.dotcolor));
+						mPaint.setColor(getResources().getColor(
+								R.color.dotcolor));
 						mPaint.setAlpha(200);
 						drawPointCircle(canvas, left_top);
 
@@ -313,4 +316,19 @@ public class MyView extends SurfaceView implements SurfaceHolder.Callback {
 
 	}
 
+	public Rect getLeft_top() {
+		return left_top;
+	}
+
+	public Rect getLeft_bottom() {
+		return left_bottom;
+	}
+
+	public Rect getRight_bottom() {
+		return right_bottom;
+	}
+
+	public Rect getRight_top() {
+		return right_top;
+	}
 }
