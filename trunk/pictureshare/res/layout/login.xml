@@ -28,7 +28,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
-                android:text="@string/reg_email" />
+                android:text="@string/reg_email"
+                android:textColor="#000000" />
 
             <EditText
                 android:id="@+id/edit_login_username"
@@ -56,7 +57,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
-                android:text="@string/reg_password" />
+                android:text="@string/reg_password"
+                android:textColor="#000000" />
 
             <EditText
                 android:id="@+id/edit_login_password"
@@ -80,12 +82,11 @@
                 android:layout_width="0dip"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:shadowColor="#FF003366"
                 android:shadowDx="0.0"
                 android:shadowDy="-2.0"
                 android:shadowRadius="0.1"
                 android:text="@string/reg_go_reg"
-                android:textColor="#FFFFFFFF" />
+                android:textColor="#000000" />
 
             <Button
                 android:id="@+id/btn_login"
@@ -93,12 +94,11 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dip"
                 android:layout_weight="1"
-                android:shadowColor="#FF003366"
                 android:shadowDx="0.0"
                 android:shadowDy="-2.0"
                 android:shadowRadius="0.1"
                 android:text="@string/reg_login"
-                android:textColor="#FFFFFFFF" />
+                android:textColor="#000000" />
         </LinearLayout>
     </LinearLayout>
 

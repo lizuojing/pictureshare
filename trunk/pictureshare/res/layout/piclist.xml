@@ -101,7 +101,16 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_above="@+id/frameLayout1"
-        android:layout_below="@+id/relativeLayout3" >
+        android:layout_below="@+id/relativeLayout3" 
+        android:visibility="gone">
     </ListView>
+
+    <ProgressBar
+        android:id="@+id/progressBar1"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone"/>
 
 </RelativeLayout>

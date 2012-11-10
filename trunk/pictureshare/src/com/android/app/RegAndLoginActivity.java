@@ -267,7 +267,7 @@ public class RegAndLoginActivity extends BaseActivity implements
 			Toast.makeText(this, "您还没有输入用户名", Toast.LENGTH_SHORT).show();
 			return false;
 		}
-		if (!Utils.isRegUserName(username)) {
+		if (!Utils.isEmail(username)) {
 			Toast.makeText(this, "用户名为5–20位字母/数字/下划线或组合", Toast.LENGTH_SHORT)
 					.show();
 			return false;
@@ -280,7 +280,7 @@ public class RegAndLoginActivity extends BaseActivity implements
 			Toast.makeText(this, "您还没有输入用户名", Toast.LENGTH_SHORT).show();
 			return false;
 		}
-		if (!Utils.isLoginUserName(username)) {
+		if (!Utils.isEmail(username)) {
 			Toast.makeText(this, "用户名为5–20位字母/数字/下划线或组合", Toast.LENGTH_SHORT)
 					.show();
 			return false;
