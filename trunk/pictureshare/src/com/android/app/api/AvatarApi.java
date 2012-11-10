@@ -182,7 +182,9 @@ public class AvatarApi extends BaseApi {
 				
 				Log.e(TAG, "sendpicinfo params is " + avatarparams.toJsonString(page+"",pages));
 				HttpResultJson result = NetService.httpPostReturnJson(context, Config.Server_URL + AVATAR_INFO_URL, params);
-//				apiResult.setEntities(entities);
+				apiResult.setResultCode(result.getResultCode());
+				Log.e(TAG, "result is " + result.getJson());
+				//apiResult.setEntities(entities);
 				return apiResult;
 			}
 
