@@ -12,7 +12,13 @@ import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.android.app.api.ApiResult;
+import com.android.app.api.ApiReturnResultListener;
+import com.android.app.api.AvatarApi;
+import com.android.app.api.OtherApi;
 import com.android.app.entity.Avatar;
+import com.android.app.entity.Detail;
+import com.android.app.entity.Point;
 import com.android.app.service.PicService;
 import com.android.app.utils.Utils;
 import com.android.app.view.OverItemT;
@@ -218,8 +224,37 @@ public class PMapActivity extends MapActivity implements View.OnClickListener {
 			showSharePopup();
 			break;
 		case R.id.btn_detail:
-			Toast.makeText(this, "detal", Toast.LENGTH_SHORT).show();
+//			Toast.makeText(this, "detal", Toast.LENGTH_SHORT).show();
 			// 发送左上右下坐标
+			OtherApi otherapi = new OtherApi(this);
+			otherapi.setReturnResultListener(new ApiReturnResultListener() {
+				@SuppressWarnings("unchecked")
+				@Override
+				public <T> void onReturnSucceedResult(int requestCode,
+						ApiResult<T> apiResult) {
+					ArrayList<Object> infos = (ArrayList<Object>) apiResult
+							.getEntities();
+					
+					Log.e(TAG, "detail result is " + infos);
+					if (infos == null || infos.size() <= 0) {
+						Toast.makeText(PMapActivity.this, "没有可显示的图片", Toast.LENGTH_SHORT).show();
+						return;
+					}
+
+				}
+
+				@Override
+				public <T> void onReturnFailResult(int requestCode,
+						ApiResult<T> apiResult) {
+					int failCode = apiResult.getFailCode();
+
+				}
+			});
+			
+			Detail detail = new Detail();
+			detail.lbPoint = new Point(mMapView.getLeft(),mMapView.getTop());
+			detail.ruPoint = new Point(mMapView.getRight(), mMapView.getBottom());
+			otherapi.getDetil(1, detail);
 			break;
 
 		default:
