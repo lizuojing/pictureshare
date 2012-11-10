@@ -1,10 +1,14 @@
 package com.android.app.api;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -14,8 +18,9 @@ import android.util.Log;
 
 import com.android.app.SettingActivity;
 import com.android.app.config.Config;
+import com.android.app.data.SettingLoader;
 import com.android.app.entity.Avatar;
-import com.android.app.entity.Point;
+import com.android.app.net.HttpResult;
 import com.android.app.net.HttpResultJson;
 import com.android.app.net.NetService;
 
@@ -74,26 +79,21 @@ public class AvatarApi extends BaseApi {
 				ApiResult<String> apiResult = new ApiResult<String>();
 				apiResult.setResultCode(ApiResult.RESULT_FAIL);
 				List<NameValuePair> params = new ArrayList<NameValuePair>();
-				
-				JSONObject json = null;
-				JSONObject jsonparam = null;
-				try {
-					json = new JSONObject();
-					jsonparam = new JSONObject();
-					json.put("photo", filepath);
-					json.put("email", email);
-					jsonparam.put("params", json.toString());
-				} catch (JSONException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				
-				params.add(new BasicNameValuePair("params", jsonparam.toString()));
-				Log.e(TAG, "uploadAvatar params is " + jsonparam.toString());
+				params.add(new BasicNameValuePair("photo", filepath));
+				params.add(new BasicNameValuePair("email", email));
+				Log.e(TAG, "uploadAvatar params is " + params);
 				
 				NameValuePair fileNVPair = new BasicNameValuePair("photo", filepath);
 				HttpResultJson result = NetService.updateFile(context,
 						Config.Server_URL + AVATAR_UPLOAD_URL, params, fileNVPair);
+				if(result.getResultCode()== HttpResult.RESULT_OK) {
+					JSONObject json = result.getJson();
+					JSONObject opeRecord = (JSONObject) json.opt("opeRecord");
+					String photoid = (String) opeRecord.opt("photoid");
+					SettingLoader.setPhotoId(context,photoid);
+					Log.e(TAG, "photoid is " + photoid);
+					Log.e(TAG, "opeRecord is " + opeRecord);
+				}
 				
 				return apiResult;
 			}
@@ -111,6 +111,8 @@ public class AvatarApi extends BaseApi {
 			}
 		}.execute(filepath);
 	}
+	
+	
 	
 	/**
 	 * 图片赞
@@ -179,8 +181,8 @@ public class AvatarApi extends BaseApi {
 				params.add(new BasicNameValuePair("params", avatarparams.toJsonString(page+"",pages)));
 				
 				Log.e(TAG, "sendpicinfo params is " + avatarparams.toJsonString(page+"",pages));
-				NetService.httpPostReturnJson(context, Config.Server_URL + AVATAR_INFO_URL, params);
-				
+				HttpResultJson result = NetService.httpPostReturnJson(context, Config.Server_URL + AVATAR_INFO_URL, params);
+//				apiResult.setEntities(entities);
 				return apiResult;
 			}
 

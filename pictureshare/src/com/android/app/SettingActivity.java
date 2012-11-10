@@ -299,9 +299,9 @@ public class SettingActivity extends BaseActivity implements OnClickListener {
 		AvatarRequestParam params = new AvatarRequestParam();
 		Location location = new Location("39.90923","116.357428");
 		params.setLocation(location);
-		ArrayList<Point> list = new ArrayList<Point>();
+		ArrayList<String> list = new ArrayList<String>();
 		for(int i=0;i<4;i++) {
-			Point point = new Point(50,50);
+			String point = "12,12";
 			list.add(point);
 		}
 		params.setPoints(list);

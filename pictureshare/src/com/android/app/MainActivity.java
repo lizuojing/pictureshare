@@ -79,10 +79,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 		inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 		initComponents();
 		registerButton();
+		
+	
 
 	}
-
-
+	
 	private void registerShareButton() {
 		if (mediaPopup!=null&&mediaPopup.getTakePhotoButton() != null) {
 			mediaPopup.getTakePhotoButton().setOnClickListener(new OnClickListener() {

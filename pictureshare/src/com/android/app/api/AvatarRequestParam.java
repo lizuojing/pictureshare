@@ -2,11 +2,9 @@ package com.android.app.api;
 
 import java.util.ArrayList;
 
-import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.android.app.entity.JsonTitle;
 import com.android.app.entity.Location;
 import com.android.app.entity.Point;
 
@@ -21,7 +19,7 @@ public class AvatarRequestParam extends BaseRequestParam {
 	private String label;// 标签
 	private String username;
 	private Location location;
-	private ArrayList<Point> points;
+	private ArrayList<String> points;
 	private String email;
 	private String tipsid;
 	private String photoid;
@@ -50,11 +48,11 @@ public class AvatarRequestParam extends BaseRequestParam {
 		this.location = location;
 	}
 
-	public ArrayList<Point> getPoints() {
+	public ArrayList<String> getPoints() {
 		return points;
 	}
 
-	public void setPoints(ArrayList<Point> points) {
+	public void setPoints(ArrayList<String> points) {
 		this.points = points;
 	}
 
@@ -85,11 +83,11 @@ public class AvatarRequestParam extends BaseRequestParam {
 	public String toJsonString(String page, String pages) {
 		JSONObject jsonParmas = new JSONObject();
 		try {
-			
+			//["x,y","x,y"];
 			String pointsParam = "[";
 			if(getPoints()!=null) {
-				for(Point point :getPoints()) {
-					pointsParam += "\"" + point.getX() + "," + point.getY() + "\",";
+				for(String point :getPoints()) {
+					pointsParam += "\"" + point+ "\",";
 				}
 			}
 			pointsParam+="]";
@@ -101,7 +99,9 @@ public class AvatarRequestParam extends BaseRequestParam {
 			
 			JSONObject jsonAll = new JSONObject();
 			jsonAll.put("photoid", getPhotoid());
-			jsonAll.put("tipsid", getTipsid());
+			if(getTipsid()!=null) {
+				jsonAll.put("tipsid", getTipsid());
+			}
 			jsonAll.put("username", getUsername());
 			jsonAll.put("email", getEmail());
 			jsonAll.put("tag", getLabel());

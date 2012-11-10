@@ -3,6 +3,7 @@ package com.android.app;
 import java.util.ArrayList;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
@@ -12,6 +13,7 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 
@@ -26,6 +28,8 @@ public class PicListActivity extends BaseActivity implements View.OnClickListene
 	private CheckBox editButton;
 	private ArrayList<Avatar> list;
 	private Button backButton;
+	private DataLoaderTask loadDataTask;
+	private ProgressBar mProgresssBar;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -33,12 +37,50 @@ public class PicListActivity extends BaseActivity implements View.OnClickListene
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.piclist);
 		initComponents();
+		
+		if(loadDataTask!=null) {
+			loadDataTask.cancel(true);
+			loadDataTask = null;
+		}
+		loadDataTask = new DataLoaderTask();
 	}
+	
+	final class DataLoaderTask extends AsyncTask<Void, Integer, Long> {
+
+		@Override
+		protected Long doInBackground(Void... params) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		protected void onPostExecute(Long result) {
+			mProgresssBar.setVisibility(View.GONE);
+			listView.setVisibility(View.VISIBLE);
+			
+			
+			super.onPostExecute(result);
+		}
+
+		@Override
+		protected void onPreExecute() {
+			mProgresssBar.setVisibility(View.VISIBLE);
+			listView.setVisibility(View.GONE);
+			super.onPreExecute();
+		}
+		
+		
+		
+	}
+
+
 	
 	private void initComponents() {
 		backButton = (Button)findViewById(R.id.btn_back);
 		backButton.setOnClickListener(this);
 		editButton = (CheckBox)findViewById(R.id.btn_edit);
+		
+		mProgresssBar = (ProgressBar)findViewById(R.id.progressBar1);
 		
 		listView = (ListView) findViewById(R.id.listView1);
 		listView.setOnItemClickListener(new OnItemClickListener() {
