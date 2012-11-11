@@ -235,22 +235,9 @@ public class PicService extends Service {
     	allActivity.clear();
     	//退出Service	
     	PicApp.getApp(context).stopDataService();
-    	unRegisterHeartBeatCheckAlarm(context);
     	
 		android.os.Process.killProcess(android.os.Process.myPid());
 	}
 
-	public static void unRegisterHeartBeatCheckAlarm(Context context) {
-		Log.i(TAG, "unRegisterHeartBeatCheckAlarm() start");
-
-		AlarmManager am = (AlarmManager)context.getSystemService("alarm");
-
-		Intent intent = new Intent(context, HeartBeatCheckReceiver.class);
-		intent.setAction(PicIntent.ACTION_HEARTBEAT_CHECK);
-
-		PendingIntent pi = PendingIntent.getBroadcast(context, 0, intent, 0);
-
-		am.cancel(pi);
-	}
 	
 }

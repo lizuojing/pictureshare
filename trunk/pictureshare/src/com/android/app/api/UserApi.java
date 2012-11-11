@@ -130,11 +130,9 @@ public class UserApi extends BaseApi {
 					String opeResult = "opeResult";
 					try {
 						String opeResults = jsonObject.getString(opeResult);
-						if (opeResults.equals("0")) {
-							Log.e("登录", "登录失败");
-						} else {
-							Log.e("登录", "登录成功");
-						}
+						ArrayList<Object> as = new ArrayList<Object>();
+						as.add(opeResults);
+						apiResult.setEntities(as);
 					} catch (JSONException e) {
 						e.printStackTrace();
 					}
@@ -304,8 +302,8 @@ public class UserApi extends BaseApi {
 		// getInstance返回实现指定 MAC 算法的 Mac对象。
 		Mac mac = Mac.getInstance("HmacSHA1");
 
-		SecretKeySpec secret = new SecretKeySpec(key.getBytes(), mac
-				.getAlgorithm());
+		SecretKeySpec secret = new SecretKeySpec(key.getBytes(),
+				mac.getAlgorithm());
 		mac.init(secret);
 		byte[] digest = mac.doFinal(baseString.getBytes());
 		return getBase64String(digest);

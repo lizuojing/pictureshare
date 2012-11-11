@@ -13,10 +13,10 @@
         android:paddingTop="12dip" >
 
         <LinearLayout
-            android:id="@+id/bg_reg_edit_username"
+            android:id="@+id/bg_reg_edit_email"
             android:layout_width="fill_parent"
             android:layout_height="47.5dip"
-            android:layout_marginBottom="7.5dip"
+            android:layout_marginBottom="5dip"
             android:background="@drawable/reg_login"
             android:gravity="center_vertical"
             android:orientation="horizontal"
@@ -29,15 +29,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
-                android:text="@string/reg_username"
+                android:text="@string/reg_email"
                 android:textColor="@color/font_color" />
 
             <EditText
-                android:id="@+id/edit_reg_username"
+                android:id="@+id/edit_reg_email"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/reg_username_hint"
+                android:hint="@string/reg_email_hint"
                 android:imeOptions="actionNext"
+                android:inputType="textEmailAddress"
                 android:paddingLeft="3dip"
                 android:singleLine="true" />
         </LinearLayout>
@@ -75,10 +76,10 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/bg_reg_edit_email"
+            android:id="@+id/bg_reg_edit_username"
             android:layout_width="fill_parent"
             android:layout_height="47.5dip"
-            android:layout_marginBottom="5dip"
+            android:layout_marginBottom="7.5dip"
             android:background="@drawable/reg_login"
             android:gravity="center_vertical"
             android:orientation="horizontal"
@@ -91,16 +92,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
-                android:text="@string/reg_email"
+                android:text="@string/reg_username"
                 android:textColor="@color/font_color" />
 
             <EditText
-                android:id="@+id/edit_reg_email"
+                android:id="@+id/edit_reg_username"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/reg_email_hint"
+                android:hint="@string/reg_username_hint"
                 android:imeOptions="actionNext"
-                android:inputType="textEmailAddress"
                 android:paddingLeft="3dip"
                 android:singleLine="true" />
         </LinearLayout>
@@ -126,7 +126,7 @@
                 android:textColor="@color/font_color" />
 
             <RadioGroup
-                android:id="@+id/edit_reg_email"
+                android:id="@+id/edit_reg_sex"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
@@ -169,7 +169,7 @@
                 android:textColor="@color/font_color" />
 
             <EditText
-                android:id="@+id/edit_reg_email"
+                android:id="@+id/edit_tel"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/reg_phone_hint"
@@ -220,7 +220,7 @@
             android:shadowDy="-2.0"
             android:shadowRadius="0.1"
             android:text="@string/reg_reg"
-             android:textColor="#000000"/>
+            android:textColor="#000000" />
     </LinearLayout>
 
 </ScrollView>

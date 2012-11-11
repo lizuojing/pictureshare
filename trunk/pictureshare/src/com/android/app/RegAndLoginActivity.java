@@ -1,6 +1,8 @@
 package com.android.app;
 
+import java.util.ArrayList;
 import android.app.Dialog;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
@@ -18,7 +20,6 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toast;
-
 import com.android.app.api.ApiResult;
 import com.android.app.api.ApiReturnResultListener;
 import com.android.app.api.OwnerRequestParam;
@@ -42,11 +43,13 @@ public class RegAndLoginActivity extends BaseActivity implements
 	private TextView ivTitle;
 	private TabContent tabContent;
 
-	private EditText editLoginUserName;
+	private EditText editLoginUserName_Email;
 	private EditText editLoginPassword;
 	private EditText editRegUserName;
 	private EditText editRegPassword;
 	private EditText editRegEmail;
+	private EditText editRegTel;
+	private EditText editRegAddress;
 
 	private Button btnGoReg;
 	private Button btnReg;
@@ -57,13 +60,17 @@ public class RegAndLoginActivity extends BaseActivity implements
 
 	private String regUsername;
 	private String regPassword;
+	private String regEmail;
+	private String regSex;
+	private String regTel;
+	private String regAddress;
 
 	private String intentToPage;
 	private boolean firstIntoActivity;
 	private PicDialogProgress progressDialog;
 	public User user;
 	private RadioButton rb_man, rb_woman;
-	private int sexflag;
+	private int sexflag = 1;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -111,17 +118,17 @@ public class RegAndLoginActivity extends BaseActivity implements
 		btnReg = (Button) findViewById(R.id.btn_reg);
 		btnLogin = (Button) findViewById(R.id.btn_login);
 		rb_man = (RadioButton) findViewById(R.id.edit_sex_man);
+		rb_man.setSelected(true);
 		rb_woman = (RadioButton) findViewById(R.id.edit_sex_woman);
-		editLoginUserName = (EditText) findViewById(R.id.edit_login_username);
+		editLoginUserName_Email = (EditText) findViewById(R.id.edit_login_username_email);
 		editLoginPassword = (EditText) findViewById(R.id.edit_login_password);
 		editRegUserName = (EditText) findViewById(R.id.edit_reg_username);
 		editRegPassword = (EditText) findViewById(R.id.edit_reg_password);
 		editRegEmail = (EditText) findViewById(R.id.edit_reg_email);
-		editRegUserName.setHintTextColor(0xFFcccccc);
-		editRegPassword.setHintTextColor(0xFFcccccc);
-		editRegEmail.setHintTextColor(0xFFcccccc);
+		editRegTel = (EditText) findViewById(R.id.edit_tel);
+		editRegAddress = (EditText) findViewById(R.id.edit_reg_addr);
 
-		editLoginUserName.setOnFocusChangeListener(this);
+		editLoginUserName_Email.setOnFocusChangeListener(this);
 		editLoginPassword.setOnFocusChangeListener(this);
 		editRegUserName.setOnFocusChangeListener(this);
 		editRegPassword.setOnFocusChangeListener(this);
@@ -161,11 +168,21 @@ public class RegAndLoginActivity extends BaseActivity implements
 				progressDialog.cancel();
 			}
 			if (requestCode == REQ_CODE_LOGIN) {
-				PicApp.getApp(RegAndLoginActivity.this).getService()
-						.registerHeartBeatCheckAlarm();
-				Toast.makeText(RegAndLoginActivity.this, "登录成功",
-						Toast.LENGTH_SHORT).show();
-				finish();
+				ArrayList<Object> as = (ArrayList<Object>) apiResult
+						.getEntities();
+				String string = (String) as.get(0);
+				if (string.equals("1")) {
+					Toast.makeText(RegAndLoginActivity.this, "登录成功",
+							Toast.LENGTH_SHORT).show();
+					Intent i = new Intent(RegAndLoginActivity.this,
+							MainActivity.class);
+					startActivity(i);
+
+				} else {
+					Toast.makeText(RegAndLoginActivity.this, "登录失败,请重新输入帐号密码。",
+							Toast.LENGTH_SHORT).show();
+				}
+
 			} else if (requestCode == REQ_CODE_REG) {
 				Toast.makeText(RegAndLoginActivity.this, "注册成功",
 						Toast.LENGTH_SHORT).show();
@@ -184,10 +201,10 @@ public class RegAndLoginActivity extends BaseActivity implements
 				progressDialog.cancel();
 			}
 			if (requestCode == REQ_CODE_LOGIN) {
-				Toast.makeText(RegAndLoginActivity.this, "登录失败",
+				Toast.makeText(RegAndLoginActivity.this, "登录失败,请检查网络连接。",
 						Toast.LENGTH_SHORT).show();
 			} else if (requestCode == REQ_CODE_REG) {
-				Toast.makeText(RegAndLoginActivity.this, "注册失败",
+				Toast.makeText(RegAndLoginActivity.this, "注册失败,请检查网络连接。",
 						Toast.LENGTH_SHORT).show();
 			}
 		}
@@ -202,11 +219,14 @@ public class RegAndLoginActivity extends BaseActivity implements
 		case R.id.btn_reg:
 			regUsername = editRegUserName.getText().toString().trim();
 			regPassword = editRegPassword.getText().toString().trim();
-			String email = editRegEmail.getText().toString().trim();
+			regEmail = editRegEmail.getText().toString().trim();
+			regSex = sexflag + "";
+			regTel = editRegTel.getText().toString().trim();
+			regAddress = editRegAddress.getText().toString().trim();
 			if (validateRegUserName(regUsername)
-					&& validatePassword(regPassword) && validateEmail(email)) {
+					&& validatePassword(regPassword) && validateEmail(regEmail)) {
 				User user = new User();
-				user.setEmail(email);
+				user.setEmail(regEmail);
 				user.setUsername(regUsername);
 				user.setPassword(regPassword);
 				userApi.regeditUser(REQ_CODE_REG, user);
@@ -214,7 +234,7 @@ public class RegAndLoginActivity extends BaseActivity implements
 			}
 			break;
 		case R.id.btn_login:
-			String loginUsername = editLoginUserName.getText().toString()
+			String loginUsername = editLoginUserName_Email.getText().toString()
 					.trim();
 			String loginPassword = editLoginPassword.getText().toString()
 					.trim();
@@ -224,8 +244,7 @@ public class RegAndLoginActivity extends BaseActivity implements
 			}
 			user.setEmail(loginUsername);
 			user.setPassword(loginPassword);
-			if (validateLoginUserName(loginUsername)
-					&& validatePassword(loginPassword)) {
+			if (validateEmail(loginUsername) && validatePassword(loginPassword)) {
 				userApi.login(REQ_CODE_LOGIN, getUser());
 				showDialog(ID_DIALOG_PROGRESS);
 			}
@@ -292,7 +311,7 @@ public class RegAndLoginActivity extends BaseActivity implements
 		ivTitle.setText(getResources().getString(R.string.reg_title));
 		tabContent.scrollToPage(1);
 		currentPageIndex = 1;
-		editRegUserName.setText(editLoginUserName.getText());
+		editRegEmail.setText(editLoginUserName_Email.getText());
 		editRegPassword.setText(editLoginPassword.getText());
 	}
 
@@ -317,8 +336,8 @@ public class RegAndLoginActivity extends BaseActivity implements
 		switch (v.getId()) {
 		case R.id.edit_login_password:
 			if (actionId == EditorInfo.IME_ACTION_DONE) {
-				String loginUsername = editLoginUserName.getText().toString()
-						.trim();
+				String loginUsername = editLoginUserName_Email.getText()
+						.toString().trim();
 				String loginPassword = editLoginPassword.getText().toString()
 						.trim();
 				if (validateLoginUserName(loginUsername)
@@ -338,7 +357,7 @@ public class RegAndLoginActivity extends BaseActivity implements
 						&& validatePassword(regPassword)
 						&& validateEmail(email)) {
 					// userApi.register(REQ_CODE_REG, regUsername.toLowerCase()
-					// + "@gozap.com", regPassword, email);
+					// + "@gozap.com", regPassword, regEmail);
 					showDialog(ID_DIALOG_PROGRESS);
 				}
 			}
@@ -351,10 +370,8 @@ public class RegAndLoginActivity extends BaseActivity implements
 	public void onCheckedChanged(CompoundButton arg0, boolean arg1) {
 		if (arg0.equals(rb_man) && arg1) {
 			sexflag = 1;
-			Log.e("sex", sexflag + "");
 		} else if (arg0.equals(rb_woman) && arg1) {
 			sexflag = 0;
-			Log.e("sex", sexflag + "");
 		}
 
 	}
