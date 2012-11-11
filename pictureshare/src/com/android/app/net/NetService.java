@@ -9,6 +9,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.SocketTimeoutException;
 import java.net.URLEncoder;
 import java.net.UnknownHostException;
+import java.nio.charset.Charset;
 import java.util.List;
 import java.util.zip.GZIPInputStream;
 
@@ -145,8 +146,9 @@ public class NetService {
 			if (params != null) {
 				for (int i = 0; i < params.size(); i++) {
 					NameValuePair pair = params.get(i);
-					StringBody stringBody = new StringBody(URLEncoder.encode(
-							pair.getValue(), "UTF-8"));
+//					StringBody stringBody = new StringBody(URLEncoder.encode(
+//							pair.getValue(), "UTF-8"));
+					StringBody stringBody = new StringBody(pair.getValue(),Charset.forName("UTF-8"));
 					FormBodyPart formBodyPart = new FormBodyPart(
 							URLEncoder.encode(pair.getName()), stringBody);
 					entity.addPart(formBodyPart);

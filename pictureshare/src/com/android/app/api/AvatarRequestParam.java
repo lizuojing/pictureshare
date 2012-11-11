@@ -2,6 +2,7 @@ package com.android.app.api;
 
 import java.util.ArrayList;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -82,34 +83,39 @@ public class AvatarRequestParam extends BaseRequestParam {
 
 	public String toJsonString(String page, String pages) {
 		JSONObject jsonParmas = new JSONObject();
+		JSONArray jsonArray = null;
 		try {
-			//["x,y","x,y"];
-			String pointsParam = "[";
-			if(getPoints()!=null) {
-				for(String point :getPoints()) {
-					pointsParam += "\"" + point+ "\",";
+			if (getPoints() != null) {
+				jsonArray = new JSONArray();
+				JSONObject json = null;
+				for (String point : getPoints()) {
+					json = new JSONObject();
+					json.put("point", point);
+					jsonArray.put(json.get("point"));
+
 				}
 			}
-			pointsParam+="]";
-			
+
 			String locationParam = "";
-			if(getLocation()!=null) {
-				locationParam+=getLocation().getLatitude()+","+getLocation().getLongitude();
+			if (getLocation() != null) {
+				locationParam += getLocation().getLatitude() + ","
+						+ getLocation().getLongitude();
 			}
-			
+
 			JSONObject jsonAll = new JSONObject();
 			jsonAll.put("photoid", getPhotoid());
-			if(getTipsid()!=null) {
+			if (getTipsid() != null) {
 				jsonAll.put("tipsid", getTipsid());
 			}
 			jsonAll.put("username", getUsername());
 			jsonAll.put("email", getEmail());
 			jsonAll.put("tag", getLabel());
 			jsonAll.put("location", locationParam);
-			jsonAll.put("points", pointsParam);
+			jsonAll.put("points", jsonArray);
+//			jsonAll.put("points", "['12,12','12,12','12,12','12,12']");
 			jsonAll.put("page", page);
 			jsonAll.put("pagesize", pages);
-			jsonParmas.put("params", jsonAll.toString());
+			jsonParmas.put("params", jsonAll);
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

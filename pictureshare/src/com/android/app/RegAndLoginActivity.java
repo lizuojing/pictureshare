@@ -1,12 +1,12 @@
 package com.android.app;
 
 import java.util.ArrayList;
+
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -14,12 +14,13 @@ import android.view.View.OnFocusChangeListener;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.CompoundButton;
-import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.TextView;
-import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toast;
+import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.TextView.OnEditorActionListener;
+
 import com.android.app.api.ApiResult;
 import com.android.app.api.ApiReturnResultListener;
 import com.android.app.api.OwnerRequestParam;
@@ -229,6 +230,8 @@ public class RegAndLoginActivity extends BaseActivity implements
 				user.setEmail(regEmail);
 				user.setUsername(regUsername);
 				user.setPassword(regPassword);
+				user.setTel(regTel);
+				user.setAddress(regAddress);
 				userApi.regeditUser(REQ_CODE_REG, user);
 				showDialog(ID_DIALOG_PROGRESS);
 			}
