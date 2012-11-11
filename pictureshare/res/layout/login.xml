@@ -13,7 +13,7 @@
         android:paddingTop="12dip" >
 
         <LinearLayout
-            android:id="@+id/bg_login_edit_username"
+            android:id="@+id/bg_login_edit_username_email"
             android:layout_width="fill_parent"
             android:layout_height="47.5dip"
             android:background="@drawable/reg_login"
@@ -32,7 +32,7 @@
                 android:textColor="#000000" />
 
             <EditText
-                android:id="@+id/edit_login_username"
+                android:id="@+id/edit_login_username_email"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:imeOptions="actionNext"
