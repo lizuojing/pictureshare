@@ -146,9 +146,9 @@ public class SettingActivity extends BaseActivity implements OnClickListener {
 			break;
 		case R.id.picshare:
 			Toast.makeText(this, "分享", Toast.LENGTH_SHORT).show();
-			String filepath = Environment.getExternalStorageDirectory().getAbsolutePath()+"/Camera/691kb.jpg";
-			Log.i(TAG, "path is " + filepath);
-			sharePic(filepath,"443@163.com");
+//			String filepath = Environment.getExternalStorageDirectory().getAbsolutePath()+"/Camera/691kb.jpg";
+//			Log.i(TAG, "path is " + filepath);
+			sharePic("443@163.com","0415c25ead8be2b7eeb825a37407ed77");
 			break;
 		case R.id.latestversion:
 			Toast.makeText(this, "最新版本", Toast.LENGTH_SHORT).show();
@@ -156,7 +156,7 @@ public class SettingActivity extends BaseActivity implements OnClickListener {
 			break;
 		case R.id.sendpic:
 			Toast.makeText(this, "发送图片", Toast.LENGTH_SHORT).show();
-			String picpath =  Environment.getExternalStorageDirectory().getAbsolutePath()+"/Camera/691kb.jpg";
+			String picpath =  Environment.getExternalStorageDirectory().getAbsolutePath()+"/20121111185009.jpg";
 			Log.i(TAG, "path is " + picpath);
 			uploadpicture(picpath);
 			break;
@@ -191,7 +191,7 @@ public class SettingActivity extends BaseActivity implements OnClickListener {
 		avatarApi.qrcodeAuth(this,1,photoid,email);
 	}
 
-	private void sharePic(String filepath,String email) {
+	private void sharePic(String email,String photoid) {
 		AvatarApi avatarApi = new AvatarApi(this);
 		avatarApi.setReturnResultListener(new ApiReturnResultListener() {
 			@Override
@@ -208,7 +208,7 @@ public class SettingActivity extends BaseActivity implements OnClickListener {
 
 			}
 		});
-		avatarApi.shareAvatar(this, 1, filepath, email);
+		avatarApi.shareAvatar(this, 1, photoid,email);
 	}
 
 	private void supportPic(String path,String email,String support) {
@@ -308,8 +308,8 @@ public class SettingActivity extends BaseActivity implements OnClickListener {
 		}
 		params.setPoints(list);
 		params.setLabel("杭州西湖");
-		params.setEmail("aaa@163.com");
-		params.setPhotoid("12345256");
+		params.setEmail("adsfa@163.com");
+		params.setPhotoid("0415c25ead8be2b7eeb825a37407ed77");
 		params.setTipsid("23453576");
 		api.sendAvatarInfo(1, params, 1, "25");
 		
@@ -456,7 +456,11 @@ public class SettingActivity extends BaseActivity implements OnClickListener {
 			}
 		});
 		Tips tip = new Tips();
-		tip.setCemail(SettingLoader.getRegEmail(this));
+//		tip.setCemail(SettingLoader.getRegEmail(this));
+		tip.setCemail("1222@126.com");
+		tip.setTemail("1222@126.com");
+		tip.setPhotoid("f9a848d40ac90d703f1d9c6c66fa8fec");//可空
+		tip.setTipsid("f9a848d40ac90d703f1d9c6c66fa8dfs");
 		tip.setTipstype(0);
 		tip.setX("123");
 		tip.setY("232");

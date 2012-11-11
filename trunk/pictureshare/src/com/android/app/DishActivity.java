@@ -45,8 +45,6 @@ public class DishActivity extends ActivityGroup implements OnTouchListener,
 
 		setContentView(R.layout.dish);
 
-		setContentView(R.layout.dish);
-
 		PicService.allActivity.add(this);
 
 		eachLayout = (LinearLayout) findViewById(R.id.each_layout);

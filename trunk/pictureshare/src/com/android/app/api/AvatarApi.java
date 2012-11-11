@@ -1,19 +1,17 @@
 package com.android.app.api;
 
+import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.android.app.SettingActivity;
@@ -23,6 +21,7 @@ import com.android.app.entity.Avatar;
 import com.android.app.net.HttpResult;
 import com.android.app.net.HttpResultJson;
 import com.android.app.net.NetService;
+import com.android.app.utils.MD5;
 
 /**
  * 图片相关api
@@ -73,6 +72,14 @@ public class AvatarApi extends BaseApi {
 	 * @return
 	 */
 	public void uploadAvatar(final Context context,final int requestCode,String filepath,final String email) {
+		String md5 = null;
+		if( !TextUtils.isEmpty(filepath) ) {
+			File file = new File(filepath);
+			if( file.exists() ) {
+				md5 = MD5.getMD5ofFile(file);
+			}
+		}
+		
 		new AsyncTask<String, Integer, ApiResult<String>>() {
 			@Override
 			protected ApiResult<String> doInBackground(String... parameters) {
@@ -136,7 +143,7 @@ public class AvatarApi extends BaseApi {
 					json.put("email", email);
 					json.put("photoid", photoid);
 					json.put("like", like);
-					jsonparam.put("params", json.toString());
+					jsonparam.put("params", json);
 				} catch (JSONException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -205,11 +212,12 @@ public class AvatarApi extends BaseApi {
 
 	/**
 	 *图片分享
+	 * @param email 
 	 * 
 	 * @param params
 	 * @return
 	 */
-	public void shareAvatar(final Context context,final int requestCode,final String filepath,String email) {
+	public void shareAvatar(final Context context,final int requestCode,final String photoid, final String email) {
 		new AsyncTask<Void, Integer, ApiResult<String>>() {
 			@Override
 			protected ApiResult<String> doInBackground(Void... param) {
@@ -220,9 +228,9 @@ public class AvatarApi extends BaseApi {
 				try {
 					json = new JSONObject();
 					jsonparam = new JSONObject();
-					json.put("email", filepath);
-					json.put("photoid", "asdfag");//photoid 由上传完图片获得 
-					jsonparam.put("params", json.toString());
+					json.put("email", email);
+					json.put("photoid", photoid);//photoid 由上传完图片获得 
+					jsonparam.put("params", json);
 				} catch (JSONException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -266,7 +274,7 @@ public class AvatarApi extends BaseApi {
 					json = new JSONObject();
 					json.put("email", email);
 					json.put("photoid", photoid);
-					jsonparm.put("params", json.toString());
+					jsonparm.put("params", json);
 				} catch (JSONException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -335,7 +343,8 @@ public class AvatarApi extends BaseApi {
 					if(tip.getTipstype()!=-1) {
 						json.put("type", tip.getTipstype());
 					}
-					jsonparams.put("params", json.toString());
+					jsonparams.put("params", json);
+					Log.e(TAG, "jsonparams is " + jsonparams);
 				} catch (JSONException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
