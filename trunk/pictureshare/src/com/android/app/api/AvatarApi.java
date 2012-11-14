@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -18,6 +19,7 @@ import com.android.app.SettingActivity;
 import com.android.app.config.Config;
 import com.android.app.data.SettingLoader;
 import com.android.app.entity.Avatar;
+import com.android.app.entity.ImageItem;
 import com.android.app.net.HttpResult;
 import com.android.app.net.HttpResultJson;
 import com.android.app.net.NetService;
@@ -192,6 +194,23 @@ public class AvatarApi extends BaseApi {
 				HttpResultJson result = NetService.httpPostReturnJson(context, Config.Server_URL + AVATAR_INFO_URL, params);
 				apiResult.setResultCode(result.getResultCode());
 				Log.e(TAG, "result is " + result.getJson());
+				JSONObject jsonObject = result.getJson();
+				if (jsonObject != null && !jsonObject.isNull("opeRecord")) {
+					JSONObject opeJson = jsonObject.optJSONObject("opeRecord");
+					JSONArray array = opeJson.optJSONArray("items");
+					Log.e(TAG, "opeJson is " + opeJson);
+					Log.e(TAG, "array is " + array);
+					if (array != null && array.length() > 0) {
+						ArrayList<ImageItem> items = new ArrayList<ImageItem>();
+						for (int i = 0; i < array.length(); i++) {
+							ImageItem imageItem = new ImageItem();
+							imageItem.parseJson((JSONObject) array.opt(i));
+							items.add(imageItem);
+						}
+						Log.e(TAG, "items is " + items.size());
+//						apiResult.setEntities(items);
+					}
+				}
 				//apiResult.setEntities(entities);
 				return apiResult;
 			}
