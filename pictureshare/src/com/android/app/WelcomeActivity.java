@@ -21,15 +21,15 @@ public class WelcomeActivity extends BaseActivity {
 
 			@Override
 			public void run() {
-				if (!SettingLoader.isLogin(WelcomeActivity.this)) {
-					Intent intent = new Intent(WelcomeActivity.this,
-							RegAndLoginActivity.class);
-					startActivity(intent);
-				} else {
+//				if (!SettingLoader.isLogin(WelcomeActivity.this)) {
+//					Intent intent = new Intent(WelcomeActivity.this,
+//							RegAndLoginActivity.class);
+//					startActivity(intent);
+//				} else {
 					Intent intent = new Intent(WelcomeActivity.this,
 							MainActivity.class);
 					startActivity(intent);
-				}
+//				}
 				finish();
 
 			}

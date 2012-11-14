@@ -19,7 +19,6 @@ import com.android.app.api.AvatarRequestParam;
 import com.android.app.api.OtherApi;
 import com.android.app.api.Tips;
 import com.android.app.api.UserApi;
-import com.android.app.data.SettingLoader;
 import com.android.app.entity.Detail;
 import com.android.app.entity.Location;
 import com.android.app.entity.Point;
