@@ -208,10 +208,9 @@ public class AvatarApi extends BaseApi {
 							items.add(imageItem);
 						}
 						Log.e(TAG, "items is " + items.size());
-//						apiResult.setEntities(items);
+						apiResult.setDataEntities(items);
 					}
 				}
-				//apiResult.setEntities(entities);
 				return apiResult;
 			}
 
