@@ -28,6 +28,7 @@ import com.android.app.data.SettingLoader;
 import com.android.app.entity.Avatar;
 import com.android.app.entity.Location;
 import com.android.app.image.ImageLoaderManager;
+import com.android.app.service.PicService;
 import com.android.app.utils.Utils;
 import com.android.app.view.CellItem;
 
@@ -46,7 +47,6 @@ public class PicListActivity extends BaseActivity implements View.OnClickListene
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.piclist);
 		initComponents();
@@ -83,13 +83,14 @@ public class PicListActivity extends BaseActivity implements View.OnClickListene
 			public <T> void onReturnSucceedResult(int requestCode,
 					ApiResult<T> apiResult) {
 				Log.e(TAG, "onReturnSucceedResult is runing");
-				ArrayList<Avatar> entities = (ArrayList<Avatar>) apiResult.getEntities();
-				if(entities!=null) {
+				list = (ArrayList<Avatar>) apiResult.getDataEntities();
+				
+				if(list!=null) {
 					mProgresssBar.setVisibility(View.GONE);
 					listView.setVisibility(View.VISIBLE);
 					tiptext.setVisibility(View.GONE);
 					
-					adapter = new ListAdapter(entities);
+					adapter = new ListAdapter(list);
 					listView.setAdapter(adapter);
 					
 					listView.setOnItemClickListener(new OnItemClickListener() {
@@ -97,9 +98,10 @@ public class PicListActivity extends BaseActivity implements View.OnClickListene
 						@Override
 						public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 								long arg3) {
+							Avatar avatar = list.get(arg2);
+							PicService.currentItem = avatar.getImageItem();
 							if(editButton.isChecked()) {
 								Intent intent = new Intent(PicListActivity.this,RectActiivity.class);
-								Avatar avatar = list.get(arg2);
 								if(Utils.isNotNullOrEmpty(avatar.getPath())) {
 									intent.putExtra("mCurrentFile",avatar.getPath());
 									intent.putExtra("mFromPicList", true);
@@ -191,7 +193,35 @@ public class PicListActivity extends BaseActivity implements View.OnClickListene
 		mProgresssBar.setVisibility(View.VISIBLE);
 		listView.setVisibility(View.GONE);
 		tiptext.setVisibility(View.GONE);
+		
+		
+	/*	//测试数据
+		listView.setVisibility(View.VISIBLE);
+		adapter = new ListAdapter(loadData());
+		listView.setAdapter(adapter);
+		
+		listView.setOnItemClickListener(new OnItemClickListener() {
 
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+					long arg3) {
+				if(editButton.isChecked()) {
+					Intent intent = new Intent(PicListActivity.this,RectActiivity.class);
+					Avatar avatar = list.get(arg2);
+					if(Utils.isNotNullOrEmpty(avatar.getPath())) {
+						intent.putExtra("mCurrentFile",avatar.getPath());
+						intent.putExtra("mFromPicList", true);
+						startActivity(intent);
+					}else {
+						Toast.makeText(PicListActivity.this, "没有可编辑的图片哦！", Toast.LENGTH_SHORT).show();
+					}
+				}else {
+					Intent intent = new Intent(PicListActivity.this,DishActivity.class);
+					startActivity(intent);
+				}
+			}
+		});
+*/
 	}
 	
 	private ArrayList<Avatar> loadData() {

@@ -15,10 +15,11 @@ import android.os.Message;
 import android.util.Log;
 
 import com.android.app.PicApp;
-import com.android.app.R;
+import com.android.app.entity.Block;
+import com.android.app.entity.ImageItem;
+import com.android.app.entity.ImageTag;
 import com.android.app.intent.PicIntent;
 import com.android.app.receceiver.HeartBeatCheckReceiver;
-import com.android.app.utils.Utils;
 
 /**
  * 消息机制实现方案
@@ -30,6 +31,8 @@ public class PicService extends Service {
 
 	private static final String TAG = "PicService";
 	
+	public static ImageItem currentItem;
+	
 	public static long lastSendTime = 0l;
 	public static long lastReceiveTime = 0l;
 	private int HB_DEFAULT_ITV = 60;
@@ -40,6 +43,7 @@ public class PicService extends Service {
 
 	public static ArrayList<Activity> allActivity = new ArrayList<Activity>();
 	private ServiceHandler mHandler = null;
+
 
 	public static abstract class ServiceHandler extends Handler {
 		public final static int ID_Message_HeartBeat_Check = 2000;
@@ -238,6 +242,19 @@ public class PicService extends Service {
     	
 		android.os.Process.killProcess(android.os.Process.myPid());
 	}
-
 	
+	public static ImageTag getCurrrentTag() {
+    	if(currentItem==null) {
+    		//查询数据库
+    	}
+		return currentItem.getTag();
+	}
+	
+	public static ArrayList<Block> getCurrrentBlocks() {
+    	if(currentItem==null) {
+    		//查询数据库
+    	}
+		return currentItem.getBlocks();
+	}
+
 }
