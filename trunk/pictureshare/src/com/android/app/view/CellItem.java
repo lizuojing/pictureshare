@@ -56,7 +56,7 @@ public class CellItem extends RelativeLayout {
 		TextView title = new TextView(context);
 		mTitle = title;
 		title.setId(ID_TITLE);
-		title.setTextSize(18.f);
+		title.setTextSize(20.f);
 		title.setTextColor(getResources().getColor(
 				R.color.color_list_item_text_default));
 		addView(title, titleLP);
@@ -64,11 +64,12 @@ public class CellItem extends RelativeLayout {
 		RelativeLayout.LayoutParams timeLP = new RelativeLayout.LayoutParams(
 				LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 		timeLP.addRule(RelativeLayout.RIGHT_OF, ID_IMAGE);
-		// timeLP.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+		timeLP.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
 		timeLP.addRule(RelativeLayout.BELOW, ID_TITLE);
 		timeLP.setMargins(Utils.dipToPixels(context, 10), 0, 0, 0);
 		TextView time = new TextView(context);
 		mTime = time;
+		time.setTextSize(18.f);
 		title.setTextColor(getResources().getColor(
 				R.color.color_list_item_text_default));
 		addView(time, timeLP);
@@ -86,7 +87,7 @@ public class CellItem extends RelativeLayout {
 				} else {
 					mLeftImage.setImageResource(R.drawable.android_default);
 				}
-				mTitle.setText(imageItem.getTag()!=null?imageItem.getTag().getTags():"未命名");
+				mTitle.setText(imageItem.getTag()!=null?imageItem.getTag().getTags()+imageItem.getTag().getOwners():"未命名");
 				mTime.setText(imageItem.getTag()!=null?imageItem.getTag().getTime():"位置时间");
 			}
 		}
