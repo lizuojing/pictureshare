@@ -31,12 +31,8 @@ import android.widget.ListView;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 
-import com.android.app.api.ApiResult;
-import com.android.app.api.ApiReturnResultListener;
 import com.android.app.api.AvatarApi;
-import com.android.app.api.OtherApi;
 import com.android.app.entity.Avatar;
-import com.android.app.entity.VersionInfo;
 import com.android.app.service.PicService;
 import com.android.app.utils.ImageUtil;
 import com.android.app.utils.Utils;

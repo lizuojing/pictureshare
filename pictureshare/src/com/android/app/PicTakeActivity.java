@@ -20,11 +20,12 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 
-import com.android.app.entity.Avatar;
+import com.android.app.entity.Block;
 import com.android.app.image.ImageLoaderManager;
+import com.android.app.service.PicService;
 import com.android.app.utils.ImageUtil;
 import com.android.app.utils.Utils;
-import com.android.app.view.CellItem;
+import com.android.app.view.MenueItem;
 
 /**
  * 拍照页面
@@ -40,7 +41,7 @@ public class PicTakeActivity extends BaseActivity implements OnClickListener{
 	private String filePath;
 	private ListView listView;
 	
-	private ArrayList<Avatar> list = null;
+	private ArrayList<Block> list = null;
 	private ListAdapter listAdapter;
 	private ImageView bottom_button;
 
@@ -52,7 +53,7 @@ public class PicTakeActivity extends BaseActivity implements OnClickListener{
 		filePath = getIntent().getStringExtra("mCurrentFile");
 		Log.i(TAG, "filePath is " + filePath);
 		
-		list = loadData();
+		list = PicService.getCurrrentBlocks();
 		initComponents();
 		updateUI();
 		
@@ -91,52 +92,6 @@ public class PicTakeActivity extends BaseActivity implements OnClickListener{
 		return null;
 	}
 	
-	private ArrayList<Avatar> loadData() {
-		ArrayList<Avatar> list = new ArrayList<Avatar>();
-		Avatar avatar = new Avatar();
-		avatar.setPath("");
-		avatar.setTitle("我的工作证");
-		avatar.setTime(System.currentTimeMillis());
-		list.add(avatar);
-
-		avatar = new Avatar();
-		avatar.setPath("");
-		avatar.setTitle("我的贵宾证");
-		avatar.setTime(System.currentTimeMillis());
-		list.add(avatar);
-
-		avatar = new Avatar();
-		avatar.setPath("");
-		avatar.setTitle("我的志愿者证");
-		avatar.setTime(System.currentTimeMillis());
-		list.add(avatar);
-
-		avatar = new Avatar();
-		avatar.setPath("");
-		avatar.setTitle("我的贵宾证");
-		avatar.setTime(System.currentTimeMillis());
-		list.add(avatar);
-
-		avatar = new Avatar();
-		avatar.setPath("");
-		avatar.setTitle("我的志愿者证");
-		avatar.setTime(System.currentTimeMillis());
-		list.add(avatar);
-
-		avatar = new Avatar();
-		avatar.setPath("");
-		avatar.setTitle("我的贵宾证");
-		avatar.setTime(System.currentTimeMillis());
-		list.add(avatar);
-
-		avatar = new Avatar();
-		avatar.setPath("");
-		avatar.setTitle("我的志愿者证");
-		avatar.setTime(System.currentTimeMillis());
-		list.add(avatar);
-		return list;
-	}
-
 
 	private void updateUI() {
 		try {
@@ -164,8 +119,8 @@ public class PicTakeActivity extends BaseActivity implements OnClickListener{
 		btn_back.setOnClickListener(this);
 		bottom_button.setOnClickListener(this);
 		
-//		listAdapter = new ListAdapter();
-//		listView.setAdapter(listAdapter);
+		listAdapter = new ListAdapter(list);
+		listView.setAdapter(listAdapter);
 		
 	}
 
@@ -194,9 +149,11 @@ public class PicTakeActivity extends BaseActivity implements OnClickListener{
 	class ListAdapter extends BaseAdapter {
 
 		private ImageLoaderManager imageLoaderManager;
+		private ArrayList<Block> list;
 
-		public ListAdapter() {
+		public ListAdapter(ArrayList<Block> list) {
 			imageLoaderManager = new ImageLoaderManager(PicTakeActivity.this,new Handler(), this);
+			this.list = list;
 		}
 
 		@Override
@@ -216,14 +173,14 @@ public class PicTakeActivity extends BaseActivity implements OnClickListener{
 
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
-			Avatar avatar = list.get(position);
-			CellItem item = null;
+			Block block = list.get(position);
+			MenueItem item = null;
 			if (convertView == null) {
-				item = new CellItem(PicTakeActivity.this, avatar,imageLoaderManager);
+				item = new MenueItem(PicTakeActivity.this, block,imageLoaderManager);
 				convertView = item;
 			} else {
-				item = (CellItem) convertView;
-				item.setItemData(avatar);
+				item = (MenueItem) convertView;
+				item.setItemData(block);
 			}
 
 			return convertView;

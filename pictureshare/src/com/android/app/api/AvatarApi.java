@@ -201,11 +201,15 @@ public class AvatarApi extends BaseApi {
 					Log.e(TAG, "opeJson is " + opeJson);
 					Log.e(TAG, "array is " + array);
 					if (array != null && array.length() > 0) {
-						ArrayList<ImageItem> items = new ArrayList<ImageItem>();
+						ArrayList<Avatar> items = new ArrayList<Avatar>();
+						Avatar avatar = null;
+						ImageItem imageItem = null;
 						for (int i = 0; i < array.length(); i++) {
-							ImageItem imageItem = new ImageItem();
+							avatar =  new Avatar();
+							imageItem = new ImageItem();
 							imageItem.parseJson((JSONObject) array.opt(i));
-							items.add(imageItem);
+							avatar.setImageItem(imageItem);
+							items.add(avatar);
 						}
 						Log.e(TAG, "items is " + items.size());
 						apiResult.setDataEntities(items);

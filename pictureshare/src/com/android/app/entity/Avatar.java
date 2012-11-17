@@ -9,7 +9,6 @@ import android.os.Parcelable;
 
 import com.android.app.PicApp;
 import com.android.app.utils.ImageUtil;
-import com.android.app.utils.Utils;
 
 /**
  * 图片信息
@@ -32,6 +31,19 @@ public class Avatar implements Parcelable {
 	private int thumbnailW;
 	private int thumbnailH;
 	public int orientation;
+	
+	////
+	private ImageItem imageItem;
+	
+	
+
+	public ImageItem getImageItem() {
+		return imageItem;
+	}
+
+	public void setImageItem(ImageItem imageItem) {
+		this.imageItem = imageItem;
+	}
 
 	class Point {
 		int pointx;

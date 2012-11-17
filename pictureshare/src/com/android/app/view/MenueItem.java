@@ -8,11 +8,12 @@ import android.widget.TextView;
 
 import com.android.app.R;
 import com.android.app.entity.Avatar;
+import com.android.app.entity.Block;
 import com.android.app.entity.ImageItem;
 import com.android.app.image.ImageLoaderManager;
 import com.android.app.utils.Utils;
 
-public class CellItem extends RelativeLayout {
+public class MenueItem extends RelativeLayout {
 
 	private static final int ID_IMAGE = 2012;
 	private static final int ID_TITLE = 2016;
@@ -22,12 +23,12 @@ public class CellItem extends RelativeLayout {
 	private TextView mTime;
 	private ImageLoaderManager imageLoaderManager;
 
-	public CellItem(Context context, Avatar avatar,
+	public MenueItem(Context context, Block block,
 			ImageLoaderManager imageLoaderManager) {
 		super(context);
 		this.imageLoaderManager = imageLoaderManager;
 		createLayout(context);
-		setItemData(avatar);
+		setItemData(block);
 	}
 
 	private void createLayout(Context context) {
@@ -36,22 +37,22 @@ public class CellItem extends RelativeLayout {
 
 		// RelativeLayout.LayoutParams imageLP = new
 		// RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT);
-		RelativeLayout.LayoutParams imageLP = new RelativeLayout.LayoutParams(
-				Utils.dipToPixels(context, 100),
-				Utils.dipToPixels(context, 100));
-		imageLP.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
-		imageLP.addRule(RelativeLayout.CENTER_VERTICAL);
-		imageLP.setMargins(Utils.dipToPixels(context, 2),
-				Utils.dipToPixels(context, 2), Utils.dipToPixels(context, 2),
-				Utils.dipToPixels(context, 2));
-		ImageView image = new ImageView(context);
-		image.setId(ID_IMAGE);
-		mLeftImage = image;
-		addView(image, imageLP);
+//		RelativeLayout.LayoutParams imageLP = new RelativeLayout.LayoutParams(
+//				Utils.dipToPixels(context, 100),
+//				Utils.dipToPixels(context, 100));
+//		imageLP.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+//		imageLP.addRule(RelativeLayout.CENTER_VERTICAL);
+//		imageLP.setMargins(Utils.dipToPixels(context, 2),
+//				Utils.dipToPixels(context, 2), Utils.dipToPixels(context, 2),
+//				Utils.dipToPixels(context, 2));
+//		ImageView image = new ImageView(context);
+//		image.setId(ID_IMAGE);
+//		mLeftImage = image;
+//		addView(image, imageLP);
 
 		RelativeLayout.LayoutParams titleLP = new RelativeLayout.LayoutParams(
 				LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-		titleLP.addRule(RelativeLayout.RIGHT_OF, ID_IMAGE);
+//		titleLP.addRule(RelativeLayout.RIGHT_OF, ID_IMAGE);
 		titleLP.setMargins(Utils.dipToPixels(context, 10), 0, 0, 0);
 		TextView title = new TextView(context);
 		mTitle = title;
@@ -61,33 +62,24 @@ public class CellItem extends RelativeLayout {
 				R.color.color_list_item_text_default));
 		addView(title, titleLP);
 
-		RelativeLayout.LayoutParams timeLP = new RelativeLayout.LayoutParams(
-				LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-		timeLP.addRule(RelativeLayout.RIGHT_OF, ID_IMAGE);
-		// timeLP.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-		timeLP.addRule(RelativeLayout.BELOW, ID_TITLE);
-		timeLP.setMargins(Utils.dipToPixels(context, 10), 0, 0, 0);
-		TextView time = new TextView(context);
-		mTime = time;
-		title.setTextColor(getResources().getColor(
-				R.color.color_list_item_text_default));
-		addView(time, timeLP);
+//		RelativeLayout.LayoutParams timeLP = new RelativeLayout.LayoutParams(
+//				LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+//		timeLP.addRule(RelativeLayout.RIGHT_OF, ID_IMAGE);
+//		// timeLP.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+//		timeLP.addRule(RelativeLayout.BELOW, ID_TITLE);
+//		timeLP.setMargins(Utils.dipToPixels(context, 10), 0, 0, 0);
+//		TextView time = new TextView(context);
+//		mTime = time;
+//		title.setTextColor(getResources().getColor(
+//				R.color.color_list_item_text_default));
+//		addView(time, timeLP);
 	}
 
-	public void setItemData(Avatar avatar) {
-		if(avatar!=null) {
-			ImageItem imageItem = avatar.getImageItem();
-			if(imageItem!=null) {
-				String imageUrl = imageItem.getImageUrl();
-				Log.e(TAG, "imageUrl is " + imageUrl);
-				if (!Utils.isNullOrEmpty(imageUrl)) {
-					mLeftImage.setImageBitmap(imageLoaderManager.getImage(
-							imageUrl, R.drawable.android_default));
-				} else {
-					mLeftImage.setImageResource(R.drawable.android_default);
-				}
-				mTitle.setText(imageItem.getTag()!=null?imageItem.getTag().getTags():"未命名");
-				mTime.setText(imageItem.getTag()!=null?imageItem.getTag().getTime():"位置时间");
+	public void setItemData(Block block) {
+		if(block!=null) {
+			String title = block.getTitle();
+			if(title!=null) {
+				mTitle.setText(title!=null?title:"未命名");
 			}
 		}
 		

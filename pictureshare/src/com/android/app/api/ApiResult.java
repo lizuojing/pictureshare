@@ -2,7 +2,7 @@ package com.android.app.api;
 
 import java.util.ArrayList;
 
-import com.android.app.entity.ImageItem;
+import com.android.app.entity.Avatar;
 
 /**
  * api请求返回的结果结构上与HttpResult相似
@@ -30,7 +30,7 @@ public class ApiResult<T> {
 	private String failMessage = "";
 
 	private ArrayList<T> entities;
-	private ArrayList<ImageItem> items;
+	private ArrayList<Avatar> items;
 
 	public int getResultCode() {
 		return resultCode;
@@ -64,11 +64,11 @@ public class ApiResult<T> {
 		this.entities = entities;
 	}
 
-	public void setDataEntities(ArrayList<ImageItem> items) {
+	public void setDataEntities(ArrayList<Avatar> items) {
 		this.items = items;
 	}
 	
-	public ArrayList<ImageItem> getDataEntities() {
+	public ArrayList<Avatar> getDataEntities() {
 		return items;
 	}
 
