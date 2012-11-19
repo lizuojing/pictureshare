@@ -4,9 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
@@ -14,7 +11,6 @@ import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 
 import com.android.app.PMapActivity;
-import com.android.app.R;
 import com.android.app.api.ApiResult;
 import com.android.app.api.ApiReturnResultListener;
 import com.android.app.api.AvatarApi;
@@ -25,7 +21,6 @@ import com.android.app.view.PicDialog.OnButtonClickListener;
 import com.baidu.mapapi.GeoPoint;
 import com.baidu.mapapi.ItemizedOverlay;
 import com.baidu.mapapi.MapView;
-import com.baidu.mapapi.Overlay;
 import com.baidu.mapapi.OverlayItem;
 import com.baidu.mapapi.Projection;
 

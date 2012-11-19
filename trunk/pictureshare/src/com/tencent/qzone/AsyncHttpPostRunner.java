@@ -1,8 +1,9 @@
 package com.tencent.qzone;
 
-import android.os.Bundle;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+
+import android.os.Bundle;
 
 public class AsyncHttpPostRunner
 {

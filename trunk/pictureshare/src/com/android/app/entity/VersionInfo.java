@@ -1,6 +1,5 @@
 package com.android.app.entity;
 
-import org.json.JSONObject;
 
 /**
  * 版本信息,客户端升级时使用

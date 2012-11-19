@@ -1,12 +1,13 @@
 package com.tencent.qzone;
 
+import java.io.IOException;
+import java.io.InputStream;
+
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.StateListDrawable;
 import android.view.View;
-import java.io.IOException;
-import java.io.InputStream;
 
 public class TencentOpenRes extends View
 {

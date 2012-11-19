@@ -8,9 +8,9 @@ import android.os.Build;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.webkit.WebSettings;
+import android.webkit.WebView;
 import android.webkit.WebSettings.LayoutAlgorithm;
 import android.webkit.WebSettings.RenderPriority;
-import android.webkit.WebView;
 import android.webkit.WebSettings.TextSize;
 
 public class PicWebView extends WebView {

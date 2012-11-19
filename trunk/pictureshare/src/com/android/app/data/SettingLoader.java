@@ -2,8 +2,6 @@ package com.android.app.data;
 
 import java.io.File;
 
-import com.android.app.RectActiivity;
-
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;

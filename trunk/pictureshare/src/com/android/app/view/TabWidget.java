@@ -9,7 +9,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.android.app.R;
 import com.android.app.utils.Utils;
 
 public class TabWidget extends LinearLayout implements Checkable {
