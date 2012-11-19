@@ -122,7 +122,7 @@ public class PicTakeActivity extends BaseActivity implements OnClickListener {
 
 	private void initComponents() {
 		btn_back = (Button) findViewById(R.id.btn_back);
-		imageView = (ImageView) findViewById(R.id.imageView4);
+		imageView = (ImageView) findViewById(R.id.BigImage);
 		bottom_button = (ImageView) findViewById(R.id.imageView1);
 		listView = (ListView) findViewById(R.id.listView1);
 

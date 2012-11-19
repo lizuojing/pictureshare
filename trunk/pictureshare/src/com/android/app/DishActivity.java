@@ -57,8 +57,8 @@ public class DishActivity extends ActivityGroup implements OnTouchListener,
 		Intent intent = new Intent(this, PicTakeActivity.class);
 		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
-		intent.putExtra("mCurrentFile", getIntent().getStringExtra(
-				"mCurrentFile"));
+		intent.putExtra("mCurrentFile",
+				getIntent().getStringExtra("mCurrentFile"));
 		intent.putExtra("number", number);
 		eachLayout.addView(getLocalActivityManager().startActivity("contact",
 				intent).getDecorView());

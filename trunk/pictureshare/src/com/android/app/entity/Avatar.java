@@ -11,7 +11,9 @@ import com.android.app.PicApp;
 import com.android.app.utils.ImageUtil;
 
 /**
- * 图片信息
+ * 图片信息 `
+ * 
+ * 
  * 
  * @author Administrator
  * 
@@ -26,16 +28,14 @@ public class Avatar implements Parcelable {
 	private ArrayList<Comment> comments;
 	private ArrayList<Point> points;
 	private long time;
-	
+
 	public SoftReference<Bitmap> mThumbnailRef;
 	private int thumbnailW;
 	private int thumbnailH;
 	public int orientation;
-	
-	////
+
+	// //
 	private ImageItem imageItem;
-	
-	
 
 	public ImageItem getImageItem() {
 		return imageItem;
@@ -48,17 +48,18 @@ public class Avatar implements Parcelable {
 	class Point {
 		int pointx;
 		int pointy;
+
 		public Point(int x, int y) {
 			pointx = x;
 			pointy = y;
 		}
 	}
-	
+
 	public Avatar() {
 		thumbnailW = PicApp.getScreenWidth() / 4;
 		thumbnailH = thumbnailW;
 	}
-	
+
 	public Avatar(Parcel in) {
 		this.orientation = in.readInt();
 		this.thumbnailH = in.readInt();
@@ -120,8 +121,6 @@ public class Avatar implements Parcelable {
 	public void setComments(ArrayList<Comment> comments) {
 		this.comments = comments;
 	}
-	
-	
 
 	public ArrayList<Point> getPoints() {
 		return points;
@@ -138,21 +137,21 @@ public class Avatar implements Parcelable {
 	public void setTime(long time) {
 		this.time = time;
 	}
-	
-	
+
 	public Bitmap getThumbnail() {
 		return getThumbnail(thumbnailW, thumbnailH);
 	}
 
 	public Bitmap getThumbnail(int width, int height) {
-		if (mThumbnailRef != null&&mThumbnailRef.get()!=null) {
+		if (mThumbnailRef != null && mThumbnailRef.get() != null) {
 			return mThumbnailRef.get();
 		}
-		if(mThumbnailRef != null){
+		if (mThumbnailRef != null) {
 			mThumbnailRef.clear();
 		}
-		Bitmap bitmap = ImageUtil.getThumbnail(this.getPath(), width, height,orientation);
-		mThumbnailRef=new SoftReference<Bitmap>(bitmap);
+		Bitmap bitmap = ImageUtil.getThumbnail(this.getPath(), width, height,
+				orientation);
+		mThumbnailRef = new SoftReference<Bitmap>(bitmap);
 		return bitmap;
 	}
 
@@ -168,7 +167,6 @@ public class Avatar implements Parcelable {
 			return new Avatar(source);
 		}
 	};
-	
 
 	@Override
 	public int describeContents() {
@@ -179,7 +177,7 @@ public class Avatar implements Parcelable {
 	public void writeToParcel(Parcel dest, int flags) {
 		dest.writeInt(thumbnailH);
 		dest.writeInt(thumbnailW);
-//		dest.writeParcelable(mThumbnail, flags);
+		// dest.writeParcelable(mThumbnail, flags);
 	}
 
 }

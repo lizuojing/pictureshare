@@ -39,22 +39,21 @@
     </RelativeLayout>
 
     <ImageView
-        android:id="@+id/imageView4"
+        android:id="@+id/BigImage"
         android:layout_width="200dip"
         android:layout_height="200dip"
         android:layout_below="@id/relativeLayout2"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="2dip"
         android:src="@drawable/ic_launcher" />
-    
-    <LinearLayout   android:layout_width="match_parent"
+
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@id/relativeLayout3"
         android:layout_below="@id/imageView4"
         android:layout_marginBottom="2dip"
         android:layout_marginTop="2dip" >
-        
-        
     </LinearLayout>
 
     <ListView
