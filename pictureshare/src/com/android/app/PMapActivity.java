@@ -8,13 +8,11 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
-
 import android.widget.Button;
 import android.widget.Toast;
 
 import com.android.app.api.ApiResult;
 import com.android.app.api.ApiReturnResultListener;
-import com.android.app.api.AvatarApi;
 import com.android.app.api.OtherApi;
 import com.android.app.entity.Avatar;
 import com.android.app.entity.Detail;

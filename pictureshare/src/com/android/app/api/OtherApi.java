@@ -14,7 +14,6 @@ import android.util.Log;
 
 import com.android.app.config.Config;
 import com.android.app.entity.Detail;
-import com.android.app.entity.User;
 import com.android.app.entity.VersionInfo;
 import com.android.app.net.HttpResult;
 import com.android.app.net.HttpResultJson;

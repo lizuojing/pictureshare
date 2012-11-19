@@ -3,8 +3,6 @@ package com.android.app;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import com.android.app.data.SettingLoader;
-
 import android.content.Intent;
 import android.os.Bundle;
 

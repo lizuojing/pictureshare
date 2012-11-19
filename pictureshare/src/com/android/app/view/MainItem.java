@@ -9,7 +9,6 @@ import android.widget.TextView;
 
 import com.android.app.R;
 import com.android.app.entity.Avatar;
-import com.android.app.image.ImageLoaderManager;
 import com.android.app.utils.Utils;
 
 public class MainItem extends RelativeLayout {

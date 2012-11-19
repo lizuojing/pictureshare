@@ -1,4 +1,5 @@
 package com.android.app;
+
 import android.app.ActivityGroup;
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,11 +8,12 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
 import android.view.animation.Animation;
-import android.view.animation.Animation.AnimationListener;
 import android.view.animation.AnimationUtils;
 import android.view.animation.RotateAnimation;
+import android.view.animation.Animation.AnimationListener;
 import android.widget.LinearLayout;
 
+import com.android.app.entity.Avatar;
 import com.android.app.service.PicService;
 import com.android.app.utils.Utils;
 import com.android.app.view.RotateView;
@@ -34,6 +36,8 @@ public class DishActivity extends ActivityGroup implements OnTouchListener,
 	private int orient = -1;//
 	private PaddlingAction paddlingAction = PaddlingAction.no;
 	private RotateView rotateView;
+	private int number;
+	private Avatar avatar;
 
 	enum PaddlingAction {
 		no, up, down;
@@ -48,10 +52,14 @@ public class DishActivity extends ActivityGroup implements OnTouchListener,
 		PicService.allActivity.add(this);
 
 		eachLayout = (LinearLayout) findViewById(R.id.each_layout);
+		number = getIntent().getIntExtra("number", -1);
+
 		Intent intent = new Intent(this, PicTakeActivity.class);
 		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-		intent.putExtra("mCurrentFile",
-				getIntent().getStringExtra("mCurrentFile"));
+
+		intent.putExtra("mCurrentFile", getIntent().getStringExtra(
+				"mCurrentFile"));
+		intent.putExtra("number", number);
 		eachLayout.addView(getLocalActivityManager().startActivity("contact",
 				intent).getDecorView());
 
