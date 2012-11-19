@@ -31,19 +31,18 @@ public class CellItem extends RelativeLayout {
 	}
 
 	private void createLayout(Context context) {
-		setBackgroundColor(getResources().getColor(
-				R.color.color_list_item_default));
 
+		setBackgroundResource(R.drawable.backitem);
 		// RelativeLayout.LayoutParams imageLP = new
 		// RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT);
 		RelativeLayout.LayoutParams imageLP = new RelativeLayout.LayoutParams(
-				Utils.dipToPixels(context, 100),
-				Utils.dipToPixels(context, 100));
+				Utils.dipToPixels(context, 100), Utils
+						.dipToPixels(context, 100));
 		imageLP.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
 		imageLP.addRule(RelativeLayout.CENTER_VERTICAL);
-		imageLP.setMargins(Utils.dipToPixels(context, 2),
-				Utils.dipToPixels(context, 2), Utils.dipToPixels(context, 2),
-				Utils.dipToPixels(context, 2));
+		imageLP.setMargins(Utils.dipToPixels(context, 2), Utils.dipToPixels(
+				context, 2), Utils.dipToPixels(context, 2), Utils.dipToPixels(
+				context, 2));
 		ImageView image = new ImageView(context);
 		image.setId(ID_IMAGE);
 		mLeftImage = image;
@@ -76,9 +75,9 @@ public class CellItem extends RelativeLayout {
 	}
 
 	public void setItemData(Avatar avatar) {
-		if(avatar!=null) {
+		if (avatar != null) {
 			ImageItem imageItem = avatar.getImageItem();
-			if(imageItem!=null) {
+			if (imageItem != null) {
 				String imageUrl = imageItem.getImageUrl();
 				Log.e(TAG, "imageUrl is " + imageUrl);
 				if (!Utils.isNullOrEmpty(imageUrl)) {
@@ -87,20 +86,23 @@ public class CellItem extends RelativeLayout {
 				} else {
 					mLeftImage.setImageResource(R.drawable.android_default);
 				}
-				mTitle.setText(imageItem.getTag()!=null?imageItem.getTag().getTags()+imageItem.getTag().getOwners():"未命名");
-				mTime.setText(imageItem.getTag()!=null?imageItem.getTag().getTime():"位置时间");
+				mTitle.setText(imageItem.getTag() != null ? imageItem.getTag()
+						.getTags()
+						+ imageItem.getTag().getOwners() : "未命名");
+				mTime.setText(imageItem.getTag() != null ? imageItem.getTag()
+						.getTime() : "位置时间");
 			}
 		}
-		
-//		if (!Utils.isNullOrEmpty(avatar.getPath())) {
-//			mLeftImage.setImageBitmap(imageLoaderManager.getImage(
-//					avatar.getPath(), R.drawable.android_default));
-//		} else {
-//			mLeftImage.setImageResource(R.drawable.android_default);
-//		}
-//
-//		mTitle.setText(avatar.getTitle());
-//		mTime.setText(Utils.formatTime(avatar.getTime()));
+
+		// if (!Utils.isNullOrEmpty(avatar.getPath())) {
+		// mLeftImage.setImageBitmap(imageLoaderManager.getImage(
+		// avatar.getPath(), R.drawable.android_default));
+		// } else {
+		// mLeftImage.setImageResource(R.drawable.android_default);
+		// }
+		//
+		// mTitle.setText(avatar.getTitle());
+		// mTime.setText(Utils.formatTime(avatar.getTime()));
 
 	}
 

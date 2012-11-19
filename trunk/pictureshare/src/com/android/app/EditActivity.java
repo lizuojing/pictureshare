@@ -22,7 +22,7 @@ import com.android.app.entity.Avatar;
 import com.android.app.image.ImageLoaderManager;
 import com.android.app.view.CellItem;
 
-public class EditActivity extends BaseActivity implements View.OnClickListener{
+public class EditActivity extends BaseActivity implements View.OnClickListener {
 	private static final String TAG = "EditActivity";
 	private ListView listView;
 	private Button finishButton;
@@ -35,9 +35,9 @@ public class EditActivity extends BaseActivity implements View.OnClickListener{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.edit);
 
-		inputMethodManager = (InputMethodManager)this.getSystemService(Context.INPUT_METHOD_SERVICE);  
+		inputMethodManager = (InputMethodManager) this
+				.getSystemService(Context.INPUT_METHOD_SERVICE);
 
-		
 		initComponents();
 
 		registerButton();
@@ -46,7 +46,7 @@ public class EditActivity extends BaseActivity implements View.OnClickListener{
 
 	private void registerButton() {
 		finishButton.setOnClickListener(this);
-		
+
 		listView.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
@@ -61,13 +61,13 @@ public class EditActivity extends BaseActivity implements View.OnClickListener{
 	}
 
 	private void initComponents() {
-		finishButton = (Button)findViewById(R.id.button1);
-		
+		finishButton = (Button) findViewById(R.id.button1);
+
 		listView = (ListView) findViewById(R.id.listView1);
-		
-		search_edit = (EditText)findViewById(R.id.editText1);
+
+		search_edit = (EditText) findViewById(R.id.editText1);
 		search_edit.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				search_edit.setFocusable(true);
@@ -76,9 +76,9 @@ public class EditActivity extends BaseActivity implements View.OnClickListener{
 				inputMethodManager.showSoftInput(search_edit, 0);
 			}
 		});
-		
-		
+
 		ListAdapter adapter = new ListAdapter(loadData());
+		listView.setPadding(13, 0, 13, 0);
 		listView.setAdapter(adapter);
 
 	}
@@ -135,7 +135,8 @@ public class EditActivity extends BaseActivity implements View.OnClickListener{
 		private ImageLoaderManager imageLoaderManager;
 
 		public ListAdapter(ArrayList<Avatar> list) {
-			imageLoaderManager = new ImageLoaderManager(EditActivity.this,new Handler(), this);
+			imageLoaderManager = new ImageLoaderManager(EditActivity.this,
+					new Handler(), this);
 			this.list = list;
 		}
 
@@ -162,7 +163,8 @@ public class EditActivity extends BaseActivity implements View.OnClickListener{
 			Avatar avatar = list.get(position);
 			CellItem item = null;
 			if (convertView == null) {
-				item = new CellItem(EditActivity.this, avatar,imageLoaderManager);
+				item = new CellItem(EditActivity.this, avatar,
+						imageLoaderManager);
 				convertView = item;
 			} else {
 				item = (CellItem) convertView;
@@ -179,13 +181,13 @@ public class EditActivity extends BaseActivity implements View.OnClickListener{
 		switch (v.getId()) {
 		case R.id.button1:
 			Log.i(TAG, "edit finish");
-//			finish();
+			// finish();
 			super.onBackPressed();
 			break;
 
 		default:
 			break;
 		}
-		
+
 	}
 }
