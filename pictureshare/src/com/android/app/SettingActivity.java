@@ -308,7 +308,7 @@ public class SettingActivity extends BaseActivity implements OnClickListener {
 		params.setPoints(list);
 		params.setLabel("杭州西湖");
 		params.setEmail("adsfa@163.com");
-		params.setPhotoid("0415c25ead8be2b7eeb825a37407ed77");
+		params.setPhotoid("3a96d2983554a166ade86212419ae41f");//有效photoid
 		params.setTipsid("23453576");
 		api.sendAvatarInfo(1, params, 1, "25");
 		
