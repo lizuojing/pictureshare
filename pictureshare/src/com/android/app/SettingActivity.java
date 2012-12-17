@@ -3,6 +3,7 @@ package com.android.app;
 import java.io.File;
 import java.util.ArrayList;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
@@ -69,7 +70,7 @@ public class SettingActivity extends BaseActivity implements OnClickListener {
 		DetailMap = (RelativeLayout) findViewById(R.id.DetailMap);
 		addtips = (RelativeLayout) findViewById(R.id.addtips);
 		refreshlist = (RelativeLayout) findViewById(R.id.refreshlist);
-	
+
 		backButton.setOnClickListener(this);
 		personalSetting.setOnClickListener(this);
 		valuationSetting.setOnClickListener(this);
@@ -79,15 +80,15 @@ public class SettingActivity extends BaseActivity implements OnClickListener {
 		DetailMap.setOnClickListener(this);
 		addtips.setOnClickListener(this);
 		refreshlist.setOnClickListener(this);
-		
-		//协议测试
+
+		// 协议测试
 		sendpicinfoLayout = (RelativeLayout) findViewById(R.id.sendpicinfo);
 		supportLayout = (RelativeLayout) findViewById(R.id.support);
 		picshareLayout = (RelativeLayout) findViewById(R.id.picshare);
 		latestversionLayout = (RelativeLayout) findViewById(R.id.latestversion);
 		sendpicLayout = (RelativeLayout) findViewById(R.id.sendpic);
 		qrcodeLayout = (RelativeLayout) findViewById(R.id.qrcode);
-		
+
 		sendpicinfoLayout.setOnClickListener(this);
 		supportLayout.setOnClickListener(this);
 		picshareLayout.setOnClickListener(this);
@@ -104,6 +105,12 @@ public class SettingActivity extends BaseActivity implements OnClickListener {
 			break;
 		case R.id.personal_setting:
 			Toast.makeText(this, "个人中心", Toast.LENGTH_SHORT).show();
+
+			Intent intent = new Intent(SettingActivity.this, DishActivity.class);
+			Log.e("number", "arg2=" + "1");
+			intent.putExtra("number", "1");
+			startActivity(intent);
+
 			break;
 		case R.id.valuation_setting:
 			Toast.makeText(this, "评价", Toast.LENGTH_SHORT).show();
@@ -139,15 +146,16 @@ public class SettingActivity extends BaseActivity implements OnClickListener {
 		case R.id.support:
 			Toast.makeText(this, "赞", Toast.LENGTH_SHORT).show();
 			File exFile = Environment.getExternalStorageDirectory();
-			String path = exFile.getAbsolutePath()+"/Camera/691kb.jpg";
+			String path = exFile.getAbsolutePath() + "/Camera/691kb.jpg";
 			Log.i(TAG, "path is " + path);
-			supportPic(path,"111@163.com","+1");
+			supportPic(path, "111@163.com", "+1");
 			break;
 		case R.id.picshare:
 			Toast.makeText(this, "分享", Toast.LENGTH_SHORT).show();
-//			String filepath = Environment.getExternalStorageDirectory().getAbsolutePath()+"/Camera/691kb.jpg";
-//			Log.i(TAG, "path is " + filepath);
-			sharePic("443@163.com","0415c25ead8be2b7eeb825a37407ed77");
+			// String filepath =
+			// Environment.getExternalStorageDirectory().getAbsolutePath()+"/Camera/691kb.jpg";
+			// Log.i(TAG, "path is " + filepath);
+			sharePic("443@163.com", "0415c25ead8be2b7eeb825a37407ed77");
 			break;
 		case R.id.latestversion:
 			Toast.makeText(this, "最新版本", Toast.LENGTH_SHORT).show();
@@ -155,13 +163,15 @@ public class SettingActivity extends BaseActivity implements OnClickListener {
 			break;
 		case R.id.sendpic:
 			Toast.makeText(this, "发送图片", Toast.LENGTH_SHORT).show();
-			String picpath =  Environment.getExternalStorageDirectory().getAbsolutePath()+"/20121111185009.jpg";
+			String picpath = Environment.getExternalStorageDirectory()
+					.getAbsolutePath()
+					+ "/20121111185009.jpg";
 			Log.i(TAG, "path is " + picpath);
 			uploadpicture(picpath);
 			break;
 		case R.id.qrcode:
 			Toast.makeText(this, "二维码", Toast.LENGTH_SHORT).show();
-			scanqrcode("alksjdljjasdg","1233@163.com");
+			scanqrcode("alksjdljjasdg", "1233@163.com");
 			break;
 		default:
 			break;
@@ -169,15 +179,14 @@ public class SettingActivity extends BaseActivity implements OnClickListener {
 
 	}
 
-
-	private void scanqrcode(String photoid,String email) {
+	private void scanqrcode(String photoid, String email) {
 		AvatarApi avatarApi = new AvatarApi(this);
 		avatarApi.setReturnResultListener(new ApiReturnResultListener() {
 			@Override
 			public <T> void onReturnSucceedResult(int requestCode,
 					ApiResult<T> apiResult) {
 				Log.i(TAG, "apiResult is " + apiResult.getResultCode());
-			
+
 			}
 
 			@Override
@@ -187,17 +196,17 @@ public class SettingActivity extends BaseActivity implements OnClickListener {
 
 			}
 		});
-		avatarApi.qrcodeAuth(this,1,photoid,email);
+		avatarApi.qrcodeAuth(this, 1, photoid, email);
 	}
 
-	private void sharePic(String email,String photoid) {
+	private void sharePic(String email, String photoid) {
 		AvatarApi avatarApi = new AvatarApi(this);
 		avatarApi.setReturnResultListener(new ApiReturnResultListener() {
 			@Override
 			public <T> void onReturnSucceedResult(int requestCode,
 					ApiResult<T> apiResult) {
 				Log.i(TAG, "apiResult is " + apiResult.getResultCode());
-			
+
 			}
 
 			@Override
@@ -207,17 +216,17 @@ public class SettingActivity extends BaseActivity implements OnClickListener {
 
 			}
 		});
-		avatarApi.shareAvatar(this, 1, photoid,email);
+		avatarApi.shareAvatar(this, 1, photoid, email);
 	}
 
-	private void supportPic(String path,String email,String support) {
+	private void supportPic(String path, String email, String support) {
 		AvatarApi avatarApi = new AvatarApi(this);
 		avatarApi.setReturnResultListener(new ApiReturnResultListener() {
 			@Override
 			public <T> void onReturnSucceedResult(int requestCode,
 					ApiResult<T> apiResult) {
 				Log.i(TAG, "apiResult is " + apiResult.getResultCode());
-			
+
 			}
 
 			@Override
@@ -237,7 +246,7 @@ public class SettingActivity extends BaseActivity implements OnClickListener {
 			public <T> void onReturnSucceedResult(int requestCode,
 					ApiResult<T> apiResult) {
 				Log.i(TAG, "apiResult is " + apiResult.getResultCode());
-			
+
 			}
 
 			@Override
@@ -247,9 +256,10 @@ public class SettingActivity extends BaseActivity implements OnClickListener {
 
 			}
 		});
-		avatarApi.uploadAvatar(SettingActivity.this,0,filepath,"adsfa@163.com");
+		avatarApi.uploadAvatar(SettingActivity.this, 0, filepath,
+				"adsfa@163.com");
 	}
-	
+
 	private void checkAppUpdate() {
 		OtherApi otherApi = new OtherApi(this);
 		otherApi.setReturnResultListener(new ApiReturnResultListener() {
@@ -278,40 +288,41 @@ public class SettingActivity extends BaseActivity implements OnClickListener {
 
 			}
 		});
-		otherApi.getLatestAppVersion(0,"1.0");
+		otherApi.getLatestAppVersion(0, "1.0");
 	}
-	
+
 	private void sendPicMessage() {
 		AvatarApi api = new AvatarApi(this);
 		api.setReturnResultListener(new ApiReturnResultListener() {
-			
+
 			@Override
 			public <T> void onReturnSucceedResult(int requestCode,
 					ApiResult<T> apiResult) {
 			}
-			
+
 			@Override
-			public <T> void onReturnFailResult(int requestCode, ApiResult<T> apiResult) {
+			public <T> void onReturnFailResult(int requestCode,
+					ApiResult<T> apiResult) {
 				// TODO Auto-generated method stub
-				
+
 			}
 		});
-		int[] a = new int[]{50,50};
+		int[] a = new int[] { 50, 50 };
 		AvatarRequestParam params = new AvatarRequestParam();
-		Location location = new Location("39.90923","116.357428");
+		Location location = new Location("39.90923", "116.357428");
 		params.setLocation(location);
 		ArrayList<String> list = new ArrayList<String>();
-		for(int i=0;i<4;i++) {
+		for (int i = 0; i < 4; i++) {
 			String point = "12,12";
 			list.add(point);
 		}
 		params.setPoints(list);
 		params.setLabel("杭州西湖");
 		params.setEmail("adsfa@163.com");
-		params.setPhotoid("3a96d2983554a166ade86212419ae41f");//有效photoid
+		params.setPhotoid("3a96d2983554a166ade86212419ae41f");// 有效photoid
 		params.setTipsid("23453576");
 		api.sendAvatarInfo(1, params, 1, "25");
-		
+
 	}
 
 	private void uerRegedit() {
@@ -455,10 +466,10 @@ public class SettingActivity extends BaseActivity implements OnClickListener {
 			}
 		});
 		Tips tip = new Tips();
-//		tip.setCemail(SettingLoader.getRegEmail(this));
+		// tip.setCemail(SettingLoader.getRegEmail(this));
 		tip.setCemail("1222@126.com");
 		tip.setTemail("1222@126.com");
-		tip.setPhotoid("f9a848d40ac90d703f1d9c6c66fa8fec");//可空
+		tip.setPhotoid("f9a848d40ac90d703f1d9c6c66fa8fec");// 可空
 		tip.setTipsid("f9a848d40ac90d703f1d9c6c66fa8dfs");
 		tip.setTipstype(0);
 		tip.setX("123");

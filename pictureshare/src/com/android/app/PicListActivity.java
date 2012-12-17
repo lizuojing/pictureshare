@@ -70,11 +70,12 @@ public class PicListActivity extends BaseActivity implements
 
 		params.setPoints(pointlist);
 		params.setLabel(picTitle);
-		params.setEmail(SettingLoader.getRegEmail(this));
+		 params.setEmail(SettingLoader.getRegEmail(this));
 		params.setPhotoid(SettingLoader.getPhotoId(this));
-		// params.setEmail("aaa@163.com");
-		// params.setPhotoid("12345256");
-		// params.setTipsid("23453576");//大头针
+		params.setEmail("aaa@163.com");
+		params.setLabel("1");
+		params.setPhotoid("12345256");
+		params.setTipsid("23453576");// 大头针
 
 		AvatarApi api = new AvatarApi(this);
 		api.setReturnResultListener(new ApiReturnResultListener() {

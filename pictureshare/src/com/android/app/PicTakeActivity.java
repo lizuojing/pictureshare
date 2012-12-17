@@ -58,7 +58,7 @@ public class PicTakeActivity extends BaseActivity implements OnClickListener {
 			avatar = PicListActivity.list.get(number);
 			url = avatar.getImageItem().getImageUrl();
 		}
-		list = PicService.getCurrrentBlocks();
+//		list = PicService.getCurrrentBlocks();
 		initComponents();
 		updateUI();
 
@@ -129,10 +129,10 @@ public class PicTakeActivity extends BaseActivity implements OnClickListener {
 		btn_back.setOnClickListener(this);
 		bottom_button.setOnClickListener(this);
 
-		listAdapter = new ListAdapter(list);
-		listView.setDivider(null);
-		listView.setPadding(10, 0, 0, 0);
-		listView.setAdapter(listAdapter);
+//		listAdapter = new ListAdapter(list);
+//		listView.setDivider(null);
+//		listView.setPadding(10, 0, 0, 0);
+//		listView.setAdapter(listAdapter);
 
 	}
 
