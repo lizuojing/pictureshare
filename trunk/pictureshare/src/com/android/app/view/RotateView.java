@@ -21,8 +21,8 @@ public class RotateView extends RelativeLayout {
 	private ImageView mTopButton;
 	private ImageView mBottomButton;
 
-	private ImageView m1;
-	private ImageView m2;
+	// private ImageView m1;
+	// private ImageView m2;
 
 	private Context context;
 
@@ -55,7 +55,7 @@ public class RotateView extends RelativeLayout {
 		mTopButton.setImageBitmap(homeItem.get(0));
 		mCenterButton.setImageBitmap(homeItem.get(1));
 		mBottomButton.setImageBitmap(homeItem.get(2));
-		m1.setImageBitmap(homeItem.get(3));
+		// m1.setImageBitmap(homeItem.get(3));
 	}
 
 	private void initItems() {
@@ -81,13 +81,13 @@ public class RotateView extends RelativeLayout {
 	public void refreshView(int orient) {
 		// 0 向下 1 向上
 
-		// this.setVisibility(View.GONE);
+		this.setVisibility(View.GONE);
 
 		mCenterButton.setVisibility(View.GONE);
 		mTopButton.setVisibility(View.GONE);
 		mBottomButton.setVisibility(View.GONE);
-		m1.setVisibility(View.GONE);
-		m2.setVisibility(View.GONE);
+		// m1.setVisibility(View.GONE);
+		// m2.setVisibility(View.GONE);
 		if (0 == orient) {
 			Bitmap last = homeItem.getLast();
 			homeItem.remove(last);
@@ -98,23 +98,24 @@ public class RotateView extends RelativeLayout {
 			homeItem.add(homeItem.size(), first);
 		}
 		//
-		// mTopButton.setDrawingCacheEnabled(false);
-		// mCenterButton.setDrawingCacheEnabled(false);
-		// mBottomButton.setDrawingCacheEnabled(false);
-		// this.refreshDrawableState();
+		mTopButton.setDrawingCacheEnabled(false);
+		mCenterButton.setDrawingCacheEnabled(false);
+		mBottomButton.setDrawingCacheEnabled(false);
+	
 
 		mTopButton.setImageBitmap(homeItem.get(0));
 		mCenterButton.setImageBitmap(homeItem.get(1));
 		mBottomButton.setImageBitmap(homeItem.get(2));
-		m1.setImageBitmap(homeItem.get(3));
-		m2.setImageBitmap(homeItem.get(4));
+		// m1.setImageBitmap(homeItem.get(3));
+		// m2.setImageBitmap(homeItem.get(4));
 
-		// this.setVisibility(View.VISIBLE);
+//		this.setVisibility(View.VISIBLE);
 		mCenterButton.setVisibility(View.VISIBLE);
 		mTopButton.setVisibility(View.VISIBLE);
 		mBottomButton.setVisibility(View.VISIBLE);
-		m1.setVisibility(View.VISIBLE);
-		m2.setVisibility(View.VISIBLE);
+		// m1.setVisibility(View.VISIBLE);
+		// m2.setVisibility(View.VISIBLE);
+		this.refreshDrawableState();
 	}
 
 	private void createLayout() {
@@ -122,8 +123,8 @@ public class RotateView extends RelativeLayout {
 		RelativeLayout.LayoutParams buttonTopLP = new RelativeLayout.LayoutParams(
 				Utils.dipToPixels(context, 40), Utils.dipToPixels(context, 40));
 		buttonTopLP.addRule(RelativeLayout.ALIGN_PARENT_TOP);
-		buttonTopLP.setMargins(Utils.dipToPixels(context, 160),
-				Utils.dipToPixels(context, 15), 0, 0);
+		buttonTopLP.setMargins(Utils.dipToPixels(context, 160), Utils
+				.dipToPixels(context, 15), 0, 0);
 
 		ImageView topButton = new ImageView(context);
 		mTopButton = topButton;
@@ -134,8 +135,8 @@ public class RotateView extends RelativeLayout {
 		RelativeLayout.LayoutParams buttonCenterLP = new RelativeLayout.LayoutParams(
 				Utils.dipToPixels(context, 40), Utils.dipToPixels(context, 40));
 		buttonCenterLP.addRule(RelativeLayout.ALIGN_PARENT_TOP);
-		buttonCenterLP.setMargins(Utils.dipToPixels(context, 65),
-				Utils.dipToPixels(context, 65), 0, 0);
+		buttonCenterLP.setMargins(Utils.dipToPixels(context, 65), Utils
+				.dipToPixels(context, 65), 0, 0);
 
 		ImageView centerButton = new ImageView(context);
 		mCenterButton = centerButton;
@@ -145,37 +146,37 @@ public class RotateView extends RelativeLayout {
 		RelativeLayout.LayoutParams buttonBottomLP = new RelativeLayout.LayoutParams(
 				Utils.dipToPixels(context, 40), Utils.dipToPixels(context, 40));
 		buttonBottomLP.addRule(RelativeLayout.ALIGN_PARENT_TOP);
-		buttonBottomLP.setMargins(Utils.dipToPixels(context, 17),
-				Utils.dipToPixels(context, 160), 0, 0);
+		buttonBottomLP.setMargins(Utils.dipToPixels(context, 17), Utils
+				.dipToPixels(context, 160), 0, 0);
 
 		ImageView bootomButton = new ImageView(context);
 		mBottomButton = bootomButton;
 		// bootomButton.setId(ID_BOTTOM);
 		addView(bootomButton, buttonBottomLP);
 
-		// button
-		RelativeLayout.LayoutParams m1LP = new RelativeLayout.LayoutParams(
-				Utils.dipToPixels(context, 40), Utils.dipToPixels(context, 40));
-		m1LP.addRule(RelativeLayout.ALIGN_PARENT_TOP);
-		m1LP.setMargins(Utils.dipToPixels(context, 65),
-				Utils.dipToPixels(context, 260), 0, 0);
-
-		ImageView m1Button = new ImageView(context);
-		m1 = m1Button;
-		// bootomButton.setId(ID_BOTTOM);
-		addView(m1Button, m1LP);
-
-		// button
-		RelativeLayout.LayoutParams m2LP = new RelativeLayout.LayoutParams(
-				Utils.dipToPixels(context, 40), Utils.dipToPixels(context, 40));
-		m2LP.addRule(RelativeLayout.ALIGN_PARENT_TOP);
-		m2LP.setMargins(Utils.dipToPixels(context, 260),
-				Utils.dipToPixels(context, 65), 0, 0);
-
-		ImageView m2Button = new ImageView(context);
-		m2 = m2Button;
-		// bootomButton.setId(ID_BOTTOM);
-		addView(m2Button, m2LP);
+		// // button
+		// RelativeLayout.LayoutParams m1LP = new RelativeLayout.LayoutParams(
+		// Utils.dipToPixels(context, 40), Utils.dipToPixels(context, 40));
+		// m1LP.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+		// m1LP.setMargins(Utils.dipToPixels(context, 65),
+		// Utils.dipToPixels(context, 260), 0, 0);
+		//
+		// ImageView m1Button = new ImageView(context);
+		// m1 = m1Button;
+		// // bootomButton.setId(ID_BOTTOM);
+		// addView(m1Button, m1LP);
+		//
+		// // button
+		// RelativeLayout.LayoutParams m2LP = new RelativeLayout.LayoutParams(
+		// Utils.dipToPixels(context, 40), Utils.dipToPixels(context, 40));
+		// m2LP.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+		// m2LP.setMargins(Utils.dipToPixels(context, 260),
+		// Utils.dipToPixels(context, 65), 0, 0);
+		//
+		// ImageView m2Button = new ImageView(context);
+		// m2 = m2Button;
+		// // bootomButton.setId(ID_BOTTOM);
+		// addView(m2Button, m2LP);
 
 	}
 

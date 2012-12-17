@@ -57,8 +57,8 @@ public class DishActivity extends ActivityGroup implements OnTouchListener,
 		Intent intent = new Intent(this, PicTakeActivity.class);
 		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
-		intent.putExtra("mCurrentFile",
-				getIntent().getStringExtra("mCurrentFile"));
+		intent.putExtra("mCurrentFile", getIntent().getStringExtra(
+				"mCurrentFile"));
 		intent.putExtra("number", number);
 		eachLayout.addView(getLocalActivityManager().startActivity("contact",
 				intent).getDecorView());
@@ -131,7 +131,7 @@ public class DishActivity extends ActivityGroup implements OnTouchListener,
 	private void moveDownHandle() {
 		Log.i(TAG, "move down");
 		orient = 0;
-		// rotateView.refreshView(position);
+		rotateView.refreshView(orient);
 		rotateView.startAnimation(createRotateAnim(0.f, -38.f, 1f, 1f));
 	}
 
@@ -141,7 +141,7 @@ public class DishActivity extends ActivityGroup implements OnTouchListener,
 	private void moveUpHandle() {
 		Log.i(TAG, "move up");
 		orient = 1;
-		// rotateView.refreshView(position);
+		rotateView.refreshView(orient);
 		rotateView.startAnimation(createRotateAnim(0.f, 38.f, 1f, 1f));
 	}
 
@@ -167,7 +167,7 @@ public class DishActivity extends ActivityGroup implements OnTouchListener,
 		anim.setInterpolator(AnimationUtils.loadInterpolator(this,
 				android.R.anim.accelerate_interpolator));
 		// 设置动画结束时停止在结束的位置
-		anim.setFillAfter(true);
+		// anim.setFillAfter(true);
 		// 动画监听
 		anim.setAnimationListener(this);
 		return anim;
