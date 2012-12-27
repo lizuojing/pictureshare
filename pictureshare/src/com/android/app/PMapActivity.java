@@ -85,14 +85,15 @@ public class PMapActivity extends MapActivity implements View.OnClickListener {
 	}
 
 	private ArrayList<Avatar> handleList(ArrayList<Avatar> list) {
-		for(int i=list.size()-1;i>=0;i--) {
-			Avatar loadedImage = list.get(i);
-			if(loadedImage.getLatitude()<=0||loadedImage.getLongitude()<=0) {
-				list.remove(loadedImage);
+		if(list!=null) {
+			for(int i=list.size()-1;i>=0;i--) {
+				Avatar loadedImage = list.get(i);
+				if(loadedImage.getLatitude()<=0||loadedImage.getLongitude()<=0) {
+					list.remove(loadedImage);
+				}
 			}
+			Log.i(TAG, "list size is " + list.size());
 		}
-		Log.i(TAG, "list size is " + list.size());
-		
 		return list;
 	}
 
